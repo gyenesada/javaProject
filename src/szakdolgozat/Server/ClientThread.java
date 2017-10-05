@@ -41,10 +41,10 @@ public class ClientThread implements Runnable {
         }
     }
 
-    private  void communicationWithClients(PrintWriter pw, Scanner sc) {
-        int index=0;
+    private void communicationWithClients(PrintWriter pw, Scanner sc) {
+        int index = 0;
         while (true) {
-            System.out.println("---------------" + index+ "--------------");
+            System.out.println("---------------" + index + "--------------");
             System.out.println("");
             outDatas.clear();
             inputPreprocess(sc.nextLine());
@@ -52,7 +52,7 @@ public class ClientThread implements Runnable {
             inDatas.clear();
             pw.println(outDatas);
             System.out.println("Output: " + outDatas);
-            
+
             index++;
         }
     }
@@ -87,7 +87,8 @@ public class ClientThread implements Runnable {
             default:
                 break;
         }
-        out.add(identifier);out.add(answer);
+        out.add(identifier);
+        out.add(answer);
         return out;
     }
 
@@ -96,8 +97,8 @@ public class ClientThread implements Runnable {
     private boolean validateClient(ArrayList<String> acceptedDatas) { //unknown helyette false kell.
         String name = acceptedDatas.get(1);
         String pass = acceptedDatas.get(2);
-        Statement stat = null;
-        ResultSet rs = null;
+        Statement stat;
+        ResultSet rs;
 
         try {
             stat = conn.createStatement();
@@ -131,17 +132,17 @@ public class ClientThread implements Runnable {
 
         try {
             ResultSet maxIDrs;
-            
+
             Statement maxID = conn.createStatement();
             String maxIDquery = "select nvl(max(user_id),0) from users;";
             maxIDrs = maxID.executeQuery(maxIDquery);
-            
-            if(maxIDrs.next()){
+
+            if (maxIDrs.next()) {
                 id = maxIDrs.getInt(1);
             }
             id++;
             System.out.println("ID: " + id);
-            
+
             //elsőnek lekérdezzük, van-e ilyen nevű vagy mailcímű felhasználó. ha van, akkor false-t adok vissza.
             Statement stat = conn.createStatement();
             String listquery = "select * from users where username = '" + name + "' or mail='" + mail + "';";
@@ -163,7 +164,7 @@ public class ClientThread implements Runnable {
                     conn.setAutoCommit(false);
                     prepstat.executeBatch();
                     conn.setAutoCommit(true);
-                    
+
                 } catch (SQLException ex) {
                     System.out.println("Nem sikerült felvinni az adatokat.");
                 }

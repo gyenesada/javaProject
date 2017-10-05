@@ -7,9 +7,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class WindowFrame extends javax.swing.JFrame implements Runnable{
+public class WindowFrame extends javax.swing.JFrame implements Runnable {
+
     private final String host;
     private final int port;
 
@@ -26,6 +29,9 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable{
 
         System.out.println("New client thread..");
         initComponents();
+        
+        this.setTitle("CloudBased classifier - Login");
+        this.setResizable(false);
     }
 
     //INIT COMPONENTS
@@ -217,7 +223,6 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable{
     }
 
     // </editor-fold>
-    
     private void logButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             outDatas.clear();
@@ -226,7 +231,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable{
             outDatas.add("log:");
             outDatas.add(username);
             outDatas.add(password);
-            
+
             System.out.println("outDatas: " + outDatas);
         } catch (Exception ex) {
             System.out.println("Error: logButton");
@@ -248,12 +253,12 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable{
             outDatas.add(username);
             outDatas.add(mail);
             outDatas.add(password);
-            
+
             System.out.println("outDatas: " + outDatas);
         } catch (Exception ex) {
             System.out.println("Error: regDoButton");
         }
-        
+
     }
 
     private static String encrypt(String pass) throws Exception {
@@ -283,73 +288,73 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable{
         }
     }
 
-    private void communicationWithServer(PrintWriter pw, Scanner sc) {
-        int index=0;
-        while (true) { 
-            System.out.println("---------------" + index+ "--------------");
+    private void communicationWithServer(PrintWriter pw, Scanner sc) { //ez kell majd a WorkWindowFrame-be is.
+        int index = 0;
+        while (true) {
+            System.out.println("---------------" + index + "--------------");
             System.out.println("");
             pw.println(outDatas);
             outDatas.clear();
             System.out.println("Output: " + outDatas);
             inDatas.clear();
             inputPreprocess(sc.nextLine());
-            if(!inDatas.isEmpty()){
-                 outDatas = controller(inDatas);
+            if (!inDatas.isEmpty()) {
+                outDatas = controller(inDatas);
             }
             System.out.println("Input: " + inDatas);
             index++;
         }
     }
-    
-    private ArrayList<String> controller(ArrayList<String> in){
+
+    private ArrayList<String> controller(ArrayList<String> in) { //Kell a WorkWindowFrame-be is.
         ArrayList<String> out = new ArrayList<>();
-        
+
         String answer = "";
         String identifier = in.get(0);
 
         switch (identifier) {
             case "log:":
-                    if(Boolean.valueOf(in.get(1))){
-                        try {
-                            String username = nameField.getText();
-                            WorkWindowFrame wwf = new WorkWindowFrame(pw, sc, username);
-                            System.out.println("Username: "+username);
-                            
-                            wwf.setVisible(true);
-                            wwf.run();
-                            this.dispose();
-                        } catch (Exception ex) {
-                            System.out.println("Error: controller, wwf");
-                        }
-                    }else{
-                        nameField.setText(""); passField.setText("");
-                        JOptionPane.showMessageDialog(this, "sikertelen");
+                if (Boolean.valueOf(in.get(1))) {
+                    try {
+                        String username = nameField.getText();
+                        WorkWindowFrame wwf = new WorkWindowFrame(pw, sc, username);
+                        System.out.println("Username: " + username);
+
+                        wwf.setVisible(true);
+                        wwf.run();
+                        this.dispose();
+                    } catch (Exception ex) {
+                        Logger.getLogger(WindowFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                } else {
+                    nameField.setText("");
+                    passField.setText("");
+                    JOptionPane.showMessageDialog(this, "sikertelen");
+                }
                 break;
             case "reg:":
-                    if(Boolean.valueOf(in.get(1))){
-                        JOptionPane.showMessageDialog(this, "sikeres regisztráció");
-                        loginPanel.setVisible(true);
-                        regPanel.setVisible(false);
-                    }else{
-                        JOptionPane.showMessageDialog(this, "sikertelen regisztráció.");
-                        
-                        regNameField.setText("");
-                        regMailField.setText("");
-                        regPassField.setText("");
-                    }
+                if (Boolean.valueOf(in.get(1))) {
+                    JOptionPane.showMessageDialog(this, "sikeres regisztráció");
+                    loginPanel.setVisible(true);
+                    regPanel.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(this, "sikertelen regisztráció.");
+
+                    regNameField.setText("");
+                    regMailField.setText("");
+                    regPassField.setText("");
+                }
                 break;
         }
         return out;
-    } 
-    
-    
+    }
+
     //ez módosítja a communication fv while() argumentumát.
-    private boolean isExit(){
+    private boolean isExit() {
         return false;
     }
 
-    public void inputPreprocess(String input) {
+    private void inputPreprocess(String input) {
         System.out.println("input: " + input);
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
 
