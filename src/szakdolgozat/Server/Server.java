@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 */
 public class Server implements Runnable {
 
-    private int port;
+    private final int port;
 
     public Server(int port) {
         this.port = port;
@@ -28,13 +28,12 @@ public class Server implements Runnable {
 
             while (true) {
                 Socket socket = ss.accept();
-                Connection conn = null;
-                conn = connectToDatabase();
+                Connection conn = connectToDatabase();
                 service.submit(new ClientThread(socket, conn));
                 System.out.println("The server is up..");
             }
         } catch (Exception ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error: Server, run()");
         }
 
     }
@@ -47,6 +46,6 @@ public class Server implements Runnable {
     }
 
     public static void main(String[] args) {
-        new Server(00001).run();
+        new Server(2017).run();
     }
 }

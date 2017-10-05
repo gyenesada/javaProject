@@ -1,18 +1,17 @@
 package szakdolgozat.Client;
 
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.Scanner;
 
-public class WorkWindowFrame extends javax.swing.JFrame {
-    private Socket socket = null;
-    private Scanner sc = null;
-    private PrintWriter pw = null;
+public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
+    private final String loggedUser;
+    private final Scanner sc;
+    private final PrintWriter pw ;
 
-    public WorkWindowFrame(Socket socket) throws Exception{
-        this.socket = socket;
-        this.sc = new Scanner(socket.getInputStream());
-        this.pw = new PrintWriter(socket.getOutputStream());
+    public WorkWindowFrame(PrintWriter pw, Scanner sc, String name) throws Exception{
+        this.loggedUser = name;
+        this.sc = sc;
+        this.pw = pw;
         initComponents();
     }
 
@@ -115,7 +114,16 @@ public class WorkWindowFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+@Override
+public void run(){
+    usernameLabel.setText("Üdvözöljük " +loggedUser+"!");
+    communicateWithServer(pw, sc);
+}
 
+private void communicateWithServer(PrintWriter pw, Scanner sc){
+    
+}
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

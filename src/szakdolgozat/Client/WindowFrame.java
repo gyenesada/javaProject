@@ -3,14 +3,13 @@ package szakdolgozat.Client;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
-//import javax.swing.JOptionPane;
 
-public class WindowFrame extends javax.swing.JFrame implements Runnable {
-
+public class WindowFrame extends javax.swing.JFrame implements Runnable{
     private final String host;
     private final int port;
 
@@ -25,7 +24,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         this.host = host;
         this.port = port;
 
-        System.out.println("New client");
+        System.out.println("New client thread..");
         initComponents();
     }
 
@@ -218,43 +217,55 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
     }
 
     // </editor-fold>
+    
     private void logButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        outDatas.clear();
-        String username = nameField.getText();
-        String password = passField.getText(); //kell az encrypt majd. 
-        outDatas.add("log:");
-        outDatas.add(username);
-        outDatas.add(password);
-
-        System.out.println("outDatas: " + outDatas);
+        try {
+            outDatas.clear();
+            String username = nameField.getText();
+            String password = encrypt(passField.getText());
+            outDatas.add("log:");
+            outDatas.add(username);
+            outDatas.add(password);
+            
+            System.out.println("outDatas: " + outDatas);
+        } catch (Exception ex) {
+            System.out.println("Error: logButton");
+        }
     }
 
     private void regButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        loginPanel.setVisible(true);
-        regPanel.setVisible(false);
+        loginPanel.setVisible(false);
+        regPanel.setVisible(true);
     }
 
     private void regDoButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        outDatas.clear();
-        String username = regNameField.getText();
-        String mail = regMailField.getText();
-        String password = regPassField.getText(); //kell encrypt
-        outDatas.add("reg:");
-        outDatas.add(username);
-        outDatas.add(mail);
-        outDatas.add(password);
+        try {
+            outDatas.clear();
+            String username = regNameField.getText();
+            String mail = regMailField.getText();
+            String password = encrypt(regPassField.getText()); //kell encrypt
+            outDatas.add("reg:");
+            outDatas.add(username);
+            outDatas.add(mail);
+            outDatas.add(password);
+            
+            System.out.println("outDatas: " + outDatas);
+        } catch (Exception ex) {
+            System.out.println("Error: regDoButton");
+        }
+        
     }
 
-    private static byte[] encrypt(String pass) throws Exception {
-        java.security.MessageDigest d = null;
-        d = java.security.MessageDigest.getInstance("MD5");
+    private static String encrypt(String pass) throws Exception {
+        java.security.MessageDigest d = java.security.MessageDigest.getInstance("MD5");
         d.reset();
         d.update(pass.getBytes());
-        return d.digest();
+        d.digest();
+        return new String(d.digest(), StandardCharsets.UTF_8);
     }
 
     public static void main(String[] args) throws Exception {
-        WindowFrame windowframe = new WindowFrame("localhost", 00001);
+        WindowFrame windowframe = new WindowFrame("localhost", 2017);
         windowframe.setVisible(true);
         windowframe.run();
     }
@@ -274,12 +285,11 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
 
     private void communicationWithServer(PrintWriter pw, Scanner sc) {
         int index=0;
-        while (true) { //X-re legyen false
-            
+        while (true) { 
             System.out.println("---------------" + index+ "--------------");
             System.out.println("");
-            pw.println(outDatas); //outDatas-st a felület tölti fel 
-            outDatas.clear();//minden kör után kiürítjük, így nem küldi el rengetegszer ugyanazt az adatot.De most nem kell, mert felesleges.
+            pw.println(outDatas);
+            outDatas.clear();
             System.out.println("Output: " + outDatas);
             inDatas.clear();
             inputPreprocess(sc.nextLine());
@@ -297,23 +307,44 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         String answer = "";
         String identifier = in.get(0);
 
-        //feladatok elosztása
         switch (identifier) {
             case "log:":
                     if(Boolean.valueOf(in.get(1))){
-                        //ha a bejelentkezés sikeres
+                        try {
+                            String username = nameField.getText();
+                            WorkWindowFrame wwf = new WorkWindowFrame(pw, sc, username);
+                            System.out.println("Username: "+username);
+                            
+                            wwf.setVisible(true);
+                            wwf.run();
+                            this.dispose();
+                        } catch (Exception ex) {
+                            System.out.println("Error: controller, wwf");
+                        }
                     }else{
-                        //ha nem
                         nameField.setText(""); passField.setText("");
                         JOptionPane.showMessageDialog(this, "sikertelen");
                     }
                 break;
-            default:
+            case "reg:":
+                    if(Boolean.valueOf(in.get(1))){
+                        JOptionPane.showMessageDialog(this, "sikeres regisztráció");
+                        loginPanel.setVisible(true);
+                        regPanel.setVisible(false);
+                    }else{
+                        JOptionPane.showMessageDialog(this, "sikertelen regisztráció.");
+                        
+                        regNameField.setText("");
+                        regMailField.setText("");
+                        regPassField.setText("");
+                    }
                 break;
         }
         return out;
     } 
     
+    
+    //ez módosítja a communication fv while() argumentumát.
     private boolean isExit(){
         return false;
     }

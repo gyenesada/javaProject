@@ -77,11 +77,11 @@ public class ClientThread implements Runnable {
         //feladatok elosztása
         switch (identifier) {
             case "log:":
-                answer = validateClient(in); //lehet true, false, unkown
+                answer = Boolean.toString(validateClient(in));
                 System.out.println("answer: " + answer);
                 break;
             case "reg:":
-                answer = regClient(in);
+                answer = Boolean.toString(regClient(in));
                 System.out.println("answer: " + answer);
                 break;
             default:
@@ -93,7 +93,7 @@ public class ClientThread implements Runnable {
 
     // DATABASE FUNCTIONS
     // <editor-fold defaultstate="collapsed">
-    private String validateClient(ArrayList<String> acceptedDatas) {
+    private boolean validateClient(ArrayList<String> acceptedDatas) { //unknown helyette false kell.
         String name = acceptedDatas.get(1);
         String pass = acceptedDatas.get(2);
         Statement stat = null;
@@ -110,19 +110,19 @@ public class ClientThread implements Runnable {
                 System.out.println("pass: " + password);
                 System.out.println("password: " + pass);
                 if (pass.equals(password)) {
-                    return "true";
+                    return true;
                 } else {
-                    return "false";
+                    return false;
                 }
             }
 
         } catch (SQLException e) {
             System.out.println("Error: SQL exception in validateClient() function");
         }
-        return "unknown";
+        return false;
     }
 
-    private String regClient(ArrayList<String> acceptedDatas) { //String (egyenlőre), mert vissza kell adja h sikerült-e a reg vagy sem.
+    private Boolean regClient(ArrayList<String> acceptedDatas) { //ID megadás nem jó.
         String returnvalue = "";
         String name = acceptedDatas.get(1);
         String mail = acceptedDatas.get(2);
@@ -130,21 +130,27 @@ public class ClientThread implements Runnable {
         int id = 0;
 
         try {
+            ResultSet maxIDrs;
+            
+            Statement maxID = conn.createStatement();
+            String maxIDquery = "select nvl(max(user_id),0) from users;";
+            maxIDrs = maxID.executeQuery(maxIDquery);
+            
+            if(maxIDrs.next()){
+                id = maxIDrs.getInt(1);
+            }
+            id++;
+            System.out.println("ID: " + id);
+            
             //elsőnek lekérdezzük, van-e ilyen nevű vagy mailcímű felhasználó. ha van, akkor false-t adok vissza.
             Statement stat = conn.createStatement();
             String listquery = "select * from users where username = '" + name + "' or mail='" + mail + "';";
             ResultSet rs = stat.executeQuery(listquery);
-            if (!rs.next()) {
+            if (rs.next()) {
                 System.out.println("Már van ilyen felh. vagy mail.");
-                //pw.println("false"); pw.flush();
+                return false;
             } else {
                 Statement idstat = conn.createStatement();
-                ResultSet idrs = idstat.executeQuery("select * from users;");
-
-                while (rs.next()) {
-                    id++;
-                }
-
                 String insertquery = "insert into users values (?,?,?,?);";
                 try {
                     PreparedStatement prepstat = conn.prepareStatement(insertquery);
@@ -157,15 +163,16 @@ public class ClientThread implements Runnable {
                     conn.setAutoCommit(false);
                     prepstat.executeBatch();
                     conn.setAutoCommit(true);
-
+                    
                 } catch (SQLException ex) {
                     System.out.println("Nem sikerült felvinni az adatokat.");
                 }
+                return true;
             }
         } catch (SQLException ex) {
-            System.out.println("Error while registration");
+            System.out.println("Error: ClientThread regClient");
         }
-        return returnvalue;
+        return false;
     }
     // </editor-fold>
 
