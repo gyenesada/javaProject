@@ -261,14 +261,6 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
 
     }
 
-    private static String encrypt(String pass) throws Exception {
-        java.security.MessageDigest d = java.security.MessageDigest.getInstance("MD5");
-        d.reset();
-        d.update(pass.getBytes());
-        d.digest();
-        return new String(d.digest(), StandardCharsets.UTF_8);
-    }
-
     public static void main(String[] args) throws Exception {
         WindowFrame windowframe = new WindowFrame("localhost", 2017);
         windowframe.setVisible(true);
@@ -286,6 +278,14 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         } catch (IOException e) {
             System.out.println("Error: Windowframe run");
         }
+    }
+    
+       private static String encrypt(String pass) throws Exception {
+        java.security.MessageDigest d = java.security.MessageDigest.getInstance("MD5");
+        d.reset();
+        d.update(pass.getBytes());
+        d.digest();
+        return new String(d.digest(), StandardCharsets.UTF_8);
     }
 
     private void communicationWithServer(PrintWriter pw, Scanner sc) { //ez kell majd a WorkWindowFrame-be is.
