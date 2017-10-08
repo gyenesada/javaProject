@@ -13,21 +13,21 @@ import javax.swing.JOptionPane;
 
 public class WindowFrame extends javax.swing.JFrame implements Runnable {
 
-    private final String host;
-    private final int port;
-
+   // static WFController wfc=null;
+    
     private Socket socket;
     private Scanner sc;
     private PrintWriter pw;
+    
+    private final  String host;
+    private final int port;
 
-    private ArrayList<String> inDatas = new ArrayList<>();
-    private ArrayList<String> outDatas = new ArrayList<>();
+    private static ArrayList<String> inDatas = new ArrayList<>();
+    private static ArrayList<String> outDatas = new ArrayList<>();
 
-    public WindowFrame(String host, int port) throws IOException {
-        this.host = host;
-        this.port = port;
-
-        System.out.println("New client thread..");
+    public WindowFrame() throws IOException {
+        this.host = "localhost";
+        this.port = 2017;
         initComponents();
         
         this.setTitle("CloudBased classifier - Login");
@@ -231,6 +231,8 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
             outDatas.add("log:");
             outDatas.add(username);
             outDatas.add(password);
+            
+            //wfc.getOutDatas(outDatas);
 
             System.out.println("outDatas: " + outDatas);
         } catch (Exception ex) {
@@ -253,18 +255,30 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
             outDatas.add(username);
             outDatas.add(mail);
             outDatas.add(password);
+            
+//            wfc.getOutDatas(outDatas);
 
             System.out.println("outDatas: " + outDatas);
         } catch (Exception ex) {
             System.out.println("Error: regDoButton");
         }
+    }
 
+    private static String encrypt(String pass) throws Exception {
+        java.security.MessageDigest d = java.security.MessageDigest.getInstance("MD5");
+        d.reset();
+        d.update(pass.getBytes());
+        d.digest();
+        return new String(d.digest(), StandardCharsets.UTF_8);
     }
 
     public static void main(String[] args) throws Exception {
-        WindowFrame windowframe = new WindowFrame("localhost", 2017);
-        windowframe.setVisible(true);
-        windowframe.run();
+//        wfc = new WFController("localhost", 2017);
+  //      wfc.run();
+  WindowFrame wf = new WindowFrame();
+  wf.setVisible(true);
+  wf.run();
+        //windowframe.run();
     }
 
     @Override
@@ -280,14 +294,8 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         }
     }
     
-       private static String encrypt(String pass) throws Exception {
-        java.security.MessageDigest d = java.security.MessageDigest.getInstance("MD5");
-        d.reset();
-        d.update(pass.getBytes());
-        d.digest();
-        return new String(d.digest(), StandardCharsets.UTF_8);
-    }
 
+    
     private void communicationWithServer(PrintWriter pw, Scanner sc) { //ez kell majd a WorkWindowFrame-be is.
         int index = 0;
         while (true) {
@@ -348,12 +356,10 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         }
         return out;
     }
-
+    
     //ez módosítja a communication fv while() argumentumát.
-    private boolean isExit() {
-        return false;
-    }
 
+    
     private void inputPreprocess(String input) {
         System.out.println("input: " + input);
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
@@ -365,28 +371,28 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
 
     //VARIABLES
     // <editor-fold defaultstate="collapsed">
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JButton logButton;
-    private javax.swing.JLabel logLabel;
-    private javax.swing.JPanel loginPanel;
-    private javax.swing.JPanel mainPanel;
-    private javax.swing.JTextField nameField;
-    private javax.swing.JLabel nameLabel;
-    private javax.swing.JPasswordField passField;
-    private javax.swing.JLabel passLabel;
-    private javax.swing.JButton regButton;
-    private javax.swing.JButton regDoButton;
-    private javax.swing.JLabel regLabel;
-    private javax.swing.JTextField regMailField;
-    private javax.swing.JLabel regMailLabel;
-    private javax.swing.JTextField regNameField;
-    private javax.swing.JLabel regNameLabel;
-    private javax.swing.JPanel regPanel;
-    private javax.swing.JPasswordField regPassField;
-    private javax.swing.JLabel regPassLabel;
-
+        protected javax.swing.JComboBox<String> jComboBox1;
+        protected javax.swing.JMenu jMenu1;
+        protected javax.swing.JMenu jMenu2;
+        protected javax.swing.JMenuBar jMenuBar1;
+        protected javax.swing.JButton logButton;
+        protected javax.swing.JLabel logLabel;
+        protected javax.swing.JPanel loginPanel;
+        protected javax.swing.JPanel mainPanel;
+        protected javax.swing.JTextField nameField;
+        protected javax.swing.JLabel nameLabel;
+        protected javax.swing.JPasswordField passField;
+        protected javax.swing.JLabel passLabel;
+        protected javax.swing.JButton regButton;
+        protected javax.swing.JButton regDoButton;
+        protected javax.swing.JLabel regLabel;
+        protected javax.swing.JTextField regMailField;
+        protected javax.swing.JLabel regMailLabel;
+        protected javax.swing.JTextField regNameField;
+        protected javax.swing.JLabel regNameLabel;
+        protected javax.swing.JPanel regPanel;
+        protected javax.swing.JPasswordField regPassField;
+        protected javax.swing.JLabel regPassLabel;
+    
     // </editor-fold >
 }
