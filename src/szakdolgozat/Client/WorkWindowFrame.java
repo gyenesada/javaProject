@@ -1,7 +1,17 @@
 package szakdolgozat.Client;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import szakdolgozat.Server.Server;
 
 public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
@@ -9,6 +19,9 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private final Scanner sc;
     private final PrintWriter pw;
     
+    ArrayList<String> outDatas = new ArrayList<>();
+    ArrayList<String> inDatas = new ArrayList<>();
+       
     public WorkWindowFrame(PrintWriter pw, Scanner sc, String name) throws Exception {
         this.loggedUser = name;
         this.sc = sc;
@@ -411,6 +424,12 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_filepathFieldActionPerformed
 
     private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
+        outDatas.clear();
+        outDatas = readFromCsv(filepathField.getText()); //csv to outDatas
+        
+        System.out.println(outDatas);
+        System.out.println("CSV");
+        
         loadPanel.setVisible(false);
         workPanel.setVisible(true);
         
@@ -434,8 +453,76 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     }
     
     private void communicateWithServer(PrintWriter pw, Scanner sc) {
+        int index = 0;
+        while (true) {
+            System.out.println("---------------" + index + "--------------");
+            System.out.println("");
+           // outDatas.clear();
+            System.out.println("Output: " + outDatas);
+            
+            pw.println(outDatas);
+            inDatas.clear();
+            inputPreprocess(sc.nextLine());
+            if (!inDatas.isEmpty()) {
+                outDatas = controller(inDatas);
+            }
+            System.out.println("Input: " + inDatas);
+            index++;
+        }
+    }
+    
+    private ArrayList<String> controller(ArrayList<String> in) { //Kell a WorkWindowFrame-be is.
+        ArrayList<String> out = new ArrayList<>();
+
+        String answer = "";
+        String identifier = in.get(0);
         
+        //Még kell!    
+        switch (identifier) {
+           
+        }
+        return out;
+    }
+    
+        private void inputPreprocess(String input) {
+        System.out.println("input: " + input);
+        String withoutBrackets = input.replaceAll("[\\[\\]]", "");
+
+        String[] string = withoutBrackets.split(", ");
+        inDatas.addAll(Arrays.asList(string));
+        System.out.println("Input: " + inDatas);
+    }
+    
+    public ArrayList<String> readFromCsv(String path){
         
+        ArrayList<String> csv = new ArrayList<>();
+        
+        BufferedReader br = null;
+        csv.add("csv:");
+        try {
+            File file = new File(path);
+            br = new BufferedReader(new FileReader(file));
+            
+            String line = br.readLine();
+            csv.add(line);
+            csv.add("enter");
+            
+            while(line != null){
+                System.out.println(line);
+                line = br.readLine();
+                csv.add(line);
+                csv.add("enter");
+            }
+        } catch (IOException ex) {
+            System.out.println(".csv file not found!");
+        } finally {
+            try {
+                br.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return csv;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

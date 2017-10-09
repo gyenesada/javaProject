@@ -1,5 +1,7 @@
 package szakdolgozat.Server;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -18,6 +20,8 @@ public class ClientThread implements Runnable {
     private Scanner sc;
     private PrintWriter pw;
     private final Connection conn;
+    
+    private String rawInput;
 
     private ArrayList<String> inDatas = new ArrayList<>();
     private ArrayList<String> outDatas = new ArrayList<>();
@@ -59,10 +63,9 @@ public class ClientThread implements Runnable {
 
     //input adatok előfeldolgozása
     private void inputPreprocess(String input) {
-
-        System.out.println("input: " + input);
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
-
+        rawInput = withoutBrackets;
+        
         String[] string = withoutBrackets.split(", ");
         inDatas.addAll(Arrays.asList(string));
         System.out.println("Input: " + inDatas);
@@ -84,12 +87,51 @@ public class ClientThread implements Runnable {
                 answer = Boolean.toString(regClient(in));
                 System.out.println("answer: " + answer);
                 break;
+            case "csv:":
+                writeToCsv();
             default:
                 break;
         }
         out.add(identifier);
         out.add(answer);
         return out;
+    }
+    
+    
+    public void writeToCsv(){ //String filename
+        String path = "C:\\Users\\Adrienn\\Desktop\\szerver minitárhely\\csv\\";
+        String filename = "four.csv"; //majd kiolvassa a kliens
+        String fullFilepath = path + filename;
+        
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+        
+        try{
+            fw = new FileWriter(fullFilepath);
+            bw = new BufferedWriter(fw);
+            
+            String withoutID = rawInput.split(":, ")[1];            
+            String[] lines;
+            lines = withoutID.split(", enter, ");
+            for(String line: lines){
+                bw.write(line);
+                bw.newLine();
+            }
+            System.out.println("Done with file writing");
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }finally{
+            try{
+                bw.close();
+                fw.close();
+            }catch(IOException e){
+                System.out.println("Error closing bw and fw");
+            }
+        }
+        
+        
+        
     }
 
     // DATABASE FUNCTIONS

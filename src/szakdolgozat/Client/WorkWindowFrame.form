@@ -325,7 +325,6 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Felt&#xf6;lt&#xe9;s"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
-                    <Property name="actionCommand" type="java.lang.String" value="Felt&#xf6;lt&#xe9;s"/>
                   </Properties>
                 </Component>
               </SubComponents>
