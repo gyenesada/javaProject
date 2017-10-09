@@ -21,6 +21,8 @@ public class ClientThread implements Runnable {
     private PrintWriter pw;
     private final Connection conn;
     
+    private String threadName;
+
     private String rawInput;
 
     private ArrayList<String> inDatas = new ArrayList<>();
@@ -65,7 +67,7 @@ public class ClientThread implements Runnable {
     private void inputPreprocess(String input) {
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
         rawInput = withoutBrackets;
-        
+
         String[] string = withoutBrackets.split(", ");
         inDatas.addAll(Arrays.asList(string));
         System.out.println("Input: " + inDatas);
@@ -73,6 +75,7 @@ public class ClientThread implements Runnable {
 
     //Vezérlő kerül majd ide. Visszatérési értéke az outDatas
     private ArrayList<String> controller(ArrayList<String> in) {
+        System.out.println("Thread: " + threadName);
         ArrayList<String> out = new ArrayList<>();
         String answer = "";
         String identifier = in.get(0);
@@ -96,42 +99,41 @@ public class ClientThread implements Runnable {
         out.add(answer);
         return out;
     }
-    
-    
-    public void writeToCsv(){ //String filename
+
+    public void writeToCsv() { //String filename
         String path = "C:\\Users\\Adrienn\\Desktop\\szerver minitárhely\\csv\\";
         String filename = "four.csv"; //majd kiolvassa a kliens
         String fullFilepath = path + filename;
-        
+
         BufferedWriter bw = null;
         FileWriter fw = null;
-        
-        try{
+
+        try {
             fw = new FileWriter(fullFilepath);
             bw = new BufferedWriter(fw);
-            
-            String withoutID = rawInput.split(":, ")[1];            
+            System.out.println("raw: "+ rawInput);
+            String withoutID = rawInput.split(":, ")[1];
             String[] lines;
-            lines = withoutID.split(", enter, ");
-            for(String line: lines){
+            lines = withoutID.split(", >>enter_flag<<, ");
+            for (String line : lines) {
+                line = line.replaceAll(", >>enter_flag<<", "");
+                
                 bw.write(line);
                 bw.newLine();
             }
             System.out.println("Done with file writing");
-            
-        }catch(IOException e){
+
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally{
-            try{
+        } finally {
+            try {
                 bw.close();
                 fw.close();
-            }catch(IOException e){
+            } catch (IOException e) {
                 System.out.println("Error closing bw and fw");
             }
         }
-        
-        
-        
+
     }
 
     // DATABASE FUNCTIONS
@@ -153,6 +155,7 @@ public class ClientThread implements Runnable {
                 System.out.println("pass: " + password);
                 System.out.println("password: " + pass);
                 if (pass.equals(password)) {
+                    threadName = name;
                     return true;
                 } else {
                     return false;

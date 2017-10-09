@@ -27,7 +27,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
 
     public WindowFrame() throws IOException {
         this.host = "localhost";
-        this.port = 2017;
+        this.port = 2018;
         initComponents();
         
         this.setTitle("CloudBased classifier - Login");
