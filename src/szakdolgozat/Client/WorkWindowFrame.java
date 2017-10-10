@@ -1,5 +1,7 @@
 package szakdolgozat.Client;
+//git 10.10
 
+import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -10,12 +12,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import szakdolgozat.Server.Server;
 
 public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
@@ -24,7 +23,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private final PrintWriter pw;
     private boolean exit=false;
     
-    ProgressFrame pf;
+   // ProgressFrame pf;
 
     ArrayList<String> outDatas = new ArrayList<>();
     ArrayList<String> inDatas = new ArrayList<>();
@@ -37,9 +36,6 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
         initComponents();
 
-        /*for (int i = 0; i < 100; i++) {
-            list.add(Integer.toString(i));
-        }*/
         setTitle("CloudBased classifier");
         setResizable(false);
         addWindowListener(new WindowAdapter() {
@@ -57,6 +53,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 }
             }
         });
+        outDatas.add("old:");
     }
 
     @SuppressWarnings("unchecked")
@@ -143,7 +140,9 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        list.setBackground(new java.awt.Color(240, 240, 240));
+        oldWorkSPane.setBackground(new java.awt.Color(255, 255, 255));
+
+        list.setBackground(new java.awt.Color(255, 255, 255));
         list.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
         list.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,23 +158,26 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loadPanelLayout.createSequentialGroup()
                 .addGroup(loadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(loadPanelLayout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(loadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(filepathField, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(fileUploadLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(choseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14)
-                        .addComponent(uploadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(loadPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(loadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(newWorkLabel)
-                            .addComponent(oldWorkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(oldWorkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(loadPanelLayout.createSequentialGroup()
+                        .addGroup(loadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(loadPanelLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(oldWorkSPane)))))
-                .addGap(18, 18, 18)
+                                .addGap(29, 29, 29)
+                                .addGroup(loadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(filepathField, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(fileUploadLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(choseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(14, 14, 14)
+                                .addComponent(uploadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loadPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(oldWorkSPane)))
+                        .addGap(18, 18, 18)))
                 .addComponent(separator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         loadPanelLayout.setVerticalGroup(
@@ -194,8 +196,8 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addGap(45, 45, 45)
                 .addComponent(oldWorkLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(oldWorkSPane, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addComponent(oldWorkSPane, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(223, Short.MAX_VALUE))
         );
 
         mainPanel.add(loadPanel, "card3");
@@ -450,7 +452,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addGap(64, 64, 64)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -475,15 +477,12 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
             /*ProgressFrame pf = new ProgressFrame("");
             pf.setVisible(true);
             pf.run();*/
-
-            
         }
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     private void choseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choseButtonActionPerformed
         FileManager fm = new FileManager();
         fm.setVisible(true);
-        //!!!
     }//GEN-LAST:event_choseButtonActionPerformed
 
     private void doButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doButtonActionPerformed
@@ -528,7 +527,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         }
     }
 
-    private ArrayList<String> controller(ArrayList<String> in) { //Kell a WorkWindowFrame-be is.
+    private ArrayList<String> controller(ArrayList<String> in) {
         ArrayList<String> out = new ArrayList<>();
 
         String answer = "";
@@ -546,6 +545,11 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 }else{
        //             pf.dispose();
                     JOptionPane.showMessageDialog(this, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
+                }
+                break;
+            case "old:":
+                for (int i = 1; i < in.size()-2; i=i+2) {
+                    list.add(in.get(i+1) +"    -    " +in.get(i));
                 }
         }
         return out;
@@ -600,12 +604,12 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
             
             fillPrevTable(cols, items);
         } catch (IOException ex) {
-            System.out.println(".csv file not found!");
+                JOptionPane.showMessageDialog(this, "Nem létező file.");
         } finally {
             try {
                 br.close();
             } catch (IOException ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Nem létező file.");
             }
         }
         return csv;

@@ -1,5 +1,7 @@
 package szakdolgozat.Client;
 
+//git 10.10
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -339,7 +341,10 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
                 if (Boolean.valueOf(in.get(1))) {
                     try {
                         String username = nameField.getText();
-                        
+                        WorkWindowFrame wwf = new WorkWindowFrame(pw, sc, username);
+                        wwf.setVisible(true);
+                        dispose();
+                        wwf.run();
                     } catch (Exception ex) {
                         Logger.getLogger(WindowFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -402,4 +407,3 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
 
     // End of variables declaration//GEN-END:variables
 }
-

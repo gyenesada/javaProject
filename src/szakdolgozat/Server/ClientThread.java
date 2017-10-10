@@ -1,5 +1,6 @@
 package szakdolgozat.Server;
 
+//git 10.10
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,19 +86,30 @@ public class ClientThread implements Runnable {
         switch (identifier) {
             case "log:":
                 answer = Boolean.toString(validateClient(in));
+
+                out.add(identifier);
+                out.add(answer);
                 break;
             case "reg:":
                 answer = Boolean.toString(regClient(in));
+
+                out.add(identifier);
+                out.add(answer);
                 break;
             case "csv:":
                 String filename = in.get(1).replaceAll(":", "");
                 answer = Boolean.toString(insertTableIntoDatabase(filename));
+
+                out.add(identifier);
+                out.add(answer);
                 writeToCsv(filename);
+                break;
+            case "old:":
+                out = getOldWorksFromTables();
+                break;
             default:
                 break;
         }
-        out.add(identifier);
-        out.add(answer);
         return out;
     }
 
@@ -231,7 +244,7 @@ public class ClientThread implements Runnable {
     private boolean insertTableIntoDatabase(String filename) { //ha full egyezés van, akkor ne illesszük be mégegyszer.
         boolean returnvalue = false;
         try {
-            String insertQuery = "insert into tables values (?,?,?,?,?,?,?);";
+            String insertQuery = "insert into tables values (?,?,?,?,?,?,?,?);";
             PreparedStatement prep = conn.prepareStatement(insertQuery);
             int id = getTableID();
             prep.setInt(1, id);
@@ -241,6 +254,7 @@ public class ClientThread implements Runnable {
             prep.setBoolean(5, false);
             prep.setBoolean(6, false);
             prep.setBoolean(7, false);
+            prep.setDate(8, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             if (!(isTheTableAlreadyInDatabase(id, threadID, filename, false, false, false, false))) {
                 prep.addBatch();
 
@@ -267,7 +281,7 @@ public class ClientThread implements Runnable {
             boolean isc = rs.getBoolean("IS_CLASSIFIED");
             boolean isf = rs.getBoolean("IS_FACTORIZED");
             boolean isn = rs.getBoolean("IS_NORMALIZED");
-            boolean isfs = rs.getBoolean("IS_FEATURE_SELECTED");
+            boolean isfs = rs.getBoolean("IS_FEAUTRE_SELECTED");
 
             if (table_id == tableID && user_id == userID && name.equals(tablename) && isclassif == isc && isfact == isf && isnorm == isn && isfeatsel == isfs) {
                 returnvalue = true;
@@ -293,6 +307,27 @@ public class ClientThread implements Runnable {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         return returnvalue++;
+    }
+
+    private ArrayList<String> getOldWorksFromTables() {
+        ArrayList<String> returnvalue = new ArrayList<>();
+        returnvalue.add("old:");
+
+        try {
+            Statement stat = conn.createStatement();
+            String query = "select name, modified from tables where user_id='" + threadID + "';";
+            ResultSet rs = stat.executeQuery(query);
+
+            while (rs.next()) {
+                returnvalue.add(rs.getString("NAME"));
+                returnvalue.add(rs.getDate("MODIFIED").toString());
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return returnvalue;
     }
 
     private void modifyIsClassifiedInTables() {
