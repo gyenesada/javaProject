@@ -1,5 +1,7 @@
 package szakdolgozat.Client;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,7 +12,8 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTable;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import szakdolgozat.Server.Server;
 
@@ -19,10 +22,12 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private final String loggedUser;
     private final Scanner sc;
     private final PrintWriter pw;
+    private boolean exit=false;
+    
+    ProgressFrame pf;
 
     ArrayList<String> outDatas = new ArrayList<>();
     ArrayList<String> inDatas = new ArrayList<>();
-    
     ArrayList<String> csvToTable = new ArrayList<>();
 
     public WorkWindowFrame(PrintWriter pw, Scanner sc, String name) throws Exception {
@@ -32,8 +37,26 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
         initComponents();
 
-        this.setTitle("CloudBased classifier");
-        this.setResizable(false);
+        /*for (int i = 0; i < 100; i++) {
+            list.add(Integer.toString(i));
+        }*/
+        setTitle("CloudBased classifier");
+        setResizable(false);
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int n = JOptionPane.showConfirmDialog(null, "Biztos ki szeretnél lépni?",
+                "Kilépés", JOptionPane.YES_NO_OPTION);
+                if (n == JOptionPane.YES_OPTION) {
+                    exit=true;
+                    dispose();
+                }
+                if(n == JOptionPane.NO_OPTION){
+                    dispose();
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -50,6 +73,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         fileUploadLabel = new javax.swing.JLabel();
         choseButton = new javax.swing.JButton();
         oldWorkSPane = new javax.swing.JScrollPane();
+        list = new java.awt.List();
         workPanel = new javax.swing.JPanel();
         separator2 = new javax.swing.JSeparator();
         jSeparator1 = new javax.swing.JSeparator();
@@ -118,6 +142,15 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 choseButtonActionPerformed(evt);
             }
         });
+
+        list.setBackground(new java.awt.Color(240, 240, 240));
+        list.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        list.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listActionPerformed(evt);
+            }
+        });
+        oldWorkSPane.setViewportView(list);
 
         javax.swing.GroupLayout loadPanelLayout = new javax.swing.GroupLayout(loadPanel);
         loadPanel.setLayout(loadPanelLayout);
@@ -417,7 +450,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addGap(64, 64, 64)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -432,18 +465,25 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
     private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
         outDatas.clear();
-        outDatas = readFromCsv(filepathField.getText()); //csv to outDatas
+        String file = filepathField.getText();
         
-        loadPanel.setVisible(false);
-        workPanel.setVisible(true);
+        if (file.equals("")) {
+            JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
+        } else {
+            outDatas = readFromCsv(file); 
+            
+            /*ProgressFrame pf = new ProgressFrame("");
+            pf.setVisible(true);
+            pf.run();*/
 
-        sideLoadPanel.setVisible(false);
-        sideWorkPanel.setVisible(true);
+            
+        }
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     private void choseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choseButtonActionPerformed
         FileManager fm = new FileManager();
         fm.setVisible(true);
+        //!!!
     }//GEN-LAST:event_choseButtonActionPerformed
 
     private void doButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doButtonActionPerformed
@@ -452,8 +492,17 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
     private void workUploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workUploadButtonActionPerformed
         outDatas.clear();
-        outDatas = readFromCsv(workPathField.getText());
+        String file = workPathField.getText();
+        if(file.equals("")){
+            JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
+        }else{
+            outDatas = readFromCsv(file);
+        }
     }//GEN-LAST:event_workUploadButtonActionPerformed
+
+    private void listActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listActionPerformed
+
+    }//GEN-LAST:event_listActionPerformed
 
     @Override
     public void run() {
@@ -463,10 +512,9 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
     private void communicateWithServer(PrintWriter pw, Scanner sc) {
         int index = 0;
-        while (true) {
+        while (!exit) {
             System.out.println("---------------" + index + "--------------");
             System.out.println("");
-            // outDatas.clear();
             System.out.println("Output: " + outDatas);
 
             pw.println(outDatas);
@@ -486,9 +534,19 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         String answer = "";
         String identifier = in.get(0);
 
-        //Még kell!    
         switch (identifier) {
+            case "csv:":
+                if(Boolean.valueOf(in.get(1))){                    
+            loadPanel.setVisible(false);
+            workPanel.setVisible(true);
 
+            sideLoadPanel.setVisible(false);
+            sideWorkPanel.setVisible(true);
+//           pf.dispose();
+                }else{
+       //             pf.dispose();
+                    JOptionPane.showMessageDialog(this, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
+                }
         }
         return out;
     }
@@ -501,41 +559,45 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         inDatas.addAll(Arrays.asList(string));
         System.out.println("Input: " + inDatas);
     }
+    
+    private String getFilename(String path){
+        System.out.println("path: " + path);
+        String[] spl = path.split(Pattern.quote("\\"));
+        return spl[spl.length-1];
+    }
 
-    public ArrayList<String> readFromCsv(String path) {
+    private ArrayList<String> readFromCsv(String path) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add("csv:");
-        
+        String filename;
+
         BufferedReader br = null;
         try {
             File file = new File(path);
             br = new BufferedReader(new FileReader(file));
-
+            filename = getFilename(path);
+            csv.add(filename+ ":");
             String line = br.readLine();
             csv.add(line);
             csv.add(">>enter_flag<<");
-            
+
             String[] cols = line.split(",");
-            ArrayList<String[]> items = new ArrayList<>(); ;
+            ArrayList<String[]> items = new ArrayList<>();
             
-            for(String c: cols) System.out.println("cosl: " + c);
-            int i=0;
             while (line != null) {
-                    System.out.println(line);
-                    line = br.readLine();
-                    i++;
-                    System.out.println("LINE: " + line);
-                    if(line==null){
-                        break;
-                    }else{
+                System.out.println(line);
+                line = br.readLine();
+                
+                if (line == null) {
+                    break;
+                } else {
                     csv.add(line);
                     csv.add(">>enter_flag<<");
-                    }
-                    
-                    String[] items_temp = line.split(",");
-                    items.add(items_temp);
+                }
+                String[] items_temp = line.split(",");
+                items.add(items_temp);
             }
-            System.out.println("items: " + items);
+            
             fillPrevTable(cols, items);
         } catch (IOException ex) {
             System.out.println(".csv file not found!");
@@ -548,17 +610,15 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         }
         return csv;
     }
-   
-    public void fillPrevTable(String[] cols, ArrayList<String[]> items){
-        DefaultTableModel model = new DefaultTableModel(cols,0);
-        
-        for(String[] str: items ){
+
+    private void fillPrevTable(String[] cols, ArrayList<String[]> items) {
+        DefaultTableModel model = new DefaultTableModel(cols, 0);
+
+        items.forEach((str) -> {
             model.addRow(str);
-        }
+        });
         csvPrevTable.setModel(model);
-        
-        csvPrevTable.setDefaultEditor(Object.class, null);
-           
+        csvPrevTable.setDefaultEditor(Object.class, null); 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -578,6 +638,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JSeparator jSeparator1;
+    private java.awt.List list;
     private javax.swing.JPanel loadPanel;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel newTablePanel;

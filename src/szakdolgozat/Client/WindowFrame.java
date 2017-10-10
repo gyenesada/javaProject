@@ -1,5 +1,7 @@
 package szakdolgozat.Client;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -12,12 +14,11 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class WindowFrame extends javax.swing.JFrame implements Runnable {
-
-   // static WFController wfc=null;
-    
     private Socket socket;
     private Scanner sc;
     private PrintWriter pw;
+    
+    private boolean exit=false;
     
     private final  String host;
     private final int port;
@@ -30,12 +31,31 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         this.port = 2018;
         initComponents();
         
-        this.setTitle("CloudBased classifier - Login");
-        this.setResizable(false);
+        setTitle("CloudBased classifier - Login");
+        setResizable(false);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int n = JOptionPane.showConfirmDialog(null, "Biztos ki szeretnél lépni?",
+                "Kilépés", JOptionPane.YES_NO_OPTION);
+                if (n == JOptionPane.YES_OPTION) {
+                    exit=true;
+                    dispose();
+                }
+                if(n == JOptionPane.NO_OPTION){
+                    dispose();
+                }
+            }
+        });
     }
+    
+    
 
     //INIT COMPONENTS
-    // <editor-fold defaultstate="collapsed">
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                                                  
     private void initComponents() {
 
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -220,10 +240,9 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         );
 
         pack();
-    }
-
-    // </editor-fold>
-    private void logButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    }// </editor-fold>                                            
+	
+    private void logButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logButtonActionPerformed
         try {
             outDatas.clear();
             String username = nameField.getText();
@@ -238,14 +257,14 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         } catch (Exception ex) {
             System.out.println("Error: logButton");
         }
-    }
+    }//GEN-LAST:event_logButtonActionPerformed
 
-    private void regButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    private void regButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                                                 
         loginPanel.setVisible(false);
         regPanel.setVisible(true);
-    }
+    }                                                                        
 
-    private void regDoButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    private void regDoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regDoButtonActionPerformed
         try {
             outDatas.clear();
             String username = regNameField.getText();
@@ -256,13 +275,11 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
             outDatas.add(mail);
             outDatas.add(password);
             
-//            wfc.getOutDatas(outDatas);
-
             System.out.println("outDatas: " + outDatas);
         } catch (Exception ex) {
             System.out.println("Error: regDoButton");
         }
-    }
+    }//GEN-LAST:event_regDoButtonActionPerformed
 
     private static String encrypt(String pass) throws Exception {
         java.security.MessageDigest d = java.security.MessageDigest.getInstance("MD5");
@@ -273,12 +290,9 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
     }
 
     public static void main(String[] args) throws Exception {
-//        wfc = new WFController("localhost", 2017);
-  //      wfc.run();
   WindowFrame wf = new WindowFrame();
   wf.setVisible(true);
   wf.run();
-        //windowframe.run();
     }
 
     @Override
@@ -298,7 +312,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
     
     private void communicationWithServer(PrintWriter pw, Scanner sc) { //ez kell majd a WorkWindowFrame-be is.
         int index = 0;
-        while (true) {
+        while (!exit) {
             System.out.println("---------------" + index + "--------------");
             System.out.println("");
             pw.println(outDatas);
@@ -325,12 +339,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
                 if (Boolean.valueOf(in.get(1))) {
                     try {
                         String username = nameField.getText();
-                        WorkWindowFrame wwf = new WorkWindowFrame(pw, sc, username);
-                        System.out.println("Username: " + username);
-
-                        wwf.setVisible(true);
-                        wwf.run();
-                        this.dispose();
+                        
                     } catch (Exception ex) {
                         Logger.getLogger(WindowFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -356,10 +365,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         }
         return out;
     }
-    
-    //ez módosítja a communication fv while() argumentumát.
-
-    
+        
     private void inputPreprocess(String input) {
         System.out.println("input: " + input);
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
@@ -370,7 +376,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
     }
 
     //VARIABLES
-    // <editor-fold defaultstate="collapsed">
+    // Variables declaration - do not modify//GEN-BEGIN:variables
         protected javax.swing.JComboBox<String> jComboBox1;
         protected javax.swing.JMenu jMenu1;
         protected javax.swing.JMenu jMenu2;
@@ -393,6 +399,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         protected javax.swing.JPanel regPanel;
         protected javax.swing.JPasswordField regPassField;
         protected javax.swing.JLabel regPassLabel;
-    
-    // </editor-fold >
+
+    // End of variables declaration//GEN-END:variables
 }
+

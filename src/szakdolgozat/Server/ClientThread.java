@@ -13,6 +13,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientThread implements Runnable {
 
@@ -20,8 +22,9 @@ public class ClientThread implements Runnable {
     private Scanner sc;
     private PrintWriter pw;
     private final Connection conn;
-    
+
     private String threadName;
+    private int threadID;
 
     private String rawInput;
 
@@ -32,7 +35,7 @@ public class ClientThread implements Runnable {
         this.s = s;
         this.conn = conn;
 
-        System.out.println("A new thread started..");
+        System.out.println("A new thread has started..");
     }
 
     @Override
@@ -63,7 +66,6 @@ public class ClientThread implements Runnable {
         }
     }
 
-    //input adatok előfeldolgozása
     private void inputPreprocess(String input) {
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
         rawInput = withoutBrackets;
@@ -73,9 +75,7 @@ public class ClientThread implements Runnable {
         System.out.println("Input: " + inDatas);
     }
 
-    //Vezérlő kerül majd ide. Visszatérési értéke az outDatas
     private ArrayList<String> controller(ArrayList<String> in) {
-        System.out.println("Thread: " + threadName);
         ArrayList<String> out = new ArrayList<>();
         String answer = "";
         String identifier = in.get(0);
@@ -84,14 +84,14 @@ public class ClientThread implements Runnable {
         switch (identifier) {
             case "log:":
                 answer = Boolean.toString(validateClient(in));
-                System.out.println("answer: " + answer);
                 break;
             case "reg:":
                 answer = Boolean.toString(regClient(in));
-                System.out.println("answer: " + answer);
                 break;
             case "csv:":
-                writeToCsv();
+                String filename = in.get(1).replaceAll(":", "");
+                answer = Boolean.toString(insertTableIntoDatabase(filename));
+                writeToCsv(filename);
             default:
                 break;
         }
@@ -100,9 +100,8 @@ public class ClientThread implements Runnable {
         return out;
     }
 
-    public void writeToCsv() { //String filename
-        String path = "C:\\Users\\Adrienn\\Desktop\\szerver minitárhely\\csv\\";
-        String filename = "four.csv"; //majd kiolvassa a kliens
+    private void writeToCsv(String filename) { //String filename
+        String path = "C:\\Users\\Adrienn\\Desktop\\szerver minitárhely\\csv\\"; //kell majd username folder
         String fullFilepath = path + filename;
 
         BufferedWriter bw = null;
@@ -111,13 +110,13 @@ public class ClientThread implements Runnable {
         try {
             fw = new FileWriter(fullFilepath);
             bw = new BufferedWriter(fw);
-            System.out.println("raw: "+ rawInput);
-            String withoutID = rawInput.split(":, ")[1];
+            System.out.println("raw: " + rawInput);
+            String withoutID = rawInput.split(":, ")[2];
             String[] lines;
             lines = withoutID.split(", >>enter_flag<<, ");
             for (String line : lines) {
                 line = line.replaceAll(", >>enter_flag<<", "");
-                
+
                 bw.write(line);
                 bw.newLine();
             }
@@ -146,16 +145,13 @@ public class ClientThread implements Runnable {
 
         try {
             stat = conn.createStatement();
-            String query = "select password from users where username='" + name + "';";
-            System.out.println(query);
+            String query = "select password, user_id from users where username='" + name + "';";
             rs = stat.executeQuery(query);
-            System.out.println(rs);
             while (rs.next()) {
                 String password = rs.getString("PASSWORD");
-                System.out.println("pass: " + password);
-                System.out.println("password: " + pass);
                 if (pass.equals(password)) {
                     threadName = name;
+                    threadID = rs.getInt("USER_ID");
                     return true;
                 } else {
                     return false;
@@ -168,7 +164,22 @@ public class ClientThread implements Runnable {
         return false;
     }
 
-    private Boolean regClient(ArrayList<String> acceptedDatas) { //ID megadás nem jó.
+    /* private int getThreadID(String name){
+        int returnvalue=0; //default 0
+        try {
+            Statement stat = conn.createStatement();
+            String query = "select user_id from users where username='" + name + "';";
+            ResultSet rs = stat.executeQuery(query);
+            
+            while(rs.next()){
+                returnvalue = getThreadID(name);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnvalue;
+    }*/
+    private Boolean regClient(ArrayList<String> acceptedDatas) {
         String returnvalue = "";
         String name = acceptedDatas.get(1);
         String mail = acceptedDatas.get(2);
@@ -185,15 +196,11 @@ public class ClientThread implements Runnable {
             if (maxIDrs.next()) {
                 id = maxIDrs.getInt(1);
             }
-            id++;
-            System.out.println("ID: " + id);
 
-            //elsőnek lekérdezzük, van-e ilyen nevű vagy mailcímű felhasználó. ha van, akkor false-t adok vissza.
             Statement stat = conn.createStatement();
             String listquery = "select * from users where username = '" + name + "' or mail='" + mail + "';";
             ResultSet rs = stat.executeQuery(listquery);
             if (rs.next()) {
-                System.out.println("Már van ilyen felh. vagy mail.");
                 return false;
             } else {
                 Statement idstat = conn.createStatement();
@@ -220,6 +227,88 @@ public class ClientThread implements Runnable {
         }
         return false;
     }
-    // </editor-fold>
 
+    private boolean insertTableIntoDatabase(String filename) { //ha full egyezés van, akkor ne illesszük be mégegyszer.
+        boolean returnvalue = false;
+        try {
+            String insertQuery = "insert into tables values (?,?,?,?,?,?,?);";
+            PreparedStatement prep = conn.prepareStatement(insertQuery);
+            int id = getTableID();
+            prep.setInt(1, id);
+            prep.setInt(2, threadID);
+            prep.setString(3, filename);
+            prep.setBoolean(4, false); //feltöltött tábla alapértelmezetten nem osztályzott
+            prep.setBoolean(5, false);
+            prep.setBoolean(6, false);
+            prep.setBoolean(7, false);
+            if (!(isTheTableAlreadyInDatabase(id, threadID, filename, false, false, false, false))) {
+                prep.addBatch();
+
+                conn.setAutoCommit(false);
+                prep.executeBatch();
+                conn.setAutoCommit(true);
+                returnvalue = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnvalue;
+    }
+
+    private boolean isTheTableAlreadyInDatabase(int table_id, int user_id, String tablename, boolean isclassif, boolean isfact, boolean isnorm, boolean isfeatsel) throws SQLException {
+        boolean returnvalue = false;
+        String query = "select * from tables where name='" + tablename + "';";
+        Statement stat = conn.createStatement();
+        ResultSet rs = stat.executeQuery(query);
+        while (rs.next()) {
+            int tableID = rs.getInt("TABLE_ID");
+            int userID = rs.getInt("USER_ID");
+            String name = rs.getString("NAME");
+            boolean isc = rs.getBoolean("IS_CLASSIFIED");
+            boolean isf = rs.getBoolean("IS_FACTORIZED");
+            boolean isn = rs.getBoolean("IS_NORMALIZED");
+            boolean isfs = rs.getBoolean("IS_FEATURE_SELECTED");
+
+            if (table_id == tableID && user_id == userID && name.equals(tablename) && isclassif == isc && isfact == isf && isnorm == isn && isfeatsel == isfs) {
+                returnvalue = true;
+            }
+        }
+        return returnvalue;
+    }
+
+    private int getTableID() {
+        int returnvalue = 0;
+        try {
+            ResultSet maxIDrs;
+
+            Statement maxID = conn.createStatement();
+            String maxIDquery = "select nvl(max(table_id),0) from tables;";
+            maxIDrs = maxID.executeQuery(maxIDquery);
+
+            if (maxIDrs.next()) {
+                returnvalue = maxIDrs.getInt(1);
+            }
+            System.out.println("ID: " + returnvalue);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnvalue++;
+    }
+
+    private void modifyIsClassifiedInTables() {
+
+    }
+
+    private void modifyIsFactorizedInTables() {
+
+    }
+
+    private void modifyIsNormalisedInTables() {
+
+    }
+
+    private void modifyIsFeatureSelectedInTables() {
+
+    }
+    // </editor-fold>
 }
