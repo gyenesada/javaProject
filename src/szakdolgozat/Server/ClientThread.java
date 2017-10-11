@@ -227,7 +227,7 @@ public class ClientThread implements Runnable {
             if (maxIDrs.next()) {
                 id = maxIDrs.getInt(1);
             }
-
+            id++;
             Statement stat = conn.createStatement();
             String listquery = "select * from users where username = '" + name + "' or mail='" + mail + "';";
             ResultSet rs = stat.executeQuery(listquery);
@@ -268,7 +268,7 @@ public class ClientThread implements Runnable {
             prep.setInt(1, id);
             prep.setInt(2, threadID);
             prep.setString(3, filename);
-            prep.setBoolean(4, false); //feltöltött tábla alapértelmezetten nem osztályzott
+            prep.setBoolean(4, false);
             prep.setBoolean(5, false);
             prep.setBoolean(6, false);
             prep.setBoolean(7, false);
@@ -282,7 +282,7 @@ public class ClientThread implements Runnable {
                 returnvalue = true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error inserting to database");
         }
         return returnvalue;
     }
@@ -322,7 +322,7 @@ public class ClientThread implements Runnable {
             }
             System.out.println("ID: " + returnvalue);
         } catch (SQLException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error: Getting table_id");
         }
         return ++returnvalue;
     }
@@ -342,7 +342,7 @@ public class ClientThread implements Runnable {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error: load old works");
         }
 
         return returnvalue;

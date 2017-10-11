@@ -8,6 +8,22 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="showLoadPanel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="F&#x151;oldal"/>
+                <Property name="actionCommand" type="java.lang.String" value="F&#x151;oldal"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showLoadPanelActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="logOut">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Kijelentkez&#xe9;s"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
