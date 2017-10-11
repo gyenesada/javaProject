@@ -1,7 +1,9 @@
 package szakdolgozat.Server;
 
-//git 10.10
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,6 +26,8 @@ public class ClientThread implements Runnable {
     private Scanner sc;
     private PrintWriter pw;
     private final Connection conn;
+
+    String PATH = "C:\\Users\\Adrienn\\Desktop\\szerver minitárhely\\csv\\";
 
     private String threadName;
     private int threadID;
@@ -107,14 +111,43 @@ public class ClientThread implements Runnable {
             case "old:":
                 out = getOldWorksFromTables();
                 break;
+            case "ldt:":
+                out = readFromCsv(in.get(1));
+                break;
             default:
                 break;
         }
         return out;
     }
 
-    private void writeToCsv(String filename) { //String filename
-        String path = "C:\\Users\\Adrienn\\Desktop\\szerver minitárhely\\csv\\"; //kell majd username folder
+    private ArrayList<String> readFromCsv(String filename) {
+        ArrayList<String> csv = new ArrayList<>();
+        csv.add("ldt:");
+        System.out.println("LDT:");
+        File file = new File(PATH + filename);
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line = br.readLine();
+            csv.add(line);
+            csv.add(">>first_line_end_flag<<"); //első sor végét jelzi.
+            while (line != null) {
+                line = br.readLine();
+
+                if (line == null) {
+                    break;
+                } else {
+                    csv.add(line);
+                    csv.add(">>enter_flag<<");
+                }
+            }
+        } catch (IOException ex) {
+            System.out.println("File not found.");
+        }
+        return csv;
+    }
+
+    private void writeToCsv(String filename) {
+        String path = PATH; //kell majd username folder
         String fullFilepath = path + filename;
 
         BufferedWriter bw = null;
@@ -177,21 +210,6 @@ public class ClientThread implements Runnable {
         return false;
     }
 
-    /* private int getThreadID(String name){
-        int returnvalue=0; //default 0
-        try {
-            Statement stat = conn.createStatement();
-            String query = "select user_id from users where username='" + name + "';";
-            ResultSet rs = stat.executeQuery(query);
-            
-            while(rs.next()){
-                returnvalue = getThreadID(name);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return returnvalue;
-    }*/
     private Boolean regClient(ArrayList<String> acceptedDatas) {
         String returnvalue = "";
         String name = acceptedDatas.get(1);
@@ -291,7 +309,7 @@ public class ClientThread implements Runnable {
     }
 
     private int getTableID() {
-        int returnvalue = 0;
+        int returnvalue = 1;
         try {
             ResultSet maxIDrs;
 
@@ -306,7 +324,7 @@ public class ClientThread implements Runnable {
         } catch (SQLException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return returnvalue++;
+        return ++returnvalue;
     }
 
     private ArrayList<String> getOldWorksFromTables() {
@@ -328,6 +346,22 @@ public class ClientThread implements Runnable {
         }
 
         return returnvalue;
+    }
+
+    private void modifyTimestamp(int id, String tablename) { //id: table or user_id  --nincs befejezve
+        try {
+            //tables és users tábla módosítás
+            Statement stat = conn.createStatement();
+            if (tablename.equals("users")) {
+                String query = "select timestamp from users where user_id = '" + id + "' ;";
+
+            } else if (tablename.equals("tables")) {
+                String query = "select modified from tables where table_id = '" + id + "' ;";
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void modifyIsClassifiedInTables() {
