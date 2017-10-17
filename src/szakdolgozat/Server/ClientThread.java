@@ -59,14 +59,14 @@ public class ClientThread implements Runnable {
     private void communicationWithClients(PrintWriter pw, Scanner sc) {
         int index = 0;
         while (true) {
-            System.out.println("---------------" + index + "--------------");
+            System.out.println("---------------" + index + ". kérés--------------");
             System.out.println("");
             outDatas.clear();
             inputPreprocess(sc.nextLine());
             outDatas = controller(inDatas);
             inDatas.clear();
             pw.println(outDatas);
-            System.out.println("Output: " + outDatas);
+          //  System.out.println("Output: " + outDatas);
 
             index++;
         }
@@ -83,7 +83,7 @@ public class ClientThread implements Runnable {
 
     private ArrayList<String> controller(ArrayList<String> in) {
         ArrayList<String> out = new ArrayList<>();
-        String answer = "";
+        String answer;
         String identifier = in.get(0);
 
         //feladatok elosztása
@@ -147,8 +147,7 @@ public class ClientThread implements Runnable {
     }
 
     private void writeToCsv(String filename) {
-        String path = PATH; //kell majd username folder
-        String fullFilepath = path + filename;
+        String fullFilepath = PATH + filename;
 
         BufferedWriter bw = null;
         FileWriter fw = null;
@@ -160,7 +159,7 @@ public class ClientThread implements Runnable {
             //System.out.println("raw: " + rawInput);
             String lines = rawInput.split(":, ")[2];
             
-            String line = lines.replaceAll(", >>enter_flag<<,", "\n");
+            String line = lines.replaceAll(", >>flag<<, ", "\n");
             
                 bw.write(line);
             System.out.println("Done with file writing");
@@ -208,7 +207,6 @@ public class ClientThread implements Runnable {
     }
 
     private Boolean regClient(ArrayList<String> acceptedDatas) {
-        String returnvalue = "";
         String name = acceptedDatas.get(1);
         String mail = acceptedDatas.get(2);
         String pass = acceptedDatas.get(3);

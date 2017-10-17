@@ -31,7 +31,8 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     ArrayList<String> inDatas = new ArrayList<>();
     ArrayList<String> csvToTable = new ArrayList<>();
     
-    
+    //FELÜLET
+     // <editor-fold defaultstate="collapsed">
     public WorkWindowFrame(PrintWriter pw, Scanner sc, String name) throws Exception {
         this.loggedUser = name;
         this.sc = sc;
@@ -71,7 +72,6 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         newTablePanel = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         workPathField = new javax.swing.JTextField();
-        workChooseButton = new javax.swing.JButton();
         workUploadButton = new javax.swing.JButton();
         tablesPanel = new javax.swing.JPanel();
         profilePanel = new javax.swing.JPanel();
@@ -82,6 +82,8 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        processBar = new javax.swing.JProgressBar();
+        loadingLabel = new javax.swing.JLabel();
         sideWorkPanel = new javax.swing.JPanel();
         classifierCBox = new javax.swing.JComboBox<>();
         classifierLabel = new javax.swing.JLabel();
@@ -100,7 +102,10 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setFocusTraversalPolicyProvider(true);
 
+        mainPanel.setPreferredSize(new java.awt.Dimension(1000, 600));
         mainPanel.setLayout(new java.awt.CardLayout());
+
+        loadPanel.setPreferredSize(new java.awt.Dimension(1000, 600));
 
         oldWorkLabel.setFont(new java.awt.Font("Trebuchet MS", 0, 18)); // NOI18N
         oldWorkLabel.setForeground(new java.awt.Color(102, 102, 102));
@@ -191,7 +196,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addComponent(oldWorkLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(oldWorkSPane, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(223, Short.MAX_VALUE))
+                .addContainerGap(257, Short.MAX_VALUE))
         );
 
         mainPanel.add(loadPanel, "card3");
@@ -215,8 +220,6 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
         jLabel8.setText("Új tábla feltöltése: ");
 
-        workChooseButton.setText("Kiválaszt");
-
         workUploadButton.setText("Feltöltés");
         workUploadButton.setToolTipText("");
         workUploadButton.addActionListener(new java.awt.event.ActionListener() {
@@ -233,10 +236,8 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addContainerGap()
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(workPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(workChooseButton)
-                .addGap(16, 16, 16)
+                .addComponent(workPathField, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                .addGap(101, 101, 101)
                 .addComponent(workUploadButton)
                 .addContainerGap())
         );
@@ -247,7 +248,6 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addGroup(newTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(workPathField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(workChooseButton)
                     .addComponent(workUploadButton))
                 .addContainerGap())
         );
@@ -259,11 +259,11 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         tablesPanel.setLayout(tablesPanelLayout);
         tablesPanelLayout.setHorizontalGroup(
             tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 709, Short.MAX_VALUE)
+            .addGap(0, 882, Short.MAX_VALUE)
         );
         tablesPanelLayout.setVerticalGroup(
             tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 225, Short.MAX_VALUE)
+            .addGap(0, 259, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout workPanelLayout = new javax.swing.GroupLayout(workPanel);
@@ -280,7 +280,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                         .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tablesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(newTablePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(previewScPane, javax.swing.GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE))))
+                            .addComponent(previewScPane, javax.swing.GroupLayout.DEFAULT_SIZE, 886, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(separator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -334,15 +334,19 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         sideLoadPanelLayout.setHorizontalGroup(
             sideLoadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sideLoadPanelLayout.createSequentialGroup()
+                .addComponent(jLabel7)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(sideLoadPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(sideLoadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(processBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(sideLoadPanelLayout.createSequentialGroup()
+                        .addComponent(loadingLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(sideLoadPanelLayout.createSequentialGroup()
-                .addComponent(jLabel7)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         sideLoadPanelLayout.setVerticalGroup(
             sideLoadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,12 +358,21 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
-                .addContainerGap(346, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 349, Short.MAX_VALUE)
+                .addComponent(loadingLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(processBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         sidePanel.add(sideLoadPanel, "card2");
 
         classifierCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        classifierCBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                classifierCBoxActionPerformed(evt);
+            }
+        });
 
         classifierLabel.setText("Classifier");
 
@@ -375,6 +388,11 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         operationLabel.setText("Műveletek");
 
         operationCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        operationCBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                operationCBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout sideWorkPanelLayout = new javax.swing.GroupLayout(sideWorkPanel);
         sideWorkPanel.setLayout(sideWorkPanelLayout);
@@ -414,7 +432,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addComponent(paramSPane, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(doButton)
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(117, Short.MAX_VALUE))
         );
 
         sidePanel.add(sideWorkPanel, "card2");
@@ -422,7 +440,6 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         fileMenu.setText("File");
 
         showLoadPanel.setText("Főoldal");
-        showLoadPanel.setActionCommand("Főoldal");
         showLoadPanel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 showLoadPanelActionPerformed(evt);
@@ -459,7 +476,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addGap(64, 64, 64)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -519,17 +536,125 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         loadPanel.setVisible(true);
         sideLoadPanel.setVisible(true);
     }//GEN-LAST:event_showLoadPanelActionPerformed
+
+    private void operationCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationCBoxActionPerformed
+        String chosen = getSelectedOperation();
+        if(chosen==null) {
+        }else{
+            
+            JOptionPane.showInputDialog(this, "opcio");
+        }
+    }//GEN-LAST:event_operationCBoxActionPerformed
+
+    private void classifierCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classifierCBoxActionPerformed
+        String chosen = getSelectedClassifier();
+        System.out.println(chosen);
+    }//GEN-LAST:event_classifierCBoxActionPerformed
+       private void addExitOption() {
+        addWindowListener(new WindowAdapter() {
+            
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int n = JOptionPane.showConfirmDialog(null, "Biztos ki szeretnél lépni?",
+                        "Kilépés", JOptionPane.YES_NO_OPTION);
+                if (n == JOptionPane.YES_OPTION) {
+                    exit = true;
+                    dispose();
+                }
+                if (n == JOptionPane.NO_OPTION) {
+                    dispose();
+                }
+            }
+        });
+    }
     
+
+// </editor-fold>
+    
+      //KEZELŐ
+     // <editor-fold defaultstate="collapsed">
     @Override
     public void run() {
         usernameLabel.setText("Üdvözöljük " + loggedUser + "!");
         communicateWithServer(pw, sc);
     }
     
+    private void communicateWithServer(PrintWriter pw, Scanner sc) {
+        int index = 0;
+        while (!exit) {
+                System.out.println("---------------" + index + "--------------");
+                while(outDatas.isEmpty()){
+                    try {
+                        Thread.sleep(10); //to prevent dataloss
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                pw.println(outDatas);
+                inDatas.clear();
+                rawInput = sc.nextLine();
+                inputPreprocess(rawInput);
+                if (!inDatas.isEmpty()) {
+                    outDatas = controller(inDatas);
+                }
+                //System.out.println("Input: " + inDatas);
+                index++;
+            
+        }
+    }
+        
+    private ArrayList<String> controller(ArrayList<String> in) {
+        ArrayList<String> out = new ArrayList<>();
+        
+        String identifier = in.get(0);
+        
+        switch (identifier) {
+            case "csv:":
+                if (Boolean.valueOf(in.get(1))) {
+                    loadPanel.setVisible(false);
+                    workPanel.setVisible(true);
+                    
+                    sideLoadPanel.setVisible(false);
+                    sideWorkPanel.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
+                }
+                break;
+            case "old:":
+                for (int i = 1; i < in.size() - 1; i = i + 2) {
+                    list.add(in.get(i + 1) + "    -    " + in.get(i));
+                }
+                getSelectedFile();
+                break;
+            case "ldt:":
+                loadedTablePreprocess();
+                loadPanel.setVisible(false);
+                sideLoadPanel.setVisible(false);
+                
+                workPanel.setVisible(true);
+                sideWorkPanel.setVisible(true);
+                break;
+        }
+        return out;
+    }
+     
+    private void inputPreprocess(String input) {
+        String withoutBrackets = input.replaceAll("[\\[\\]]", "");
+        
+        String[] string = withoutBrackets.split(", ");
+        inDatas.addAll(Arrays.asList(string));
+      //  System.out.println("Input:: " + inDatas);
+    }
+    
+     // </editor-fold>
+    
+    //Combo-box feltöltő fv-ek
+     // <editor-fold defaultstate="collapsed">
     private void fillOperationsList() {
         ArrayList<String> operations = new ArrayList<>();
         
         operationCBox.removeAllItems();
+        operations.add(""); //első üres legyen
         operations.add("Üres értékek kezelése");
         operations.add("Faktorizálás");
         operations.add("Normalizálás");
@@ -546,6 +671,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     ArrayList<String> classifiers = new ArrayList<>();
     
         classifierCBox.removeAllItems();
+        classifiers.add("");
         classifiers.add("AdaBoost Classifier");
         classifiers.add("Random Forest Classifier");
         classifiers.add("Sentiment Analysis");
@@ -557,99 +683,10 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
             classifierCBox.addItem(str);
         });
     }
-    
-    private void communicateWithServer(PrintWriter pw, Scanner sc) {
-        int index = 0;
-        while (!exit) {
-                System.out.println("---------------" + index + "--------------");
-                while(outDatas.isEmpty()){
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                pw.println(outDatas);
-                inDatas.clear();
-                rawInput = sc.nextLine();
-                inputPreprocess(rawInput);
-                if (!inDatas.isEmpty()) {
-                    outDatas = controller(inDatas);
-                }
-                System.out.println("Input: " + inDatas);
-                index++;
-            
-        }
-    }
-    
-    private ArrayList<String> controller(ArrayList<String> in) {
-        ArrayList<String> out = new ArrayList<>();
-        
-        String answer = "";
-        String identifier = in.get(0);
-        
-        switch (identifier) {
-            case "csv:":
-                if (Boolean.valueOf(in.get(1))) {
-                    loadPanel.setVisible(false);
-                    workPanel.setVisible(true);
-                    
-                    sideLoadPanel.setVisible(false);
-                    sideWorkPanel.setVisible(true);
-//           pf.dispose();
-                } else {
-                    //             pf.dispose();
-                    JOptionPane.showMessageDialog(this, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
-                }
-                break;
-            case "old:":
-                for (int i = 1; i < in.size() - 1; i = i + 2) {
-                    list.add(in.get(i + 1) + "    -    " + in.get(i));
-                }
-                getSelectedFile();
-                break;
-            case "ldt:": //loadtable -> ide érkezik majd be a betöltött tábla, innen kell a jtable-be betölteni.
-                loadedTablePreprocess();
-                loadPanel.setVisible(false);
-                sideLoadPanel.setVisible(false);
-                
-                workPanel.setVisible(true);
-                sideWorkPanel.setVisible(true);
-                break;
-        }
-        return out;
-    }
-    
-    private void loadedTablePreprocess() {
-        ArrayList<String[]> items = new ArrayList<>();
-        String input = rawInput.split(":,")[1];
-        String[] splitted = input.split(", >>first_line_end_flag<<, ");
-        String cols = splitted[0];
-        String content = splitted[1];
-        
-        String[] colnames = cols.split(",");
-        
-        String[] lines = content.split(", >>enter_flag<<,");
-        for (String str : lines) {
-            String[] temp = str.split("(?!\"),(?!\")");
-            items.add(temp);
-        }
-        fillPrevTable(colnames, items);
-    }
-    
-    private void inputPreprocess(String input) {
-        String withoutBrackets = input.replaceAll("[\\[\\]]", "");
-        
-        String[] string = withoutBrackets.split(", ");
-        inDatas.addAll(Arrays.asList(string));
-        System.out.println("Input:: " + inDatas);
-    }
-    
-    private String getFilename(String path) {
-        String[] spl = path.split(Pattern.quote("\\"));
-        return spl[spl.length - 1];
-    }
-    
+    //</editor-fold>
+
+    //CSV kezelő fv-ek
+     // <editor-fold defaultstate="collapsed">
     private ArrayList<String> readFromCsv(String path) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add("csv:");
@@ -694,6 +731,23 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         return csv;
     }
     
+    private void loadedTablePreprocess() {
+        ArrayList<String[]> items = new ArrayList<>();
+        String input = rawInput.split(":,")[1];
+        String[] splitted = input.split(", >>first_line_end_flag<<, ");
+        String cols = splitted[0];
+        String content = splitted[1];
+        
+        String[] colnames = cols.split(",");
+        
+        String[] lines = content.split(", >>enter_flag<<,");
+        for (String str : lines) {
+            String[] temp = str.split("(?!\"),(?!\")");
+            items.add(temp);
+        }
+        fillPrevTable(colnames, items);
+    }
+    
     private void fillPrevTable(String[] cols, ArrayList<String[]> items) {
         DefaultTableModel model = new DefaultTableModel(cols, 0);
         
@@ -703,7 +757,10 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         csvPrevTable.setModel(model);
         csvPrevTable.setDefaultEditor(Object.class, null);
     }
+     // </editor-fold>
     
+    //GETTEREK
+     // <editor-fold defaultstate="collapsed">
     private void getSelectedFile() {
         list.addMouseListener(new MouseAdapter() {
             @Override
@@ -718,24 +775,25 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         });
     }
     
-    private void addExitOption() {
-        addWindowListener(new WindowAdapter() {
-            
-            @Override
-            public void windowClosing(WindowEvent e) {
-                int n = JOptionPane.showConfirmDialog(null, "Biztos ki szeretnél lépni?",
-                        "Kilépés", JOptionPane.YES_NO_OPTION);
-                if (n == JOptionPane.YES_OPTION) {
-                    exit = true;
-                    dispose();
-                }
-                if (n == JOptionPane.NO_OPTION) {
-                    dispose();
-                }
-            }
-        });
+    private String getFilename(String path) {
+        String[] spl = path.split(Pattern.quote("\\"));
+        return spl[spl.length - 1];
     }
-
+    
+    private String getSelectedOperation(){
+        String chosen = operationCBox.getItemAt(operationCBox.getSelectedIndex());
+        System.out.println("Chosen: " + chosen);
+        return chosen;
+    }
+    
+    private String getSelectedClassifier(){
+        return classifierCBox.getItemAt(classifierCBox.getSelectedIndex());
+    }
+    
+     // </editor-fold>
+    
+    //VARIABLES
+     // <editor-fold defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton choseButton;
     private javax.swing.JComboBox<String> classifierCBox;
@@ -755,6 +813,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private javax.swing.JSeparator jSeparator1;
     private java.awt.List list;
     private javax.swing.JPanel loadPanel;
+    private javax.swing.JLabel loadingLabel;
     private javax.swing.JMenuItem logOut;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel newTablePanel;
@@ -766,6 +825,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private javax.swing.JScrollPane paramSPane;
     private javax.swing.JLabel parameterLabel;
     private javax.swing.JScrollPane previewScPane;
+    private javax.swing.JProgressBar processBar;
     private javax.swing.JPanel profilePanel;
     private javax.swing.JSeparator separator;
     private javax.swing.JSeparator separator1;
@@ -777,9 +837,10 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel tablesPanel;
     private javax.swing.JButton uploadButton;
     private javax.swing.JLabel usernameLabel;
-    private javax.swing.JButton workChooseButton;
     private javax.swing.JPanel workPanel;
     private javax.swing.JTextField workPathField;
     private javax.swing.JButton workUploadButton;
     // End of variables declaration//GEN-END:variables
+
+     // </editor-fold>
 }
