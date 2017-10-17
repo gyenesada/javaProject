@@ -22,6 +22,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
     
     private final  String host;
     private final int port;
+    private  String rawInput;
 
     private static ArrayList<String> inDatas = new ArrayList<>();
     private static ArrayList<String> outDatas = new ArrayList<>();
@@ -313,18 +314,25 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
     private void communicationWithServer(PrintWriter pw, Scanner sc) { //ez kell majd a WorkWindowFrame-be is.
         int index = 0;
         while (!exit) {
-            System.out.println("---------------" + index + "--------------");
-            System.out.println("");
-            pw.println(outDatas);
-            outDatas.clear();
-            System.out.println("Output: " + outDatas);
-            inDatas.clear();
-            inputPreprocess(sc.nextLine());
-            if (!inDatas.isEmpty()) {
-                outDatas = controller(inDatas);
-            }
-            System.out.println("Input: " + inDatas);
-            index++;
+                   
+                System.out.println("---------------" + index + "--------------");
+                while(outDatas.isEmpty()){
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                pw.println(outDatas);
+                inDatas.clear();
+                rawInput = sc.nextLine();
+                inputPreprocess(rawInput);
+                if (!inDatas.isEmpty()) {
+                    outDatas = controller(inDatas);
+                }
+                System.out.println("Input: " + inDatas);
+                index++;
+            
         }
     }
 
@@ -370,6 +378,7 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
     }
         
     private void inputPreprocess(String input) {
+        
         System.out.println("input: " + input);
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
 

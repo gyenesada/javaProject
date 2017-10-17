@@ -12,6 +12,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -471,7 +473,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_filepathFieldActionPerformed
 
     private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
-        outDatas.clear();
+       // outDatas.clear();
         String file = filepathField.getText();
         
         if (file.equals("")) {
@@ -559,19 +561,24 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private void communicateWithServer(PrintWriter pw, Scanner sc) {
         int index = 0;
         while (!exit) {
-            System.out.println("---------------" + index + "--------------");
-            System.out.println("");
-            System.out.println("Output: " + outDatas);
+                System.out.println("---------------" + index + "--------------");
+                while(outDatas.isEmpty()){
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                pw.println(outDatas);
+                inDatas.clear();
+                rawInput = sc.nextLine();
+                inputPreprocess(rawInput);
+                if (!inDatas.isEmpty()) {
+                    outDatas = controller(inDatas);
+                }
+                System.out.println("Input: " + inDatas);
+                index++;
             
-            pw.println(outDatas);
-            inDatas.clear();
-            rawInput = sc.nextLine();
-            inputPreprocess(rawInput);
-            if (!inDatas.isEmpty()) {
-                outDatas = controller(inDatas);
-            }
-            System.out.println("Input: " + inDatas);
-            index++;
         }
     }
     
@@ -656,20 +663,19 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
             csv.add(filename + ":");
             String line = br.readLine();
             csv.add(line);
-            csv.add(">>enter_flag<<");
+            csv.add(">>flag<<");
             
             String[] cols = line.split(",");
             ArrayList<String[]> items = new ArrayList<>();
             
             while (line != null) {
-                System.out.println(line);
                 line = br.readLine();
                 
                 if (line == null) {
                     break;
                 } else {
                     csv.add(line);
-                    csv.add(">>enter_flag<<");
+                    csv.add(">>flag<<");
                 }
                 String[] items_temp = line.split(",");
                 items.add(items_temp);

@@ -78,7 +78,7 @@ public class ClientThread implements Runnable {
 
         String[] string = withoutBrackets.split(", ");
         inDatas.addAll(Arrays.asList(string));
-        System.out.println("Input: " + inDatas);
+    //    System.out.println("Input: " + inDatas);
     }
 
     private ArrayList<String> controller(ArrayList<String> in) {
@@ -156,16 +156,13 @@ public class ClientThread implements Runnable {
         try {
             fw = new FileWriter(fullFilepath);
             bw = new BufferedWriter(fw);
-            System.out.println("raw: " + rawInput);
-            String withoutID = rawInput.split(":, ")[2];
-            String[] lines;
-            lines = withoutID.split(", >>enter_flag<<, ");
-            for (String line : lines) {
-                line = line.replaceAll(", >>enter_flag<<", "");
-
+            
+            //System.out.println("raw: " + rawInput);
+            String lines = rawInput.split(":, ")[2];
+            
+            String line = lines.replaceAll(", >>enter_flag<<,", "\n");
+            
                 bw.write(line);
-                bw.newLine();
-            }
             System.out.println("Done with file writing");
 
         } catch (IOException e) {
