@@ -109,36 +109,12 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="newWorkLabel" min="-2" max="-2" attributes="0"/>
-                                  <Component id="oldWorkLabel" alignment="0" min="-2" pref="222" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="filepathField" alignment="0" min="-2" pref="479" max="-2" attributes="0"/>
-                                          <Component id="fileUploadLabel" min="-2" pref="82" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="choseButton" min="-2" pref="86" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                                      <Component id="uploadButton" min="-2" pref="93" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="oldWorkSPane" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="loadFileUploadPanel" alignment="0" max="32767" attributes="0"/>
+                          <Component id="loadOldWorkPanel" max="32767" attributes="0"/>
                       </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="separator1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -147,106 +123,163 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="separator1" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="newWorkLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                      <Component id="fileUploadLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="filepathField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="uploadButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="choseButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-                      <Component id="oldWorkLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="oldWorkSPane" min="-2" pref="132" max="-2" attributes="0"/>
-                      <EmptySpace pref="257" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                      <Component id="loadFileUploadPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                      <Component id="loadOldWorkPanel" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="oldWorkLabel">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Trebuchet MS" size="18" style="0"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="66" green="66" red="66" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Kor&#xe1;bbi munkafolyamatok"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="newWorkLabel">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Trebuchet MS" size="18" style="0"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="66" green="66" red="66" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="&#xda;j munkafolyamat"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JSeparator" name="separator1">
               <Properties>
                 <Property name="orientation" type="int" value="1"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="filepathField">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="filepathFieldActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="uploadButton">
+            <Container class="javax.swing.JPanel" name="loadFileUploadPanel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Felt&#xf6;lt&#xe9;s"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="uploadButtonActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JLabel" name="fileUploadLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="F&#xe1;jl felt&#xf6;lt&#xe9;s"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="choseButton">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Kiv&#xe1;laszt"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="choseButtonActionPerformed"/>
-              </Events>
-            </Component>
-            <Container class="javax.swing.JScrollPane" name="oldWorkSPane">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="&#xda;j munkafolyamat">
+                      <Font PropertyName="font" name="Trebuchet MS" size="18" style="0"/>
+                      <Color PropertyName="color" blue="66" green="66" red="66" type="rgb"/>
+                    </TitledBorder>
+                  </Border>
                 </Property>
               </Properties>
 
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="fileUploadLabel" min="-2" pref="82" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="filepathField" min="-2" pref="629" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="choseButton" min="-2" pref="86" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="uploadButton" min="-2" pref="93" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="fileUploadLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="filepathField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="choseButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="uploadButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="36" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
               <SubComponents>
-                <Component class="java.awt.List" name="list">
+                <Component class="javax.swing.JLabel" name="fileUploadLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="F&#xe1;jl felt&#xf6;lt&#xe9;s"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="filepathField">
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="filepathFieldActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="choseButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Kiv&#xe1;laszt"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="choseButtonActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="uploadButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Felt&#xf6;lt&#xe9;s"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="uploadButtonActionPerformed"/>
+                  </Events>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JPanel" name="loadOldWorkPanel">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Kor&#xe1;bbi Munkafolyamat">
+                      <Font PropertyName="font" name="Trebuchet MS" size="18" style="0"/>
+                      <Color PropertyName="color" blue="66" green="66" red="66" type="rgb"/>
+                    </TitledBorder>
+                  </Border>
+                </Property>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="oldWorkSPane" pref="938" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="oldWorkSPane" pref="276" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Container class="javax.swing.JScrollPane" name="oldWorkSPane">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Trebuchet MS" size="14" style="0"/>
-                    </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listActionPerformed"/>
-                  </Events>
-                </Component>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="java.awt.List" name="list">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                        </Property>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Trebuchet MS" size="14" style="0"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listActionPerformed"/>
+                      </Events>
+                    </Component>
+                  </SubComponents>
+                </Container>
               </SubComponents>
             </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="workPanel">
+          <Properties>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="West Resize Cursor"/>
+            </Property>
+          </Properties>
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=""/>
+          </AccessibilityProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
               <CardConstraints cardName="card3"/>
@@ -267,11 +300,11 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="tablesPanel" max="32767" attributes="0"/>
                                   <Component id="newTablePanel" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="previewScPane" pref="886" max="32767" attributes="0"/>
+                                  <Component id="previewScPane" pref="986" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="separator2" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -282,11 +315,11 @@
                   <Group type="102" attributes="0">
                       <Component id="newTablePanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tablesPanel" max="32767" attributes="0"/>
+                      <Component id="tablesPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="previewScPane" min="-2" pref="255" max="-2" attributes="0"/>
+                      <Component id="previewScPane" pref="277" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -301,6 +334,13 @@
             <Component class="javax.swing.JSeparator" name="jSeparator1">
             </Component>
             <Container class="javax.swing.JScrollPane" name="previewScPane">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="El&#x151;n&#xe9;zet"/>
+                  </Border>
+                </Property>
+              </Properties>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
@@ -325,6 +365,9 @@
                     <TitledBorder/>
                   </Border>
                 </Property>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Default Cursor"/>
+                </Property>
               </Properties>
 
               <Layout>
@@ -334,8 +377,10 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="workPathField" pref="586" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="101" max="-2" attributes="0"/>
+                          <Component id="workPathField" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                          <Component id="workChoseButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="workUploadButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -349,6 +394,7 @@
                               <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="workPathField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="workUploadButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="workChoseButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -372,13 +418,18 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="workUploadButtonActionPerformed"/>
                   </Events>
                 </Component>
+                <Component class="javax.swing.JButton" name="workChoseButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Kiv&#xe1;laszt"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="tablesPanel">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder/>
+                    <TitledBorder title="T&#xe1;bl&#xe1;k kezel&#xe9;se"/>
                   </Border>
                 </Property>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -389,15 +440,674 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="882" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="classifierLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="classifierCBox" min="-2" pref="253" max="-2" attributes="0"/>
+                              <Component id="operationCBox" min="-2" pref="253" max="-2" attributes="0"/>
+                              <Component id="operationLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="doButton" min="-2" pref="105" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="parameterMainPanel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="259" max="32767" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="parameterMainPanel" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="operationLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="operationCBox" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="classifierLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="classifierCBox" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="doButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JComboBox" name="classifierCBox">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="1">
+                        <StringItem index="0" value="item"/>
+                      </StringArray>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="classifierCBoxActionPerformed"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JComboBox" name="operationCBox">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="4">
+                        <StringItem index="0" value="Item 1"/>
+                        <StringItem index="1" value="Item 2"/>
+                        <StringItem index="2" value="Item 3"/>
+                        <StringItem index="3" value="Item 4"/>
+                      </StringArray>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="operationCBoxActionPerformed"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JLabel" name="classifierLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Classifier"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="operationLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="M&#x171;veletek"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JButton" name="doButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Ind&#xed;t&#xe1;s"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="doButtonActionPerformed"/>
+                  </Events>
+                </Component>
+                <Container class="javax.swing.JPanel" name="parameterMainPanel">
+                  <Properties>
+                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                      <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                        <TitledBorder title="Param&#xe9;terek">
+                          <Font PropertyName="font" name="Trebuchet MS" size="12" style="0"/>
+                        </TitledBorder>
+                      </Border>
+                    </Property>
+                  </Properties>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
+                  <SubComponents>
+                    <Container class="javax.swing.JPanel" name="firstPanel">
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                          <CardConstraints cardName="card2"/>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <EmptySpace min="0" pref="586" max="32767" attributes="0"/>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="adaPanel">
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                          <CardConstraints cardName="card2"/>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace pref="48" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="ada_beLabel" alignment="1" min="-2" pref="102" max="-2" attributes="0"/>
+                                      <Component id="ada_algorithm" alignment="1" min="-2" pref="71" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="ada_beField" alignment="1" min="-2" pref="131" max="-2" attributes="0"/>
+                                      <Component id="ada_algCBox" alignment="1" min="-2" pref="131" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="ada_neLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ada_rsLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="ada_neField" alignment="1" min="-2" pref="35" max="-2" attributes="0"/>
+                                      <Component id="ada_rsField" alignment="1" min="-2" pref="35" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="ada_lrLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="ada_lrField" min="-2" pref="35" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="ada_beField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ada_beLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ada_neLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ada_neField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ada_lrLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ada_lrField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="ada_algorithm" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ada_algCBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ada_rsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ada_rsField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace pref="89" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JTextField" name="ada_beField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="DecisionTreeClassifier"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="ada_beLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="base_estimator:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="ada_neLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="n_estimators:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="ada_neField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="50"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ada_neFieldActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="ada_lrLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="learning_rate:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="ada_lrField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="1"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="ada_algorithm">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="algorithm: "/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="ada_algCBox">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="2">
+                                <StringItem index="0" value="SAMME.R"/>
+                                <StringItem index="1" value="SAMME"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="ada_rsLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="random_state:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="ada_rsField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="None"/>
+                          </Properties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="sentimentPanel">
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                          <CardConstraints cardName="card2"/>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <EmptySpace min="0" pref="586" max="32767" attributes="0"/>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="rfcPanel">
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                          <CardConstraints cardName="card2"/>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Component id="rfc_rsLabel" min="-2" max="-2" attributes="0"/>
+                                              <Component id="rfc_bsLabel" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="rfc_rsField" alignment="1" min="-2" pref="35" max="-2" attributes="0"/>
+                                              <Component id="rfc_bsField" alignment="1" min="-2" pref="35" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace pref="23" max="32767" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <Component id="rfs_neLabel" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                                  <Component id="rfc_neField" min="-2" pref="35" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="rfc_mdLabel" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                                  <Component id="rfc_mdField" min="-2" pref="35" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                          <Component id="rfc_oosLabel" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="rfc_critLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="rfc_njLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="rfc_oosField" min="-2" pref="67" max="-2" attributes="0"/>
+                                      <Component id="rfc_critCBox" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_njField" alignment="0" min="-2" pref="27" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="269" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="rfs_neLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_neField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_critLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_critCBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace pref="20" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="rfc_mdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_mdField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_oosLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_oosField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="rfc_rsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_rsField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_njLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_njField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="rfc_bsField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rfc_bsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JLabel" name="rfs_neLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="n_estimators:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="rfc_neField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="10"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="rfc_mdLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="max_depth:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="rfc_mdField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="None"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="rfc_rsLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="random_state:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="rfc_rsField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="None"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="rfc_bsLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="bootstrap:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="rfc_bsField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="True"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="rfc_critLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="criterion: "/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="rfc_critCBox">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="2">
+                                <StringItem index="0" value="gini"/>
+                                <StringItem index="1" value="entropty"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="rfc_oosLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="oob_score:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="rfc_oosField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="True"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="rfc_njLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="n_jobs:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="rfc_njField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="1"/>
+                          </Properties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="baggingPanel">
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                          <CardConstraints cardName="card2"/>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="bc_bsfLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_bsLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_neLabel" alignment="1" min="-2" pref="68" max="-2" attributes="0"/>
+                                      <Component id="bc_beLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="bc_beField" pref="50" max="32767" attributes="0"/>
+                                      <Component id="bc_neField" max="32767" attributes="0"/>
+                                      <Component id="bc_bsField" max="32767" attributes="0"/>
+                                      <Component id="bc_bsfField" max="32767" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="bc_oosLabel" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="bc_oosCBox" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Component id="bc_njLabel" min="-2" max="-2" attributes="0"/>
+                                              <Component id="bc_wsLabel" min="-2" max="-2" attributes="0"/>
+                                              <Component id="bc_verLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="bc_wsField" pref="34" max="32767" attributes="0"/>
+                                              <Component id="bc_njField" max="32767" attributes="0"/>
+                                              <Component id="bc_verField" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="265" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="bc_beLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_beField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_oosLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_oosCBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="bc_neLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_neField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_wsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_wsField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="bc_bsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_bsField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_njLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_njField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="bc_bsfLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_bsfField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_verLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bc_verField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace pref="14" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JLabel" name="bc_beLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="base_estimator:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="bc_beField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="None"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="bc_neLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="n_estimators:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="bc_neField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="10"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bc_neFieldActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="bc_bsLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="bootstrap:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="bc_bsField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="True"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="bc_bsfLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="bootstrap_features:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="bc_bsfField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="False"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="bc_oosLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="oob_score:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="bc_oosCBox">
+                          <Properties>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="2">
+                                <StringItem index="0" value="True"/>
+                                <StringItem index="1" value="False"/>
+                              </StringArray>
+                            </Property>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="bc_wsLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="warm_stat:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="bc_wsField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="False"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="bc_njLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="n_jobs:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="bc_njField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="1"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="bc_verLabel">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="verbose:"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="bc_verField">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="0"/>
+                          </Properties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                  </SubComponents>
+                </Container>
+                <Component class="javax.swing.JButton" name="cancelButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Alap&#xe9;rtelmez&#xe9;s"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTable" name="jTable1">
+                  <Properties>
+                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                      <Table columnCount="4" rowCount="4">
+                        <Column editable="true" title="Title 1" type="java.lang.Object"/>
+                        <Column editable="true" title="Title 2" type="java.lang.Object"/>
+                        <Column editable="true" title="Title 3" type="java.lang.Object"/>
+                        <Column editable="true" title="Title 4" type="java.lang.Object"/>
+                      </Table>
+                    </Property>
+                  </Properties>
+                </Component>
+              </SubComponents>
             </Container>
           </SubComponents>
         </Container>
@@ -528,111 +1238,40 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="paramSPane" alignment="1" max="32767" attributes="0"/>
-                          <Component id="classifierCBox" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="68" max="32767" attributes="0"/>
-                              <Component id="doButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="operationCBox" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="classifierLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="parameterLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="operationLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="loadedTablesList" alignment="1" pref="151" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="operationLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="operationCBox" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="classifierLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="classifierCBox" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="parameterLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="paramSPane" min="-2" pref="175" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="doButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="117" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="0" pref="12" max="32767" attributes="0"/>
+                      <Component id="loadedTablesList" min="-2" pref="437" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="12" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JComboBox" name="classifierCBox">
+            <Component class="javax.swing.JList" name="loadedTablesList">
               <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="f0" green="f0" red="f0" type="rgb"/>
+                </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Bet&#xf6;lt&#xf6;tt t&#xe1;bl&#xe1;k"/>
+                  </Border>
+                </Property>
+                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
+                  <StringArray count="5">
                     <StringItem index="0" value="Item 1"/>
                     <StringItem index="1" value="Item 2"/>
                     <StringItem index="2" value="Item 3"/>
                     <StringItem index="3" value="Item 4"/>
+                    <StringItem index="4" value="Item 5"/>
                   </StringArray>
                 </Property>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="classifierCBoxActionPerformed"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JLabel" name="classifierLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Classifier"/>
-              </Properties>
-            </Component>
-            <Container class="javax.swing.JScrollPane" name="paramSPane">
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-            </Container>
-            <Component class="javax.swing.JLabel" name="parameterLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Param&#xe9;terek"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="doButton">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Mehet"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="doButtonActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JLabel" name="operationLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="M&#x171;veletek"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="operationCBox">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
-                  </StringArray>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="operationCBoxActionPerformed"/>
-              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>

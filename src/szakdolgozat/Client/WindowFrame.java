@@ -1,5 +1,6 @@
 package szakdolgozat.Client;
 
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -35,6 +36,8 @@ public class WindowFrame extends javax.swing.JFrame implements Runnable {
         setTitle("CloudBased classifier - Login");
         setResizable(false);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setLocation((Toolkit.getDefaultToolkit().getScreenSize().width  - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
+
         
         addWindowListener(new WindowAdapter() {
 
