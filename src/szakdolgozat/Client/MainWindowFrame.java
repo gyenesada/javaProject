@@ -4,34 +4,19 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class MainWindowFrame extends javax.swing.JFrame implements Runnable {
+public class MainWindowFrame extends javax.swing.JFrame{
 
-    private Socket socket;
-    private Scanner sc;
-    private PrintWriter pw;
-
-    private boolean exit = false;
-
-    private final String host;
-    private final int port;
-    private String rawInput;
-
-    private static ArrayList<String> inDatas = new ArrayList<>();
-    private static ArrayList<String> outDatas = new ArrayList<>();
+    protected boolean exit = false;
+    
+    protected ArrayList<String> inDatas = new ArrayList<>();
+    protected ArrayList<String> outDatas = new ArrayList<>();
 
     public MainWindowFrame() throws IOException {
-        this.host = "localhost";
-        this.port = 2018;
+
         initComponents();
 
         setTitle("CloudBased classifier - Login");
@@ -225,7 +210,6 @@ public class MainWindowFrame extends javax.swing.JFrame implements Runnable {
             outDatas.add(username);
             outDatas.add(password);
 
-            //wfc.getOutDatas(outDatas);
             System.out.println("outDatas: " + outDatas);
         } catch (Exception ex) {
             System.out.println("Error: logButton");
@@ -288,120 +272,25 @@ public class MainWindowFrame extends javax.swing.JFrame implements Runnable {
             }
         });
     }
-    public static void main(String[] args) throws Exception {
-        MainWindowFrame wf = new MainWindowFrame();
-        wf.setVisible(true);
-        wf.run();
-    }
-
-    @Override
-    public void run() {
-        try {
-            socket = new Socket(host, port);
-            sc = new Scanner(socket.getInputStream());
-            pw = new PrintWriter(socket.getOutputStream(), true);
-
-            communicationWithServer(pw, sc);
-        } catch (IOException e) {
-
-            JOptionPane.showMessageDialog(this, "A szerver kapcsolat nem aktív. Kérjük próbálja később.");
-        }
-    }
-
-    private void communicationWithServer(PrintWriter pw, Scanner sc) { //ez kell majd a WorkWindowFrame-be is.
-        int index = 0;
-        while (!exit) {
-
-            System.out.println("---------------" + index + "--------------");
-            while (outDatas.isEmpty()) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            pw.println(outDatas);
-            inDatas.clear();
-            rawInput = sc.nextLine();
-            inputPreprocess(rawInput);
-            if (!inDatas.isEmpty()) {
-                outDatas = controller(inDatas);
-            }
-            System.out.println("Input: " + inDatas);
-            index++;
-
-        }
-    }
-
-    private ArrayList<String> controller(ArrayList<String> in) { //Kell a WorkWindowFrame-be is.
-        ArrayList<String> out = new ArrayList<>();
-
-        String identifier = in.get(0);
-
-        switch (identifier) {
-            case "log:":
-                if (Boolean.valueOf(in.get(1))) {
-                    try {
-                        String username = nameField.getText();
-                        WorkWindowFrame wwf = new WorkWindowFrame(pw, sc, username);
-                        wwf.setVisible(true);
-                        dispose();
-                        wwf.run();
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "A szerver kapcsolat nem aktív. Kérjük próbálja később.");
-                    }
-                } else {
-                    nameField.setText("");
-                    passField.setText("");
-                    JOptionPane.showMessageDialog(this, "A bejelentkezés sikertelen. Ellenőrizze helyes adatokat adott-e meg.");
-                }
-                break;
-            case "reg:":
-                if (Boolean.valueOf(in.get(1))) {
-                    JOptionPane.showMessageDialog(this, "Sikeres regisztráció.");
-                    loginPanel.setVisible(true);
-                    regPanel.setVisible(false);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Sikertelen regisztráció. A felhasználónév/email már foglalt.");
-
-                    regNameField.setText("");
-                    regPassField.setText("");
-                    regMailField.setText("");
-                }
-                break;
-        }
-        return out;
-    }
-
-    private void inputPreprocess(String input) {
-
-        System.out.println("input: " + input);
-        String withoutBrackets = input.replaceAll("[\\[\\]]", "");
-
-        String[] string = withoutBrackets.split(", ");
-        inDatas.addAll(Arrays.asList(string));
-        System.out.println("Input: " + inDatas);
-    }
-
-
+        
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton logButton;
-    private javax.swing.JLabel logLabel;
-    private javax.swing.JPanel loginPanel;
-    private javax.swing.JTextField nameField;
-    private javax.swing.JLabel nameLabel;
-    private javax.swing.JPasswordField passField;
-    private javax.swing.JLabel passLabel;
-    private javax.swing.JButton regButton;
-    private javax.swing.JButton regCancelButton;
-    private javax.swing.JButton regDoButton;
-    private javax.swing.JLabel regLabel;
-    private javax.swing.JTextField regMailField;
-    private javax.swing.JLabel regMailLabel;
-    private javax.swing.JTextField regNameField;
-    private javax.swing.JLabel regNameLabel;
-    private javax.swing.JPanel regPanel;
-    private javax.swing.JPasswordField regPassField;
-    private javax.swing.JLabel regPassLabel;
+    protected javax.swing.JButton logButton;
+    protected javax.swing.JLabel logLabel;
+    protected javax.swing.JPanel loginPanel;
+    protected javax.swing.JTextField nameField;
+    protected javax.swing.JLabel nameLabel;
+    protected javax.swing.JPasswordField passField;
+    protected javax.swing.JLabel passLabel;
+    protected javax.swing.JButton regButton;
+    protected javax.swing.JButton regCancelButton;
+    protected javax.swing.JButton regDoButton;
+    protected javax.swing.JLabel regLabel;
+    protected javax.swing.JTextField regMailField;
+    protected javax.swing.JLabel regMailLabel;
+    protected javax.swing.JTextField regNameField;
+    protected javax.swing.JLabel regNameLabel;
+    protected javax.swing.JPanel regPanel;
+    protected javax.swing.JPasswordField regPassField;
+    protected javax.swing.JLabel regPassLabel;
     // End of variables declaration//GEN-END:variables
 }

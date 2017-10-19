@@ -3,9 +3,8 @@ package szakdolgozat.Client;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException{
-        MainWindowFrame wf = new MainWindowFrame();
-        
-        wf.setVisible(true);
+    public static void main(String[] args) throws IOException {
+        MWFController controller = new MWFController();
+        controller.run();
     }
 }

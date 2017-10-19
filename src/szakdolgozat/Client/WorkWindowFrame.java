@@ -9,46 +9,34 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
-public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
+public class WorkWindowFrame extends javax.swing.JFrame{
+    protected boolean exit = false;
 
-    private final String loggedUser;
-    private final Scanner sc;
-    private final PrintWriter pw;
-    private boolean exit = false;
+    protected String rawInput;
+    protected String selectedOperation;
+    protected String selectedTable; //oldal menü, 1 táblás műveletekhez
 
-    private String rawInput;
-    private String selectedOperation;
-    private String selectedTable; //oldal menü, 1 táblás műveletekhez
+    protected ArrayList<String> loadedTables = new ArrayList<>();
+    protected ArrayList<String> csvToTable = new ArrayList<>();
 
-    ArrayList<String> loadedTables = new ArrayList<>();
-    ArrayList<String> csvToTable = new ArrayList<>();
-
-    ArrayList<String> bufferParameters = new ArrayList<>();
+    protected ArrayList<String> bufferParameters = new ArrayList<>();
 
     //buffer to send and receive datas
-    ArrayList<String> outDatas = new ArrayList<>();
-    ArrayList<String> inDatas = new ArrayList<>();
-
+    protected ArrayList<String> outDatas = new ArrayList<>();
+    protected ArrayList<String> inDatas = new ArrayList<>();
+   
     //FELÜLET
     // <editor-fold defaultstate="collapsed">
-    public WorkWindowFrame(PrintWriter pw, Scanner sc, String name) throws Exception {
-        this.loggedUser = name;
-        this.sc = sc;
-        this.pw = pw;
-
+    public WorkWindowFrame() throws Exception {
         initComponents();
-
+   
         setTitle("CloudBased classifier");
         setResizable(false);
         setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
@@ -1068,124 +1056,8 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
             }
         });
     }
-
-// </editor-fold>
-    //KEZELŐ
-    // <editor-fold defaultstate="collapsed">
-    @Override
-    public void run() {
-        usernameLabel.setText("Üdvözöljük " + loggedUser + "!");
-        communicateWithServer(pw, sc);
-    }
-
-    private void communicateWithServer(PrintWriter pw, Scanner sc) {
-        int index = 0;
-        while (!exit) {
-            System.out.println("---------------" + index + "--------------");
-            while (outDatas.isEmpty()) {
-                try {
-                    Thread.sleep(10); //to prevent dataloss
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            pw.println(outDatas);
-            inDatas.clear();
-            rawInput = sc.nextLine();
-            inputPreprocess(rawInput);
-            if (!inDatas.isEmpty()) {
-                outDatas = controller(inDatas);
-            }
-            //System.out.println("Input: " + inDatas);
-            index++;
-
-        }
-    }
-
-    private ArrayList<String> controller(ArrayList<String> in) {
-        ArrayList<String> out = new ArrayList<>();
-
-        String identifier = in.get(0);
-
-        switch (identifier) {
-            case "csv:":
-                if (Boolean.valueOf(in.get(1))) {
-                    loadPanel.setVisible(false);
-                    workPanel.setVisible(true);
-
-                    sideLoadPanel.setVisible(false);
-                    sideWorkPanel.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
-                }
-                break;
-            case "old:":
-                for (int i = 1; i < in.size() - 1; i = i + 2) {
-                    list.add(in.get(i + 1) + "    -    " + in.get(i));
-                }
-                getSelectedFile();
-                break;
-            case "ldt:":
-                loadedTablePreprocess();
-                loadPanel.setVisible(false);
-                sideLoadPanel.setVisible(false);
-
-                workPanel.setVisible(true);
-                sideWorkPanel.setVisible(true);
-                break;
-        }
-        return out;
-    }
-
-    private void inputPreprocess(String input) {
-        String withoutBrackets = input.replaceAll("[\\[\\]]", "");
-
-        String[] string = withoutBrackets.split(", ");
-        inDatas.addAll(Arrays.asList(string));
-        //  System.out.println("Input:: " + inDatas);
-    }
-
-    // </editor-fold>
-    //Combo-box feltöltő fv-ek
-    // <editor-fold defaultstate="collapsed">
-    private void fillOperationsList() {
-        ArrayList<String> operations = new ArrayList<>();
-
-        operationCBox.removeAllItems();
-        operations.add("..."); //első üres legyen
-        operations.add("Üres értékek kezelése");
-        operations.add("Faktorizálás");
-        operations.add("Normalizálás");
-        operations.add("Összefűzés");
-        operations.add("Oszlopok törlése");
-        operations.add("Feature kiválasztás");
-
-        operations.forEach((str) -> {
-            operationCBox.addItem(str);
-        });
-    }
-
-    private void fillClassifierList() {
-        ArrayList<String> classifiers = new ArrayList<>();
-
-        classifierCBox.removeAllItems();
-        classifiers.add("...");
-        classifiers.add("AdaBoost Classifier");
-        classifiers.add("Random Forest Classifier");
-        classifiers.add("Sentiment Analysis");
-        classifiers.add("Bagging Classifier");
-        classifiers.add("Voting Classifier");
-        classifiers.add("Gradient Tree Boost");
-
-        classifiers.forEach((str) -> {
-            classifierCBox.addItem(str);
-        });
-    }
-    //</editor-fold>
-
-    //CSV kezelő fv-ek
-    // <editor-fold defaultstate="collapsed">
-    private ArrayList<String> readFromCsv(String path) {
+    
+private ArrayList<String> readFromCsv(String path) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add("csv:");
         String filename;
@@ -1230,25 +1102,48 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         }
         return csv;
     }
+    // </editor-fold>
+    //Combo-box feltöltő fv-ek
+    // <editor-fold defaultstate="collapsed">
+    private void fillOperationsList() {
+        ArrayList<String> operations = new ArrayList<>();
 
-    private void loadedTablePreprocess() {
-        ArrayList<String[]> items = new ArrayList<>();
-        String input = rawInput.split(":,")[1];
-        String[] splitted = input.split(", >>first_line_end_flag<<, ");
-        String cols = splitted[0];
-        String content = splitted[1];
+        operationCBox.removeAllItems();
+        operations.add("..."); //első üres legyen
+        operations.add("Üres értékek kezelése");
+        operations.add("Faktorizálás");
+        operations.add("Normalizálás");
+        operations.add("Összefűzés");
+        operations.add("Oszlopok törlése");
+        operations.add("Feature kiválasztás");
 
-        String[] colnames = cols.split(",");
-
-        String[] lines = content.split(", >>enter_flag<<,");
-        for (String str : lines) {
-            String[] temp = str.split("(?!\"),(?!\")");
-            items.add(temp);
-        }
-        fillPrevTable(colnames, items);
+        operations.forEach((str) -> {
+            operationCBox.addItem(str);
+        });
     }
 
-    private void fillPrevTable(String[] cols, ArrayList<String[]> items) {
+    private void fillClassifierList() {
+        ArrayList<String> classifiers = new ArrayList<>();
+
+        classifierCBox.removeAllItems();
+        classifiers.add("...");
+        classifiers.add("AdaBoost Classifier");
+        classifiers.add("Random Forest Classifier");
+        classifiers.add("Sentiment Analysis");
+        classifiers.add("Bagging Classifier");
+        classifiers.add("Voting Classifier");
+        classifiers.add("Gradient Tree Boost");
+
+        classifiers.forEach((str) -> {
+            classifierCBox.addItem(str);
+        });
+    }
+    //</editor-fold>
+
+    //CSV kezelő fv-ek
+    // <editor-fold defaultstate="collapsed">
+    
+    protected void fillPrevTable(String[] cols, ArrayList<String[]> items) {
         DefaultTableModel model = new DefaultTableModel(cols, 0);
 
         items.forEach((str) -> {
@@ -1261,7 +1156,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
     //GETTEREK-SETTEREK
     // <editor-fold defaultstate="collapsed">
-    private void getSelectedFile() {
+    protected void getSelectedFile() {
         list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -1278,7 +1173,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         });
     }
 
-    private String getFilename(String path) {
+    protected String getFilename(String path) {
         String[] spl = path.split(Pattern.quote("\\"));
         return spl[spl.length - 1];
     }
@@ -1307,108 +1202,109 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         bufferParameters.add(classifier);
         bufferParameters.addAll(Arrays.asList(parameters));
     }
+    
 
     // </editor-fold>
     //VARIABLES
     // <editor-fold defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel adaPanel;
-    private javax.swing.JComboBox<String> ada_algCBox;
-    private javax.swing.JLabel ada_algorithm;
-    private javax.swing.JTextField ada_beField;
-    private javax.swing.JLabel ada_beLabel;
-    private javax.swing.JTextField ada_lrField;
-    private javax.swing.JLabel ada_lrLabel;
-    private javax.swing.JTextField ada_neField;
-    private javax.swing.JLabel ada_neLabel;
-    private javax.swing.JTextField ada_rsField;
-    private javax.swing.JLabel ada_rsLabel;
-    private javax.swing.JPanel baggingPanel;
-    private javax.swing.JTextField bc_beField;
-    private javax.swing.JLabel bc_beLabel;
-    private javax.swing.JTextField bc_bsField;
-    private javax.swing.JLabel bc_bsLabel;
-    private javax.swing.JTextField bc_bsfField;
-    private javax.swing.JLabel bc_bsfLabel;
-    private javax.swing.JTextField bc_neField;
-    private javax.swing.JLabel bc_neLabel;
-    private javax.swing.JTextField bc_njField;
-    private javax.swing.JLabel bc_njLabel;
-    private javax.swing.JComboBox<String> bc_oosCBox;
-    private javax.swing.JLabel bc_oosLabel;
-    private javax.swing.JTextField bc_verField;
-    private javax.swing.JLabel bc_verLabel;
-    private javax.swing.JTextField bc_wsField;
-    private javax.swing.JLabel bc_wsLabel;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JButton choseButton;
-    private javax.swing.JComboBox<String> classifierCBox;
-    private javax.swing.JLabel classifierLabel;
-    private javax.swing.JTable csvPrevTable;
-    private javax.swing.JButton doButton;
-    private javax.swing.JMenu fileMenu;
-    private javax.swing.JLabel fileUploadLabel;
-    private javax.swing.JTextField filepathField;
-    private javax.swing.JPanel firstPanel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
-    private java.awt.List list;
-    private javax.swing.JPanel loadFileUploadPanel;
-    private javax.swing.JPanel loadOldWorkPanel;
-    private javax.swing.JPanel loadPanel;
-    private javax.swing.JList<String> loadedTablesList;
-    private javax.swing.JLabel loadingLabel;
-    private javax.swing.JMenuItem logOut;
-    private javax.swing.JPanel mainPanel;
-    private javax.swing.JPanel newTablePanel;
-    private javax.swing.JScrollPane oldWorkSPane;
-    private javax.swing.JComboBox<String> operationCBox;
-    private javax.swing.JLabel operationLabel;
-    private javax.swing.JPanel parameterMainPanel;
-    private javax.swing.JScrollPane previewScPane;
-    private javax.swing.JProgressBar processBar;
-    private javax.swing.JPanel profilePanel;
-    private javax.swing.JPanel rfcPanel;
-    private javax.swing.JTextField rfc_bsField;
-    private javax.swing.JLabel rfc_bsLabel;
-    private javax.swing.JComboBox<String> rfc_critCBox;
-    private javax.swing.JLabel rfc_critLabel;
-    private javax.swing.JTextField rfc_mdField;
-    private javax.swing.JLabel rfc_mdLabel;
-    private javax.swing.JTextField rfc_neField;
-    private javax.swing.JTextField rfc_njField;
-    private javax.swing.JLabel rfc_njLabel;
-    private javax.swing.JTextField rfc_oosField;
-    private javax.swing.JLabel rfc_oosLabel;
-    private javax.swing.JTextField rfc_rsField;
-    private javax.swing.JLabel rfc_rsLabel;
-    private javax.swing.JLabel rfs_neLabel;
-    private javax.swing.JPanel sentimentPanel;
-    private javax.swing.JSeparator separator;
-    private javax.swing.JSeparator separator1;
-    private javax.swing.JSeparator separator2;
-    private javax.swing.JMenuItem showLoadPanel;
-    private javax.swing.JPanel sideLoadPanel;
-    private javax.swing.JPanel sidePanel;
-    private javax.swing.JPanel sideWorkPanel;
-    private javax.swing.JPanel tablesPanel;
-    private javax.swing.JButton uploadButton;
-    private javax.swing.JLabel usernameLabel;
-    private javax.swing.JPanel votingPanel;
-    private javax.swing.JButton workChoseButton;
-    private javax.swing.JPanel workPanel;
-    private javax.swing.JTextField workPathField;
-    private javax.swing.JButton workUploadButton;
+    protected javax.swing.JPanel adaPanel;
+    protected javax.swing.JComboBox<String> ada_algCBox;
+    protected javax.swing.JLabel ada_algorithm;
+    protected javax.swing.JTextField ada_beField;
+    protected javax.swing.JLabel ada_beLabel;
+    protected javax.swing.JTextField ada_lrField;
+    protected javax.swing.JLabel ada_lrLabel;
+    protected javax.swing.JTextField ada_neField;
+    protected javax.swing.JLabel ada_neLabel;
+    protected javax.swing.JTextField ada_rsField;
+    protected javax.swing.JLabel ada_rsLabel;
+    protected javax.swing.JPanel baggingPanel;
+    protected javax.swing.JTextField bc_beField;
+    protected javax.swing.JLabel bc_beLabel;
+    protected javax.swing.JTextField bc_bsField;
+    protected javax.swing.JLabel bc_bsLabel;
+    protected javax.swing.JTextField bc_bsfField;
+    protected javax.swing.JLabel bc_bsfLabel;
+    protected javax.swing.JTextField bc_neField;
+    protected javax.swing.JLabel bc_neLabel;
+    protected javax.swing.JTextField bc_njField;
+    protected javax.swing.JLabel bc_njLabel;
+    protected javax.swing.JComboBox<String> bc_oosCBox;
+    protected javax.swing.JLabel bc_oosLabel;
+    protected javax.swing.JTextField bc_verField;
+    protected javax.swing.JLabel bc_verLabel;
+    protected javax.swing.JTextField bc_wsField;
+    protected javax.swing.JLabel bc_wsLabel;
+    protected javax.swing.JButton cancelButton;
+    protected javax.swing.JButton choseButton;
+    protected javax.swing.JComboBox<String> classifierCBox;
+    protected javax.swing.JLabel classifierLabel;
+    protected javax.swing.JTable csvPrevTable;
+    protected javax.swing.JButton doButton;
+    protected javax.swing.JMenu fileMenu;
+    protected javax.swing.JLabel fileUploadLabel;
+    protected javax.swing.JTextField filepathField;
+    protected javax.swing.JPanel firstPanel;
+    protected javax.swing.JLabel jLabel1;
+    protected javax.swing.JLabel jLabel2;
+    protected javax.swing.JLabel jLabel4;
+    protected javax.swing.JLabel jLabel5;
+    protected javax.swing.JLabel jLabel6;
+    protected javax.swing.JLabel jLabel7;
+    protected javax.swing.JLabel jLabel8;
+    protected javax.swing.JMenu jMenu2;
+    protected javax.swing.JMenuBar jMenuBar1;
+    protected javax.swing.JScrollPane jScrollPane1;
+    protected javax.swing.JSeparator jSeparator1;
+    protected javax.swing.JTable jTable1;
+    protected java.awt.List list;
+    protected javax.swing.JPanel loadFileUploadPanel;
+    protected javax.swing.JPanel loadOldWorkPanel;
+    protected javax.swing.JPanel loadPanel;
+    protected javax.swing.JList<String> loadedTablesList;
+    protected javax.swing.JLabel loadingLabel;
+    protected javax.swing.JMenuItem logOut;
+    protected javax.swing.JPanel mainPanel;
+    protected javax.swing.JPanel newTablePanel;
+    protected javax.swing.JScrollPane oldWorkSPane;
+    protected javax.swing.JComboBox<String> operationCBox;
+    protected javax.swing.JLabel operationLabel;
+    protected javax.swing.JPanel parameterMainPanel;
+    protected javax.swing.JScrollPane previewScPane;
+    protected javax.swing.JProgressBar processBar;
+    protected javax.swing.JPanel profilePanel;
+    protected javax.swing.JPanel rfcPanel;
+    protected javax.swing.JTextField rfc_bsField;
+    protected javax.swing.JLabel rfc_bsLabel;
+    protected javax.swing.JComboBox<String> rfc_critCBox;
+    protected javax.swing.JLabel rfc_critLabel;
+    protected javax.swing.JTextField rfc_mdField;
+    protected javax.swing.JLabel rfc_mdLabel;
+    protected javax.swing.JTextField rfc_neField;
+    protected javax.swing.JTextField rfc_njField;
+    protected javax.swing.JLabel rfc_njLabel;
+    protected javax.swing.JTextField rfc_oosField;
+    protected javax.swing.JLabel rfc_oosLabel;
+    protected javax.swing.JTextField rfc_rsField;
+    protected javax.swing.JLabel rfc_rsLabel;
+    protected javax.swing.JLabel rfs_neLabel;
+    protected javax.swing.JPanel sentimentPanel;
+    protected javax.swing.JSeparator separator;
+    protected javax.swing.JSeparator separator1;
+    protected javax.swing.JSeparator separator2;
+    protected javax.swing.JMenuItem showLoadPanel;
+    protected javax.swing.JPanel sideLoadPanel;
+    protected javax.swing.JPanel sidePanel;
+    protected javax.swing.JPanel sideWorkPanel;
+    protected javax.swing.JPanel tablesPanel;
+    protected javax.swing.JButton uploadButton;
+    protected javax.swing.JLabel usernameLabel;
+    protected javax.swing.JPanel votingPanel;
+    protected javax.swing.JButton workChoseButton;
+    protected javax.swing.JPanel workPanel;
+    protected javax.swing.JTextField workPathField;
+    protected javax.swing.JButton workUploadButton;
     // End of variables declaration//GEN-END:variables
 
     // </editor-fold>
