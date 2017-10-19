@@ -92,6 +92,8 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         operationLabel = new javax.swing.JLabel();
         doButton = new javax.swing.JButton();
         parameterMainPanel = new javax.swing.JPanel();
+        votingPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         firstPanel = new javax.swing.JPanel();
         adaPanel = new javax.swing.JPanel();
         ada_beField = new javax.swing.JTextField();
@@ -105,6 +107,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         ada_rsLabel = new javax.swing.JLabel();
         ada_rsField = new javax.swing.JTextField();
         sentimentPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         rfcPanel = new javax.swing.JPanel();
         rfs_neLabel = new javax.swing.JLabel();
         rfc_neField = new javax.swing.JTextField();
@@ -367,6 +370,27 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         parameterMainPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Paraméterek", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Trebuchet MS", 0, 12))); // NOI18N
         parameterMainPanel.setLayout(new java.awt.CardLayout());
 
+        jLabel1.setText("Voting panel");
+
+        javax.swing.GroupLayout votingPanelLayout = new javax.swing.GroupLayout(votingPanel);
+        votingPanel.setLayout(votingPanelLayout);
+        votingPanelLayout.setHorizontalGroup(
+            votingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, votingPanelLayout.createSequentialGroup()
+                .addContainerGap(256, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(271, 271, 271))
+        );
+        votingPanelLayout.setVerticalGroup(
+            votingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(votingPanelLayout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addComponent(jLabel1)
+                .addContainerGap(78, Short.MAX_VALUE))
+        );
+
+        parameterMainPanel.add(votingPanel, "card7");
+
         javax.swing.GroupLayout firstPanelLayout = new javax.swing.GroupLayout(firstPanel);
         firstPanel.setLayout(firstPanelLayout);
         firstPanelLayout.setHorizontalGroup(
@@ -375,7 +399,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         );
         firstPanelLayout.setVerticalGroup(
             firstPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 158, Short.MAX_VALUE)
         );
 
         parameterMainPanel.add(firstPanel, "card2");
@@ -454,15 +478,23 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
         parameterMainPanel.add(adaPanel, "card2");
 
+        jLabel2.setText("Sentiment Panel");
+
         javax.swing.GroupLayout sentimentPanelLayout = new javax.swing.GroupLayout(sentimentPanel);
         sentimentPanel.setLayout(sentimentPanelLayout);
         sentimentPanelLayout.setHorizontalGroup(
             sentimentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 586, Short.MAX_VALUE)
+            .addGroup(sentimentPanelLayout.createSequentialGroup()
+                .addGap(260, 260, 260)
+                .addComponent(jLabel2)
+                .addContainerGap(249, Short.MAX_VALUE))
         );
         sentimentPanelLayout.setVerticalGroup(
             sentimentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(sentimentPanelLayout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addComponent(jLabel2)
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(sentimentPanel, "card2");
@@ -691,7 +723,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                         .addComponent(doButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(parameterMainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
+                .addGap(34, 34, 34))
         );
         tablesPanelLayout.setVerticalGroup(
             tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -894,7 +926,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 .addGap(64, 64, 64)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -915,7 +947,6 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
             outDatas = readFromCsv(file);
-
         }
     }//GEN-LAST:event_uploadButtonActionPerformed
 
@@ -933,12 +964,18 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                 setClassifierParameters("ada:", ada_parameters);
                 break;
             case "rfc":
+                System.out.println("selected: " + selectedOperation);
                 String[] rfc_parameters = {rfc_mdField.getText(), rfc_neField.getText(), rfc_rsField.getText(), rfc_bsField.getText(), rfc_critCBox.getSelectedItem().toString(), rfc_oosField.getText(), rfc_njField.getText()};
                 setClassifierParameters("rfc:", rfc_parameters);
                 break;
             case "bag":
-                String[] bag_parameters = {bc_beField.getText(), bc_neField.getText(), bc_bsField.getText(), bc_bsfField.getText(), bc_oosCBox.getSelectedItem().toString(), bc_wsField.getText(), bc_njField.getText(), bc_verField.getText() };
+                String[] bag_parameters = {bc_beField.getText(), bc_neField.getText(), bc_bsField.getText(), bc_bsfField.getText(), bc_oosCBox.getSelectedItem().toString(), bc_wsField.getText(), bc_njField.getText(), bc_verField.getText()};
                 setClassifierParameters("bag:", bag_parameters);
+                break;
+            case "vot":
+                String[] vot_parameters = {};
+                setClassifierParameters("vot:", vot_parameters);
+                break;
         }
 
         outDatas = bufferParameters;
@@ -984,7 +1021,6 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
             //  donothing
         } else {
             switch (chosen) {
-                //panel váltás ArrayList<JPanel>-el
                 case "AdaBoost Classifier":
                     changePanels(adaPanel);
 
@@ -992,13 +1028,17 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
                     break;
                 case "Random Forest Classifier":
                     changePanels(rfcPanel);
-                    
+
                     selectedOperation = "rfc";
+                    break;
                 case "Bagging Classifier":
                     changePanels(baggingPanel);
-                    
-                    selectedOperation = "bag:";
+
+                    selectedOperation = "bag";
                     break;
+                case "Voting Classifier":
+                    changePanels(votingPanel);
+                    selectedOperation = "vot";
             }
         }
     }//GEN-LAST:event_classifierCBoxActionPerformed
@@ -1010,6 +1050,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private void bc_neFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bc_neFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bc_neFieldActionPerformed
+
     private void addExitOption() {
         addWindowListener(new WindowAdapter() {
 
@@ -1161,20 +1202,22 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
 
             String[] cols = line.split(",");
             ArrayList<String[]> items = new ArrayList<>();
-
+            int index = 0;
             while (line != null) {
                 line = br.readLine();
 
                 if (line == null) {
                     break;
                 } else {
-                    csv.add(line);
-                    csv.add(">>flag<<");
+                    csv.add(line);  
+                    csv.add(">>flag<<"); //valamiért betesz egy utolsót..
                 }
-                String[] items_temp = line.split(",");
-                items.add(items_temp);
+                if (index < 500) {
+                    String[] items_temp = line.split(",");
+                    items.add(items_temp);
+                }
+                index++;
             }
-
             fillPrevTable(cols, items);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Nem létező file.");
@@ -1249,12 +1292,11 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     }
 
     private void changePanels(JPanel visiblePanel) {
-        //valami nem oké.  rfc panel esetén a bagging-et adja ki.
-        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel};
-        for(JPanel p:panels){
-            if(visiblePanel==p){
+        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel};
+        for (JPanel p : panels) {
+            if (visiblePanel == p) {
                 p.setVisible(true);
-            }else{
+            } else {
                 p.setVisible(false);
             }
         }
@@ -1264,7 +1306,6 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
         bufferParameters.clear();
         bufferParameters.add(classifier);
         bufferParameters.addAll(Arrays.asList(parameters));
-        System.out.println("buffer: " + bufferParameters);
     }
 
     // </editor-fold>
@@ -1309,6 +1350,8 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel fileUploadLabel;
     private javax.swing.JTextField filepathField;
     private javax.swing.JPanel firstPanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1361,6 +1404,7 @@ public class WorkWindowFrame extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel tablesPanel;
     private javax.swing.JButton uploadButton;
     private javax.swing.JLabel usernameLabel;
+    private javax.swing.JPanel votingPanel;
     private javax.swing.JButton workChoseButton;
     private javax.swing.JPanel workPanel;
     private javax.swing.JTextField workPathField;

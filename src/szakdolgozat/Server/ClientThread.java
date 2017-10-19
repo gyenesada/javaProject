@@ -123,22 +123,25 @@ public class ClientThread implements Runnable {
     private ArrayList<String> readFromCsv(String filename) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add("ldt:");
-        System.out.println("LDT:");
+        System.out.println("Loading chosen table: " + filename);
         File file = new File(PATH + filename);
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
             csv.add(line);
             csv.add(">>first_line_end_flag<<"); //első sor végét jelzi.
-            while (line != null) {
+            int index=0;
+            while (index<500/2) {
                 line = br.readLine();
 
+                index++;
                 if (line == null) {
                     break;
                 } else {
                     csv.add(line);
                     csv.add(">>enter_flag<<");
                 }
+                
             }
         } catch (IOException ex) {
             System.out.println("File not found.");
@@ -374,5 +377,11 @@ public class ClientThread implements Runnable {
     private void modifyIsFeatureSelectedInTables() {
 
     }
+    // </editor-fold>
+    
+    //.py functioncalls
+    // <editor-fold defaultstate="collapsed">
+    
+    
     // </editor-fold>
 }

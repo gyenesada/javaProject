@@ -4,7 +4,8 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException{
-        WindowFrame wf = new WindowFrame();
+        MainWindowFrame wf = new MainWindowFrame();
+        
         wf.setVisible(true);
     }
 }
