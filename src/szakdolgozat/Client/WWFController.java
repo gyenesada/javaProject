@@ -30,7 +30,7 @@ public class WWFController implements Runnable{
     
     @Override
     public void run() {
-        wwf.usernameLabel.setText("Üdvözöljük " + loggedUser + "!"); //ezt majd konstruktorba kell tenni.
+        wwf.usernameLabel.setText("Üdvözöljük " + loggedUser + "!"); 
         communicateWithServer(pw, sc);
     }
     
@@ -45,6 +45,8 @@ public class WWFController implements Runnable{
                     Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+           // System.out.println(wwf.outDatas);
+            System.out.println(wwf.selectedTable);
             pw.println(wwf.outDatas);
             wwf.inDatas.clear();
             wwf.rawInput = sc.nextLine();
@@ -89,11 +91,13 @@ public class WWFController implements Runnable{
                 wwf.workPanel.setVisible(true);
                 wwf.sideWorkPanel.setVisible(true);
                 break;
+            case "done:":
+                System.out.println("Load fact.table");
+                loadedTablePreprocess();
+                break;
         }
         return out;
     }
-    
-    
 
     private void loadedTablePreprocess() {
         ArrayList<String[]> items = new ArrayList<>();
@@ -106,13 +110,12 @@ public class WWFController implements Runnable{
 
         String[] lines = content.split(", >>enter_flag<<,");
         for (String str : lines) {
-            String[] temp = str.split("(?!\"),(?!\")");
+            String[] temp = str.split("(?!\"),(?!\")"); //titanic csv-ben nem jól split-el.
             items.add(temp);
         }
         wwf.fillPrevTable(colnames, items);
     }
-
-
+    
     private void inputPreprocess(String input) {
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
 

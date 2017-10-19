@@ -20,15 +20,16 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     protected boolean exit = false;
 
     protected String rawInput;
-    protected String selectedOperation;
-    protected String selectedTable; //oldal menü, 1 táblás műveletekhez
+    protected String selectedOperation="";
+    protected String selectedTable; //oldal menü, 1 táblás műveletekhez 
 
     protected ArrayList<String> loadedTables = new ArrayList<>();
     protected ArrayList<String> csvToTable = new ArrayList<>();
 
-    protected ArrayList<String> bufferParameters = new ArrayList<>();
+    //buffered output datas.
+    protected ArrayList<String> bufferOutput = new ArrayList<>();
 
-    //buffer to send and receive datas
+    //container to send and receive datas
     protected ArrayList<String> outDatas = new ArrayList<>();
     protected ArrayList<String> inDatas = new ArrayList<>();
    
@@ -143,6 +144,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         loadingLabel = new javax.swing.JLabel();
         sideWorkPanel = new javax.swing.JPanel();
         loadedTablesList = new javax.swing.JList<>();
+        workSave = new javax.swing.JButton();
         separator = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -859,18 +861,26 @@ public class WorkWindowFrame extends javax.swing.JFrame{
             public String getElementAt(int i) { return strings[i]; }
         });
 
+        workSave.setText("Mentés");
+
         javax.swing.GroupLayout sideWorkPanelLayout = new javax.swing.GroupLayout(sideWorkPanel);
         sideWorkPanel.setLayout(sideWorkPanelLayout);
         sideWorkPanelLayout.setHorizontalGroup(
             sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(loadedTablesList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideWorkPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(workSave)
+                .addContainerGap())
         );
         sideWorkPanelLayout.setVerticalGroup(
             sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sideWorkPanelLayout.createSequentialGroup()
-                .addGap(0, 12, Short.MAX_VALUE)
-                .addComponent(loadedTablesList, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideWorkPanelLayout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addComponent(loadedTablesList, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
+                .addComponent(workSave)
+                .addContainerGap())
         );
 
         sidePanel.add(sideWorkPanel, "card2");
@@ -914,7 +924,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
                 .addGap(64, 64, 64)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -930,7 +940,9 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
         // outDatas.clear();
         String file = filepathField.getText();
-
+        selectedTable = getFilename(file);
+        System.out.println("selected: " + selectedTable);
+        //selectedTable.add(getFilename(file));
         if (file.equals("")) {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
@@ -964,10 +976,11 @@ public class WorkWindowFrame extends javax.swing.JFrame{
                 String[] vot_parameters = {};
                 setClassifierParameters("vot:", vot_parameters);
                 break;
+            default:
+                break;
         }
 
-        outDatas = bufferParameters;
-        System.out.println("out: " + outDatas);
+        outDatas = bufferOutput;
     }//GEN-LAST:event_doButtonActionPerformed
 
     private void workUploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workUploadButtonActionPerformed
@@ -976,7 +989,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         if (file.equals("")) {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
-            outDatas = readFromCsv(file);
+            outDatas = bufferOutput;
         }
     }//GEN-LAST:event_workUploadButtonActionPerformed
 
@@ -986,6 +999,9 @@ public class WorkWindowFrame extends javax.swing.JFrame{
 
     private void showLoadPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLoadPanelActionPerformed
         //refreshelni kell majd a korábbi munkalistát
+        
+        operationCBox.setSelectedItem("...");
+        classifierCBox.setSelectedItem("...");
         workPanel.setVisible(false);
         sideWorkPanel.setVisible(false);
 
@@ -999,6 +1015,17 @@ public class WorkWindowFrame extends javax.swing.JFrame{
             //  donothing
         } else {
             switch (chosen) {
+                case "Faktorizálás":
+                    bufferOutput.clear();
+                    bufferOutput.add("fact:");
+                    bufferOutput.add(selectedTable);
+                    System.out.println("actlist: " + selectedTable);
+                 break;
+                case "Normalizálás":
+                    bufferOutput.clear();
+                    bufferOutput.add("norm:");
+                    bufferOutput.add(selectedTable);
+                 break;
             }
         }
     }//GEN-LAST:event_operationCBoxActionPerformed
@@ -1009,6 +1036,9 @@ public class WorkWindowFrame extends javax.swing.JFrame{
             //  donothing
         } else {
             switch (chosen) {
+                case "...":
+                    changePanels(firstPanel);
+                    break;
                 case "AdaBoost Classifier":
                     changePanels(adaPanel);
 
@@ -1027,6 +1057,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
                 case "Voting Classifier":
                     changePanels(votingPanel);
                     selectedOperation = "vot";
+                    break;
             }
         }
     }//GEN-LAST:event_classifierCBoxActionPerformed
@@ -1057,51 +1088,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         });
     }
     
-private ArrayList<String> readFromCsv(String path) {
-        ArrayList<String> csv = new ArrayList<>();
-        csv.add("csv:");
-        String filename;
 
-        BufferedReader br = null;
-        try {
-            File file = new File(path);
-            br = new BufferedReader(new FileReader(file));
-            filename = getFilename(path);
-            csv.add(filename + ":");
-            String line = br.readLine();
-            csv.add(line);
-            csv.add(">>flag<<");
-
-            String[] cols = line.split(",");
-            ArrayList<String[]> items = new ArrayList<>();
-            int index = 0;
-            while (line != null) {
-                line = br.readLine();
-
-                if (line == null) {
-                    break;
-                } else {
-                    csv.add(line);  
-                    csv.add(">>flag<<"); //valamiért betesz egy utolsót..
-                }
-                if (index < 500) {
-                    String[] items_temp = line.split(",");
-                    items.add(items_temp);
-                }
-                index++;
-            }
-            fillPrevTable(cols, items);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Nem létező file.");
-        } finally {
-            try {
-                br.close();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Nem létező file.");
-            }
-        }
-        return csv;
-    }
     // </editor-fold>
     //Combo-box feltöltő fv-ek
     // <editor-fold defaultstate="collapsed">
@@ -1166,6 +1153,7 @@ private ArrayList<String> readFromCsv(String path) {
                         outDatas.clear();
                         outDatas.add("ldt:");
                         outDatas.add(selected);
+                        selectedTable = selected;
                     } catch (ArrayIndexOutOfBoundsException ex) {
                     }
                 }
@@ -1198,12 +1186,56 @@ private ArrayList<String> readFromCsv(String path) {
     }
 
     private void setClassifierParameters(String classifier, String[] parameters) {
-        bufferParameters.clear();
-        bufferParameters.add(classifier);
-        bufferParameters.addAll(Arrays.asList(parameters));
+        bufferOutput.clear();
+        bufferOutput.add(classifier);
+        bufferOutput.addAll(Arrays.asList(parameters));
     }
     
+ private ArrayList<String> readFromCsv(String path) {
+        ArrayList<String> csv = new ArrayList<>();
+        csv.add("csv:");
+        String filename;
 
+        BufferedReader br = null;
+        try {
+            File file = new File(path);
+            br = new BufferedReader(new FileReader(file));
+            filename = getFilename(path);
+            csv.add(filename + ":");
+            String line = br.readLine();
+            csv.add(line);
+            csv.add(">>flag<<");
+
+            String[] cols = line.split(",");
+            ArrayList<String[]> items = new ArrayList<>();
+            int index = 0;
+            while (line != null) {
+                line = br.readLine();
+
+                if (line == null) {
+                    break;
+                } else {
+                    csv.add(line);  
+                    csv.add(">>flag<<"); //valamiért betesz egy utolsót..
+                }
+                if (index < 500) {
+                    String[] items_temp = line.split(",");
+                    items.add(items_temp);
+                }
+                index++;
+            }
+            fillPrevTable(cols, items);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Nem létező file.");
+        } finally {
+            try {
+                br.close();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Nem létező file.");
+            }
+        }
+        return csv;
+    }
     // </editor-fold>
     //VARIABLES
     // <editor-fold defaultstate="collapsed">
@@ -1304,6 +1336,7 @@ private ArrayList<String> readFromCsv(String path) {
     protected javax.swing.JButton workChoseButton;
     protected javax.swing.JPanel workPanel;
     protected javax.swing.JTextField workPathField;
+    protected javax.swing.JButton workSave;
     protected javax.swing.JButton workUploadButton;
     // End of variables declaration//GEN-END:variables
 

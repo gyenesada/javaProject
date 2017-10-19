@@ -21,13 +21,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClientThread implements Runnable {
+    String PATH = "C:\\Users\\Adrienn\\Desktop\\szerver\\csv\\";
+    String PY_PATH = "C:\\Users\\Adrienn\\Desktop\\szerver\\python\\";
 
     private final Socket s;
     private Scanner sc;
     private PrintWriter pw;
     private final Connection conn;
-
-    String PATH = "C:\\Users\\Adrienn\\Desktop\\szerver minitárhely\\csv\\";
 
     private String threadName;
     private int threadID;
@@ -112,17 +112,28 @@ public class ClientThread implements Runnable {
                 out = getOldWorksFromTables();
                 break;
             case "ldt:":
-                out = readFromCsv(in.get(1));
+                out = readFromCsv("ldt:",in.get(1));
                 break;
+            case "fact:":
+                String table = in.get(1);
+                System.out.println("Selected table to factorize: " + table);
+                
+                callingPython("factorize.py", table);
+                out = readFromCsv("done:", in.get(1));
+                System.out.println("..");
+                break;
+            case "norm:":
+                callingPython("normalize.py", in.get(1));
+                out = readFromCsv("done:", in.get(1));
             default:
                 break;
         }
         return out;
     }
 
-    private ArrayList<String> readFromCsv(String filename) {
+    private ArrayList<String> readFromCsv(String identifier, String filename) {
         ArrayList<String> csv = new ArrayList<>();
-        csv.add("ldt:");
+        csv.add(identifier);
         System.out.println("Loading chosen table: " + filename);
         File file = new File(PATH + filename);
         try {
@@ -151,7 +162,6 @@ public class ClientThread implements Runnable {
 
     private void writeToCsv(String filename) {
         String fullFilepath = PATH + filename;
-
         BufferedWriter bw = null;
         FileWriter fw = null;
 
@@ -162,11 +172,9 @@ public class ClientThread implements Runnable {
             //System.out.println("raw: " + rawInput);
             String lines = rawInput.split(":, ")[2];
             
-            String line = lines.replaceAll(", >>flag<<, ", "\n");
-            
-                bw.write(line);
+            String line = lines.replaceAll(", >>flag<<, ", "\n").replaceAll(", >>flag<<", "");
+            bw.write(line);
             System.out.println("Done with file writing");
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -381,7 +389,24 @@ public class ClientThread implements Runnable {
     
     //.py functioncalls
     // <editor-fold defaultstate="collapsed">
-    
+    private void callingPython(String py, String file){
+        String[] cmd = {
+            "python",
+            PY_PATH+py,
+            PATH+file
+        };
+
+        for(String s:cmd) System.out.println(s);
+        try {
+            Process p = Runtime.getRuntime().exec(cmd);
+            int exitVal = p.waitFor();
+            System.out.println("exitval:" + exitVal);
+            System.out.println("Python script completed");
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     
     // </editor-fold>
 }
