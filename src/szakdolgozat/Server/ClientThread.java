@@ -101,15 +101,22 @@ public class ClientThread implements Runnable {
                 out.add(answer);
                 break;
             case "csv:":
-                String filename = in.get(1).replaceAll(":", "");
-                answer = Boolean.toString(insertTableIntoDatabase(filename));
-
+                String taskname = in.get(1).replaceAll(":", ""); //visszaadja a task id-t is, és akkor a client eltárolja, mint current Task id-t. Betöltésnél frissül. (elküldi a task id-t is. dátum, task név, id)
+                int task_id = insertTaskIntoDatabase(taskname);
+                String filename = in.get(2).replaceAll(":", "");
+                answer = Boolean.toString(insertTableIntoDatabase(task_id, filename));
+                
                 out.add(identifier);
                 out.add(answer);
+                out.add(Integer.toString(task_id));
                 writeToCsv(filename);
                 break;
+            case "wrk:":
+                out = getTasks();
+                break;
             case "old:":
-                out = getOldWorksFromTables();
+                out = getTasksTable(Integer.parseInt(in.get(1)));
+                //out = getOldWorksFromTables();
                 break;
             case "ldt:":
                 out = readFromCsv("ldt:",in.get(1));
@@ -125,6 +132,7 @@ public class ClientThread implements Runnable {
             case "norm:":
                 callingPython("normalize.py", in.get(1));
                 out = readFromCsv("done:", in.get(1));
+                break;
             default:
                 break;
         }
@@ -170,7 +178,7 @@ public class ClientThread implements Runnable {
             bw = new BufferedWriter(fw);
             
             //System.out.println("raw: " + rawInput);
-            String lines = rawInput.split(":, ")[2];
+            String lines = rawInput.split(":, ")[3];
             
             String line = lines.replaceAll(", >>flag<<, ", "\n").replaceAll(", >>flag<<", "");
             bw.write(line);
@@ -205,6 +213,11 @@ public class ClientThread implements Runnable {
                 if (pass.equals(password)) {
                     threadName = name;
                     threadID = rs.getInt("USER_ID");
+                    
+                    String updateQuery = "update users set is_online='"+true+"', last_visit='"+new java.sql.Date(Calendar.getInstance().getTimeInMillis())+"';";
+                    Statement updateStat = conn.createStatement();
+                    updateStat.executeUpdate(updateQuery);
+                    
                     return true;
                 } else {
                     return false;
@@ -241,13 +254,15 @@ public class ClientThread implements Runnable {
                 return false;
             } else {
                 Statement idstat = conn.createStatement();
-                String insertquery = "insert into users values (?,?,?,?);";
+                String insertquery = "insert into users values (?,?,?,?,?,?);";
                 try {
                     PreparedStatement prepstat = conn.prepareStatement(insertquery);
                     prepstat.setInt(1, id++);
                     prepstat.setString(2, name);
                     prepstat.setString(3, mail);
                     prepstat.setString(4, pass);
+                    prepstat.setBoolean(5, false);
+                    prepstat.setDate(6, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
                     prepstat.addBatch();
 
                     conn.setAutoCommit(false);
@@ -265,10 +280,54 @@ public class ClientThread implements Runnable {
         return false;
     }
 
-    private boolean insertTableIntoDatabase(String filename) { //ha full egyezés van, akkor ne illesszük be mégegyszer.
+    private int insertTaskIntoDatabase(String taskname){
+        int returnvalue=0;
+        try{
+            String insertQuery = "insert into tasks values (?,?,?);";
+            PreparedStatement prep = conn.prepareStatement(insertQuery);
+            
+            int id = getTaskID();
+            prep.setInt(1, id);
+            prep.setString(2, taskname);
+            prep.setInt(3, threadID);
+            
+            //ellenőrizni kell, létezik-e ugyanilyen vagy sem.
+            
+            prep.addBatch();
+            conn.setAutoCommit(false);
+            prep.executeBatch();
+            conn.setAutoCommit(true);
+            returnvalue = id;
+            
+            System.out.println("Task bejegyezve: "+returnvalue+" számmal.");
+        }catch(SQLException e){
+            
+        }        
+        return returnvalue;
+    }
+    
+    private int getTaskID(){
+        int returnvalue = 1;
+        try {
+            ResultSet maxIDrs;
+
+            Statement maxID = conn.createStatement();
+            String maxIDquery = "select nvl(max(task_id),0) from tasks;";
+            maxIDrs = maxID.executeQuery(maxIDquery);
+
+            if (maxIDrs.next()) {
+                returnvalue = maxIDrs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: Getting task_id");
+        }
+        return ++returnvalue;
+    }
+    
+    private boolean insertTableIntoDatabase(int task_id, String filename) { //ha full egyezés van, akkor ne illesszük be mégegyszer.
         boolean returnvalue = false;
         try {
-            String insertQuery = "insert into tables values (?,?,?,?,?,?,?,?);";
+            String insertQuery = "insert into tables values (?,?,?,?,?,?,?,?,?);";
             PreparedStatement prep = conn.prepareStatement(insertQuery);
             int id = getTableID();
             prep.setInt(1, id);
@@ -279,14 +338,15 @@ public class ClientThread implements Runnable {
             prep.setBoolean(6, false);
             prep.setBoolean(7, false);
             prep.setDate(8, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-            if (!(isTheTableAlreadyInDatabase(id, threadID, filename, false, false, false, false))) {
+            prep.setInt(9, task_id);
+           // if (!(isTheTableAlreadyInDatabase(id, threadID, filename, false, false, false, false))) {
                 prep.addBatch();
 
                 conn.setAutoCommit(false);
                 prep.executeBatch();
                 conn.setAutoCommit(true);
                 returnvalue = true;
-            }
+          //  }
         } catch (SQLException ex) {
             System.out.println("Error inserting to database");
         }
@@ -333,13 +393,13 @@ public class ClientThread implements Runnable {
         return ++returnvalue;
     }
 
-    private ArrayList<String> getOldWorksFromTables() {
+    private ArrayList<String> getTasksTable(int task_id) {
         ArrayList<String> returnvalue = new ArrayList<>();
         returnvalue.add("old:");
 
         try {
             Statement stat = conn.createStatement();
-            String query = "select name, modified from tables where user_id='" + threadID + "';";
+            String query = "select name, modified from tables where user_id='" + threadID + "' and task_id='"+task_id+"';";
             ResultSet rs = stat.executeQuery(query);
 
             while (rs.next()) {
@@ -351,6 +411,27 @@ public class ClientThread implements Runnable {
             System.out.println("Error: load old works");
         }
 
+        return returnvalue;
+    }
+    
+    private ArrayList<String> getTasks(){
+        ArrayList<String> returnvalue = new ArrayList<>();
+        returnvalue.add("wrk:");
+        
+        try{
+            Statement stat =  conn.createStatement();
+            //Egyenlőre modifier nélkül!!!
+            String query = "select task_id, task_name from tasks where user_id='"+threadID+"';";
+            ResultSet rs = stat.executeQuery(query);
+            
+            while(rs.next()){
+                returnvalue.add(Integer.toString(rs.getInt("TASK_ID")));
+                returnvalue.add(rs.getString("TASK_NAME"));
+            }
+            
+        }catch(SQLException e){
+            System.out.println("Error: load tasks");
+        }
         return returnvalue;
     }
 
@@ -374,8 +455,15 @@ public class ClientThread implements Runnable {
 
     }
 
-    private void modifyIsFactorizedInTables() {
-
+    //ID alapján kell a táblát azonosítani. (how?)
+    private void modifyIsFactorizedInTables(String table_id) {
+        try {
+            Statement stat =  conn.createStatement();
+            String query = "update tables set is_factorized = true where id='"+table_id+"'; ";
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
     }
 
     private void modifyIsNormalisedInTables() {
@@ -407,6 +495,5 @@ public class ClientThread implements Runnable {
         }
     }
 
-    
     // </editor-fold>
 }

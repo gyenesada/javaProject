@@ -1,15 +1,12 @@
 package szakdolgozat.Client;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 public class WWFController implements Runnable{
@@ -38,14 +35,12 @@ public class WWFController implements Runnable{
         int index = 0;
         while (!wwf.exit) {
             System.out.println("---------------" + index + "--------------");
+           try {
             while (wwf.outDatas.isEmpty()) {
-                try {
+                
                     Thread.sleep(10); //to prevent dataloss
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
             }
-           // System.out.println(wwf.outDatas);
             System.out.println(wwf.selectedTable);
             pw.println(wwf.outDatas);
             wwf.inDatas.clear();
@@ -54,13 +49,16 @@ public class WWFController implements Runnable{
             if (!wwf.inDatas.isEmpty()) {
                 wwf.outDatas = controller(wwf.inDatas);
             }
+            } catch (InterruptedException ex) {
+                    Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             //System.out.println("Input: " + inDatas);
             index++;
 
         }
     }
 
-    private ArrayList<String> controller(ArrayList<String> in) {
+    private ArrayList<String> controller(ArrayList<String> in) throws InterruptedException {
         ArrayList<String> out = new ArrayList<>();
 
         String identifier = in.get(0);
@@ -68,6 +66,13 @@ public class WWFController implements Runnable{
         switch (identifier) {
             case "csv:":
                 if (Boolean.valueOf(in.get(1))) {
+                    wwf.currentTaskId = Integer.parseInt(in.get(2));
+                    
+                DefaultListModel<String> model = new DefaultListModel<>();
+                wwf.loadedTablesList.setModel(model);
+                model.addElement(wwf.selectedTable);
+                    //erre kell majd írni egy change panel fv-t....
+                    Thread.sleep(10);
                     wwf.loadPanel.setVisible(false);
                     wwf.workPanel.setVisible(true);
 
@@ -77,26 +82,41 @@ public class WWFController implements Runnable{
                     JOptionPane.showMessageDialog(wwf, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
                 }
                 break;
-            case "old:":
+            case "wrk:": //old:
                 for (int i = 1; i < in.size() - 1; i = i + 2) {
-                    wwf.list.add(in.get(i + 1) + "    -    " + in.get(i));
+                    wwf.list.add(in.get(i) + "    -    " + in.get(i+1));
                 }
-                wwf.getSelectedFile();
+                wwf.getSelectedTask();
                 break;
-            case "ldt:":
-                loadedTablePreprocess();
+            case "old:":
+                fillLoadedTablesList(in);
+                
+                wwf.workPanel.setVisible(true);
+                wwf.sideWorkPanel.setVisible(true);
+                
                 wwf.loadPanel.setVisible(false);
                 wwf.sideLoadPanel.setVisible(false);
 
-                wwf.workPanel.setVisible(true);
-                wwf.sideWorkPanel.setVisible(true);
+                wwf.getSelectedTable();
                 break;
+            case "ldt:":
+                loadedTablePreprocess();
+                break;
+                
             case "done:":
                 System.out.println("Load fact.table");
                 loadedTablePreprocess();
                 break;
         }
         return out;
+    }
+    
+    protected void fillLoadedTablesList(ArrayList<String> in){
+                DefaultListModel<String> model = new DefaultListModel<>();
+                wwf.loadedTablesList.setModel(model);
+                for(int i=1; i<in.size()-1; i=i+2){
+                    model.addElement(in.get(i+1) + " - " +in.get(i));
+                }
     }
 
     private void loadedTablePreprocess() {

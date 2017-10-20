@@ -22,6 +22,9 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     protected String rawInput;
     protected String selectedOperation="";
     protected String selectedTable; //oldal menü, 1 táblás műveletekhez 
+    protected String currentTask;
+    protected int currentTaskId;
+    
 
     protected ArrayList<String> loadedTables = new ArrayList<>();
     protected ArrayList<String> csvToTable = new ArrayList<>();
@@ -46,7 +49,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         changePanels(firstPanel);
         fillOperationsList();
         fillClassifierList();
-        outDatas.add("old:");
+        outDatas.add("wrk:");
     }
 
     @SuppressWarnings("unchecked")
@@ -140,8 +143,10 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        processBar = new javax.swing.JProgressBar();
         loadingLabel = new javax.swing.JLabel();
+        otherLabel = new javax.swing.JLabel();
+        deleteTaskLabel = new javax.swing.JLabel();
+        renameTaskLabel = new javax.swing.JLabel();
         sideWorkPanel = new javax.swing.JPanel();
         loadedTablesList = new javax.swing.JList<>();
         workSave = new javax.swing.JButton();
@@ -800,7 +805,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
             profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(profilePanelLayout.createSequentialGroup()
                 .addComponent(usernameLabel)
-                .addGap(0, 49, Short.MAX_VALUE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
 
         sidePanel.setLayout(new java.awt.CardLayout());
@@ -815,12 +820,22 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         jLabel7.setForeground(new java.awt.Color(102, 102, 102));
         jLabel7.setText("Profil szerkesztése");
 
+        otherLabel.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        otherLabel.setForeground(new java.awt.Color(102, 102, 102));
+        otherLabel.setText("Egyéb");
+
+        deleteTaskLabel.setText("Munkafolyam törlése");
+
+        renameTaskLabel.setText("Munkafolyam átnevezése");
+
         javax.swing.GroupLayout sideLoadPanelLayout = new javax.swing.GroupLayout(sideLoadPanel);
         sideLoadPanel.setLayout(sideLoadPanelLayout);
         sideLoadPanelLayout.setHorizontalGroup(
             sideLoadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sideLoadPanelLayout.createSequentialGroup()
-                .addComponent(jLabel7)
+                .addGroup(sideLoadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(otherLabel))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(sideLoadPanelLayout.createSequentialGroup()
                 .addContainerGap()
@@ -828,9 +843,11 @@ public class WorkWindowFrame extends javax.swing.JFrame{
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(processBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(sideLoadPanelLayout.createSequentialGroup()
-                        .addComponent(loadingLabel)
+                        .addGroup(sideLoadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(loadingLabel)
+                            .addComponent(deleteTaskLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(renameTaskLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -844,11 +861,15 @@ public class WorkWindowFrame extends javax.swing.JFrame{
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 349, Short.MAX_VALUE)
-                .addComponent(loadingLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(otherLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(processBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(deleteTaskLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(renameTaskLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 280, Short.MAX_VALUE)
+                .addComponent(loadingLabel)
+                .addGap(31, 31, 31))
         );
 
         sidePanel.add(sideLoadPanel, "card2");
@@ -921,10 +942,10 @@ public class WorkWindowFrame extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(profilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
+                .addGap(105, 105, 105)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -932,28 +953,6 @@ public class WorkWindowFrame extends javax.swing.JFrame{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void filepathFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filepathFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_filepathFieldActionPerformed
-
-    private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
-        // outDatas.clear();
-        String file = filepathField.getText();
-        selectedTable = getFilename(file);
-        System.out.println("selected: " + selectedTable);
-        //selectedTable.add(getFilename(file));
-        if (file.equals("")) {
-            JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
-        } else {
-            outDatas = readFromCsv(file);
-        }
-    }//GEN-LAST:event_uploadButtonActionPerformed
-
-    private void choseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choseButtonActionPerformed
-        FileManager fm = new FileManager();
-        fm.setVisible(true);
-    }//GEN-LAST:event_choseButtonActionPerformed
 
     private void doButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doButtonActionPerformed
         outDatas.clear();
@@ -989,17 +988,11 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         if (file.equals("")) {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
-            outDatas = bufferOutput;
+            outDatas = readFromCsv(getFilename(file));
         }
     }//GEN-LAST:event_workUploadButtonActionPerformed
 
-    private void listActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listActionPerformed
-
-    }//GEN-LAST:event_listActionPerformed
-
     private void showLoadPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLoadPanelActionPerformed
-        //refreshelni kell majd a korábbi munkalistát
-        
         operationCBox.setSelectedItem("...");
         classifierCBox.setSelectedItem("...");
         workPanel.setVisible(false);
@@ -1020,6 +1013,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
                     bufferOutput.add("fact:");
                     bufferOutput.add(selectedTable);
                     System.out.println("actlist: " + selectedTable);
+                    System.out.println(bufferOutput);
                  break;
                 case "Normalizálás":
                     bufferOutput.clear();
@@ -1069,6 +1063,34 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     private void bc_neFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bc_neFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bc_neFieldActionPerformed
+
+    private void listActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listActionPerformed
+
+    }//GEN-LAST:event_listActionPerformed
+
+    private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
+        String file = filepathField.getText();
+        selectedTable = getFilename(file);
+        System.out.println("selected: " + selectedTable);
+        if (file.equals("")) {
+            JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
+        } else {
+            currentTask = JOptionPane.showInputDialog(this, "Munkafolyamat neve: ");
+            if(currentTask.equals("")) JOptionPane.showMessageDialog(this, "Adjon meg nevet!");
+            
+            outDatas = readFromCsv(file);
+        }
+        
+    }//GEN-LAST:event_uploadButtonActionPerformed
+
+    private void choseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choseButtonActionPerformed
+        FileManager fm = new FileManager();
+        fm.setVisible(true);
+    }//GEN-LAST:event_choseButtonActionPerformed
+
+    private void filepathFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filepathFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_filepathFieldActionPerformed
 
     private void addExitOption() {
         addWindowListener(new WindowAdapter() {
@@ -1139,61 +1161,11 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         csvPrevTable.setModel(model);
         csvPrevTable.setDefaultEditor(Object.class, null);
     }
-    // </editor-fold>
-
-    //GETTEREK-SETTEREK
-    // <editor-fold defaultstate="collapsed">
-    protected void getSelectedFile() {
-        list.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    try {
-                        String selected = list.getComponentAt(e.getPoint()).toString().split("    -    ")[1];
-                        outDatas.clear();
-                        outDatas.add("ldt:");
-                        outDatas.add(selected);
-                        selectedTable = selected;
-                    } catch (ArrayIndexOutOfBoundsException ex) {
-                    }
-                }
-            }
-        });
-    }
-
-    protected String getFilename(String path) {
-        String[] spl = path.split(Pattern.quote("\\"));
-        return spl[spl.length - 1];
-    }
-
-    private String getSelectedOperation() {
-        return operationCBox.getItemAt(operationCBox.getSelectedIndex());
-    }
-
-    private String getSelectedClassifier() {
-        return classifierCBox.getItemAt(classifierCBox.getSelectedIndex());
-    }
-
-    private void changePanels(JPanel visiblePanel) {
-        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel};
-        for (JPanel p : panels) {
-            if (visiblePanel == p) {
-                p.setVisible(true);
-            } else {
-                p.setVisible(false);
-            }
-        }
-    }
-
-    private void setClassifierParameters(String classifier, String[] parameters) {
-        bufferOutput.clear();
-        bufferOutput.add(classifier);
-        bufferOutput.addAll(Arrays.asList(parameters));
-    }
     
- private ArrayList<String> readFromCsv(String path) {
+    private ArrayList<String> readFromCsv(String path) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add("csv:");
+        csv.add(currentTask+":");
         String filename;
 
         BufferedReader br = null;
@@ -1237,6 +1209,85 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         return csv;
     }
     // </editor-fold>
+
+    //GETTEREK-SETTEREK
+    // <editor-fold defaultstate="collapsed">
+    protected void getSelectedTask() {
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    try {
+                        String selected = list.getComponentAt(e.getPoint()).toString().split("    -    ")[1];
+                        currentTaskId = Integer.parseInt((list.getComponentAt(e.getPoint()).toString().split("    -    ")[0]).split("selected=")[1]);
+                        outDatas.clear();
+                        //outDatas.add("ldt:");
+                        outDatas.add("old:");
+                        outDatas.add(Integer.toString(currentTaskId));
+                        outDatas.add(selected);
+                        
+                        DefaultTableModel model = new DefaultTableModel(0, 0);
+                        csvPrevTable.setModel(model);
+                    } catch (ArrayIndexOutOfBoundsException ex) {
+                    }
+                }
+            }
+        });
+    }
+
+    protected void getSelectedTable(){
+        loadedTablesList.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if (e.getClickCount()==1){
+                    try{
+                        System.out.println("Clicked.");
+                       String selected = ((String)loadedTablesList.getModel().getElementAt(loadedTablesList.locationToIndex(e.getPoint()))).split(" - ")[1];
+                        System.out.println("Selected: "+ selected);
+                        
+                        outDatas.clear();
+                        outDatas.add("ldt:");
+                        outDatas.add(selected);
+                        selectedTable = selected;
+                    }catch(ArrayIndexOutOfBoundsException ex){
+                        
+                    }
+                }
+            }
+        });
+    }
+    protected String getFilename(String path) {
+        String[] spl = path.split(Pattern.quote("\\"));
+        return spl[spl.length - 1];
+    }
+
+    private String getSelectedOperation() {
+        return operationCBox.getItemAt(operationCBox.getSelectedIndex());
+    }
+
+    private String getSelectedClassifier() {
+        return classifierCBox.getItemAt(classifierCBox.getSelectedIndex());
+    }
+
+    private void changePanels(JPanel visiblePanel) {
+        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel};
+        for (JPanel p : panels) {
+            if (visiblePanel == p) {
+                p.setVisible(true);
+            } else {
+                p.setVisible(false);
+            }
+        }
+    }
+
+    private void setClassifierParameters(String classifier, String[] parameters) {
+        bufferOutput.clear();
+        bufferOutput.add(classifier);
+        bufferOutput.addAll(Arrays.asList(parameters));
+    }
+ 
+    // </editor-fold>
+ 
     //VARIABLES
     // <editor-fold defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1273,6 +1324,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     protected javax.swing.JComboBox<String> classifierCBox;
     protected javax.swing.JLabel classifierLabel;
     protected javax.swing.JTable csvPrevTable;
+    protected javax.swing.JLabel deleteTaskLabel;
     protected javax.swing.JButton doButton;
     protected javax.swing.JMenu fileMenu;
     protected javax.swing.JLabel fileUploadLabel;
@@ -1302,10 +1354,11 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     protected javax.swing.JScrollPane oldWorkSPane;
     protected javax.swing.JComboBox<String> operationCBox;
     protected javax.swing.JLabel operationLabel;
+    protected javax.swing.JLabel otherLabel;
     protected javax.swing.JPanel parameterMainPanel;
     protected javax.swing.JScrollPane previewScPane;
-    protected javax.swing.JProgressBar processBar;
     protected javax.swing.JPanel profilePanel;
+    protected javax.swing.JLabel renameTaskLabel;
     protected javax.swing.JPanel rfcPanel;
     protected javax.swing.JTextField rfc_bsField;
     protected javax.swing.JLabel rfc_bsLabel;
