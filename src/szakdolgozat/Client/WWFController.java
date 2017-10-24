@@ -41,6 +41,7 @@ public class WWFController implements Runnable{
                     Thread.sleep(10); //to prevent dataloss
                 
             }
+             System.out.println("out: " + wwf.outDatas);
             System.out.println(wwf.selectedTable);
             pw.println(wwf.outDatas);
             wwf.inDatas.clear();

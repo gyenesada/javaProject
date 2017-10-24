@@ -12,11 +12,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
-public class WorkWindowFrame extends javax.swing.JFrame{
+public final class WorkWindowFrame extends javax.swing.JFrame{
     protected boolean exit = false;
 
     protected String rawInput;
@@ -34,7 +35,12 @@ public class WorkWindowFrame extends javax.swing.JFrame{
 
     //container to send and receive datas
     protected ArrayList<String> outDatas = new ArrayList<>();
-    protected ArrayList<String> inDatas = new ArrayList<>();
+    protected ArrayList<String> inDatas = new ArrayList();
+            
+            
+        DefaultListModel<String> colModel;
+        
+        DefaultListModel<String> dropColModel ;
    
     //FELÜLET
     // <editor-fold defaultstate="collapsed">
@@ -54,7 +60,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    protected void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
         loadPanel = new javax.swing.JPanel();
@@ -132,6 +138,13 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         bc_njField = new javax.swing.JTextField();
         bc_verLabel = new javax.swing.JLabel();
         bc_verField = new javax.swing.JTextField();
+        dropcolPanel = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        colList = new javax.swing.JList<>();
+        colLabel = new javax.swing.JLabel();
+        delColLabel = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        dropColList = new javax.swing.JList<>();
         cancelButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -699,6 +712,45 @@ public class WorkWindowFrame extends javax.swing.JFrame{
 
         parameterMainPanel.add(baggingPanel, "card2");
 
+        jScrollPane3.setViewportView(colList);
+
+        colLabel.setText("Oszlopok");
+
+        delColLabel.setText("Törlendő oszlopok");
+
+        jScrollPane4.setViewportView(dropColList);
+
+        javax.swing.GroupLayout dropcolPanelLayout = new javax.swing.GroupLayout(dropcolPanel);
+        dropcolPanel.setLayout(dropcolPanelLayout);
+        dropcolPanelLayout.setHorizontalGroup(
+            dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dropcolPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(colLabel)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addGroup(dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delColLabel))
+                .addGap(38, 38, 38))
+        );
+        dropcolPanelLayout.setVerticalGroup(
+            dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dropcolPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(colLabel)
+                    .addComponent(delColLabel))
+                .addGap(1, 1, 1)
+                .addGroup(dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+
+        parameterMainPanel.add(dropcolPanel, "card2");
+
         cancelButton.setText("Alapértelmezés");
 
         javax.swing.GroupLayout tablesPanelLayout = new javax.swing.GroupLayout(tablesPanel);
@@ -945,7 +997,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
                 .addGap(105, 105, 105)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -974,6 +1026,15 @@ public class WorkWindowFrame extends javax.swing.JFrame{
             case "vot":
                 String[] vot_parameters = {};
                 setClassifierParameters("vot:", vot_parameters);
+                break;
+            case "delc:":
+               // getTextFromPane();
+                String[] colToDel=new String[dropColList.getModel().getSize()];
+                for(int i = 0; i< dropColList.getModel().getSize();i++){
+                    colToDel[i] = dropColList.getModel().getElementAt(i);
+                }
+                String[] columnsToDel={};
+                insertIntoBuffer("delc:", selectedTable, colToDel);
                 break;
             default:
                 break;
@@ -1009,16 +1070,24 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         } else {
             switch (chosen) {
                 case "Faktorizálás":
-                    bufferOutput.clear();
-                    bufferOutput.add("fact:");
-                    bufferOutput.add(selectedTable);
-                    System.out.println("actlist: " + selectedTable);
-                    System.out.println(bufferOutput);
+                    changePanels(firstPanel);
+                    insertIntoBuffer("fact:", selectedTable);
                  break;
                 case "Normalizálás":
-                    bufferOutput.clear();
-                    bufferOutput.add("norm:");
-                    bufferOutput.add(selectedTable);
+                    changePanels(firstPanel);
+                    insertIntoBuffer("norm:", selectedTable);
+                 break;
+                case "Feature kiválasztás":
+                    changePanels(firstPanel);
+                    insertIntoBuffer("ftsl:", selectedTable);
+                    break;
+                case "Oszlopok törlése":
+                    changePanels(dropcolPanel);
+                    selectedOperation = "delc:";
+                    
+                    ///BUGOS
+                    addColToDrop();
+                    removeColToDrop();
                  break;
             }
         }
@@ -1149,10 +1218,18 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     }
     //</editor-fold>
 
+    private void insertIntoBuffer(String identifier, String selectedTable, String... other){
+        bufferOutput.clear();
+        bufferOutput.add(identifier);
+        bufferOutput.add(selectedTable);
+        bufferOutput.addAll(Arrays.asList(other));
+    }
+    
     //CSV kezelő fv-ek
     // <editor-fold defaultstate="collapsed">
     
     protected void fillPrevTable(String[] cols, ArrayList<String[]> items) {
+        
         DefaultTableModel model = new DefaultTableModel(cols, 0);
 
         items.forEach((str) -> {
@@ -1160,6 +1237,17 @@ public class WorkWindowFrame extends javax.swing.JFrame{
         });
         csvPrevTable.setModel(model);
         csvPrevTable.setDefaultEditor(Object.class, null);
+        
+        colModel = new DefaultListModel<>();
+        dropColModel = new DefaultListModel<>();
+        
+        colList.setModel(colModel);
+        dropColList.setModel(dropColModel);
+        
+        for (String c : cols) {
+            colModel.addElement(c);
+            System.out.println("cols fillprevTable: " + c);
+        }
     }
     
     private ArrayList<String> readFromCsv(String path) {
@@ -1188,7 +1276,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
                     break;
                 } else {
                     csv.add(line);  
-                    csv.add(">>flag<<"); //valamiért betesz egy utolsót..
+                    csv.add(">>flag<<"); 
                 }
                 if (index < 500) {
                     String[] items_temp = line.split(",");
@@ -1234,7 +1322,47 @@ public class WorkWindowFrame extends javax.swing.JFrame{
             }
         });
     }
-
+    
+    protected void addColToDrop(){
+        
+        colList.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(e.getClickCount()==1){
+                    try{
+                        System.out.println("Clicked.");
+                        String selected = ((String)colList.getModel().getElementAt(colList.locationToIndex(e.getPoint())));
+                        
+                        dropColModel.addElement(selected);
+                        colModel.removeElement(selected);
+                    }catch(Exception ex){
+                        
+                    }
+                }
+            }
+        });
+    }
+    
+    protected void removeColToDrop(){
+        dropColList.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(e.getClickCount()==1){
+                    try{
+                        System.out.println("Clicked.");
+                        String selected = ((String)dropColList.getModel().getElementAt(dropColList.locationToIndex(e.getPoint())));
+                        
+                        colModel.addElement(selected);
+                        dropColModel.removeElement(selected);
+                    }catch(Exception ex){
+                        
+                    }
+                }
+            }
+        });
+    }
+    
+    
     protected void getSelectedTable(){
         loadedTablesList.addMouseListener(new MouseAdapter(){
             @Override
@@ -1256,6 +1384,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
             }
         });
     }
+    
     protected String getFilename(String path) {
         String[] spl = path.split(Pattern.quote("\\"));
         return spl[spl.length - 1];
@@ -1270,7 +1399,7 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     }
 
     private void changePanels(JPanel visiblePanel) {
-        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel};
+        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel, dropcolPanel};
         for (JPanel p : panels) {
             if (visiblePanel == p) {
                 p.setVisible(true);
@@ -1323,9 +1452,14 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     protected javax.swing.JButton choseButton;
     protected javax.swing.JComboBox<String> classifierCBox;
     protected javax.swing.JLabel classifierLabel;
+    protected javax.swing.JLabel colLabel;
+    protected javax.swing.JList<String> colList;
     protected javax.swing.JTable csvPrevTable;
+    protected javax.swing.JLabel delColLabel;
     protected javax.swing.JLabel deleteTaskLabel;
     protected javax.swing.JButton doButton;
+    protected javax.swing.JList<String> dropColList;
+    protected javax.swing.JPanel dropcolPanel;
     protected javax.swing.JMenu fileMenu;
     protected javax.swing.JLabel fileUploadLabel;
     protected javax.swing.JTextField filepathField;
@@ -1340,6 +1474,8 @@ public class WorkWindowFrame extends javax.swing.JFrame{
     protected javax.swing.JMenu jMenu2;
     protected javax.swing.JMenuBar jMenuBar1;
     protected javax.swing.JScrollPane jScrollPane1;
+    protected javax.swing.JScrollPane jScrollPane3;
+    protected javax.swing.JScrollPane jScrollPane4;
     protected javax.swing.JSeparator jSeparator1;
     protected javax.swing.JTable jTable1;
     protected java.awt.List list;

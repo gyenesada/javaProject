@@ -101,7 +101,7 @@ public class ClientThread implements Runnable {
                 out.add(answer);
                 break;
             case "csv:":
-                String taskname = in.get(1).replaceAll(":", ""); //visszaadja a task id-t is, és akkor a client eltárolja, mint current Task id-t. Betöltésnél frissül. (elküldi a task id-t is. dátum, task név, id)
+                String taskname = in.get(1).replaceAll(":", "");
                 int task_id = insertTaskIntoDatabase(taskname);
                 String filename = in.get(2).replaceAll(":", "");
                 answer = Boolean.toString(insertTableIntoDatabase(task_id, filename));
@@ -116,21 +116,32 @@ public class ClientThread implements Runnable {
                 break;
             case "old:":
                 out = getTasksTable(Integer.parseInt(in.get(1)));
-                //out = getOldWorksFromTables();
                 break;
             case "ldt:":
                 out = readFromCsv("ldt:",in.get(1));
                 break;
             case "fact:":
-                String table = in.get(1);
-                System.out.println("Selected table to factorize: " + table);
-                
-                callingPython("factorize.py", table);
+                callingPython("factorize.py", in.get(1));
                 out = readFromCsv("done:", in.get(1));
-                System.out.println("..");
                 break;
             case "norm:":
                 callingPython("normalize.py", in.get(1));
+                out = readFromCsv("done:", in.get(1));
+                break;
+            case "ftsl:":
+                callingPython("variance.py", in.get(1));
+                out = readFromCsv("done:", in.get(1));
+                break;
+            case "delc:":
+                System.out.println("DEL:" + in);
+                
+                StringBuilder sb = new StringBuilder();
+                for(int i=2; i<in.size(); i++){
+                    System.out.println("in.get(i) " + in.get(i));
+                    sb.append(in.get(i));
+                    sb.append(" ");
+                }
+                callingPython("dropout.py", in.get(1), sb.toString());
                 out = readFromCsv("done:", in.get(1));
                 break;
             default:
@@ -148,7 +159,7 @@ public class ClientThread implements Runnable {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
             csv.add(line);
-            csv.add(">>first_line_end_flag<<"); //első sor végét jelzi.
+            csv.add(">>first_line_end_flag<<"); 
             int index=0;
             while (index<500/2) {
                 line = br.readLine();
@@ -477,19 +488,20 @@ public class ClientThread implements Runnable {
     
     //.py functioncalls
     // <editor-fold defaultstate="collapsed">
-    private void callingPython(String py, String file){
-        String[] cmd = {
-            "python",
-            PY_PATH+py,
-            PATH+file
-        };
+    private void callingPython(String py, String file, String... other){
+        String string=Arrays.toString(other).replaceAll("[\\[\\]]", "").replaceAll("\\t", " ");
+        
+        String cmd = "python "+PY_PATH+py +" "+PATH+file+" "+string+"";
+        System.out.println("cmdl: " + cmd);
 
-        for(String s:cmd) System.out.println(s);
         try {
             Process p = Runtime.getRuntime().exec(cmd);
             int exitVal = p.waitFor();
-            System.out.println("exitval:" + exitVal);
-            System.out.println("Python script completed");
+            if(exitVal==0){
+                System.out.println("Python script completed successfully.");
+            }else{
+                System.out.println("Python script completed with an error.");
+            }
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
