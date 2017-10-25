@@ -43,7 +43,7 @@ public class MWFController implements Runnable {
         }
     }
 
-    private void communicationWithServer(PrintWriter pw, Scanner sc) { //ez kell majd a WorkWindowFrame-be is.
+    private void communicationWithServer(PrintWriter pw, Scanner sc) { 
         int index = 0;
         while (!wf.exit) {
 
@@ -62,7 +62,6 @@ public class MWFController implements Runnable {
             if (!wf.inDatas.isEmpty()) {
                 wf.outDatas = controller(wf.inDatas);
             }
-            System.out.println("Input: " + wf.inDatas);
             index++;
 
         }
@@ -85,8 +84,7 @@ public class MWFController implements Runnable {
                         JOptionPane.showMessageDialog(wf, "A szerver kapcsolat nem aktív. Kérjük próbálja később.");
                     }
                 } else {
-                    wf.nameField.setText("");
-                    wf.passField.setText("");
+                    wf.setDefaultJTextField(wf.nameField, wf.passField);
                     JOptionPane.showMessageDialog(wf, "A bejelentkezés sikertelen. Ellenőrizze helyes adatokat adott-e meg.");
                 }
                 break;
@@ -97,10 +95,7 @@ public class MWFController implements Runnable {
                     wf.regPanel.setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(wf, "Sikertelen regisztráció. A felhasználónév/email már foglalt.");
-
-                    wf.regNameField.setText("");
-                    wf.regPassField.setText("");
-                    wf.regMailField.setText("");
+                    wf.setDefaultJTextField(wf.regNameField, wf.regPassField, wf.regMailField);
                 }
                 break;
         }
@@ -115,5 +110,5 @@ public class MWFController implements Runnable {
         wf.inDatas.addAll(Arrays.asList(string));
         System.out.println("Input: " + wf.inDatas);
     }
-
+    
 }

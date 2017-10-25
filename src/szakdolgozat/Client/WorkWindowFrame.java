@@ -1,6 +1,8 @@
 package szakdolgozat.Client;
 
 import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -15,17 +17,17 @@ import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public final class WorkWindowFrame extends javax.swing.JFrame{
+public final class WorkWindowFrame extends javax.swing.JFrame {
     protected boolean exit = false;
 
     protected String rawInput;
-    protected String selectedOperation="";
+    protected String selectedOperation = "";
     protected String selectedTable; //oldal menü, 1 táblás műveletekhez 
     protected String currentTask;
     protected int currentTaskId;
-    
 
     protected ArrayList<String> loadedTables = new ArrayList<>();
     protected ArrayList<String> csvToTable = new ArrayList<>();
@@ -36,31 +38,33 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
     //container to send and receive datas
     protected ArrayList<String> outDatas = new ArrayList<>();
     protected ArrayList<String> inDatas = new ArrayList();
-            
-            
-        DefaultListModel<String> colModel;
-        
-        DefaultListModel<String> dropColModel ;
-   
+
+    DefaultListModel<String> colModel;
+    DefaultListModel<String> dropColModel;
+
     //FELÜLET
     // <editor-fold defaultstate="collapsed">
     public WorkWindowFrame() throws Exception {
         initComponents();
-   
+
         setTitle("CloudBased classifier");
         setResizable(false);
         setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
-
+        
         addExitOption();
         changePanels(firstPanel);
         fillOperationsList();
         fillClassifierList();
+
+        addColToDrop();
+        removeColToDrop();
+        setScrollPane();
         outDatas.add("wrk:");
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    protected void initComponents() {
+    private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
         loadPanel = new javax.swing.JPanel();
@@ -145,6 +149,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
         delColLabel = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         dropColList = new javax.swing.JList<>();
+        mergePanel = new javax.swing.JPanel();
+        mergeCBox = new javax.swing.JComboBox<>();
+        mergeLabel = new javax.swing.JLabel();
         cancelButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -394,7 +401,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
             .addGroup(votingPanelLayout.createSequentialGroup()
                 .addGap(66, 66, 66)
                 .addComponent(jLabel1)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(votingPanel, "card7");
@@ -407,7 +414,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
         );
         firstPanelLayout.setVerticalGroup(
             firstPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 158, Short.MAX_VALUE)
+            .addGap(0, 171, Short.MAX_VALUE)
         );
 
         parameterMainPanel.add(firstPanel, "card2");
@@ -481,7 +488,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                     .addComponent(ada_algCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ada_rsLabel)
                     .addComponent(ada_rsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(102, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(adaPanel, "card2");
@@ -502,7 +509,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
             .addGroup(sentimentPanelLayout.createSequentialGroup()
                 .addGap(68, 68, 68)
                 .addComponent(jLabel2)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(sentimentPanel, "card2");
@@ -586,7 +593,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                     .addComponent(rfc_neField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rfc_critLabel)
                     .addComponent(rfc_critCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rfc_mdLabel)
                     .addComponent(rfc_mdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -707,7 +714,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                     .addComponent(bc_bsfField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bc_verLabel)
                     .addComponent(bc_verField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(baggingPanel, "card2");
@@ -725,15 +732,15 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
         dropcolPanelLayout.setHorizontalGroup(
             dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dropcolPanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addGroup(dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(colLabel)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
                 .addGroup(dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(delColLabel))
-                .addGap(38, 38, 38))
+                .addGap(19, 19, 19))
         );
         dropcolPanelLayout.setVerticalGroup(
             dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -744,12 +751,37 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                     .addComponent(delColLabel))
                 .addGap(1, 1, 1)
                 .addGroup(dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(dropcolPanel, "card2");
+
+        mergeLabel.setText("Összefűzés:");
+
+        javax.swing.GroupLayout mergePanelLayout = new javax.swing.GroupLayout(mergePanel);
+        mergePanel.setLayout(mergePanelLayout);
+        mergePanelLayout.setHorizontalGroup(
+            mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mergePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(mergeLabel)
+                    .addComponent(mergeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(440, Short.MAX_VALUE))
+        );
+        mergePanelLayout.setVerticalGroup(
+            mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mergePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(mergeLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mergeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(120, Short.MAX_VALUE))
+        );
+
+        parameterMainPanel.add(mergePanel, "card7");
 
         cancelButton.setText("Alapértelmezés");
 
@@ -836,7 +868,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(previewScPane, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                .addComponent(previewScPane, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -969,6 +1001,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
         fileMenu.add(showLoadPanel);
 
         logOut.setText("Kijelentkezés");
+        logOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logOutActionPerformed(evt);
+            }
+        });
         fileMenu.add(logOut);
 
         jMenuBar1.add(fileMenu);
@@ -997,7 +1034,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                 .addGap(105, 105, 105)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1028,12 +1065,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                 setClassifierParameters("vot:", vot_parameters);
                 break;
             case "delc:":
-               // getTextFromPane();
-                String[] colToDel=new String[dropColList.getModel().getSize()];
-                for(int i = 0; i< dropColList.getModel().getSize();i++){
+                // getTextFromPane();
+                String[] colToDel = new String[dropColList.getModel().getSize()];
+                for (int i = 0; i < dropColList.getModel().getSize(); i++) {
                     colToDel[i] = dropColList.getModel().getElementAt(i);
                 }
-                String[] columnsToDel={};
+                String[] columnsToDel = {};
                 insertIntoBuffer("delc:", selectedTable, colToDel);
                 break;
             default:
@@ -1056,11 +1093,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
     private void showLoadPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLoadPanelActionPerformed
         operationCBox.setSelectedItem("...");
         classifierCBox.setSelectedItem("...");
-        workPanel.setVisible(false);
-        sideWorkPanel.setVisible(false);
-
-        loadPanel.setVisible(true);
-        sideLoadPanel.setVisible(true);
+        
+        changeMainPanels(loadPanel, sideLoadPanel);
     }//GEN-LAST:event_showLoadPanelActionPerformed
 
     private void operationCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationCBoxActionPerformed
@@ -1072,11 +1106,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                 case "Faktorizálás":
                     changePanels(firstPanel);
                     insertIntoBuffer("fact:", selectedTable);
-                 break;
+                    break;
                 case "Normalizálás":
                     changePanels(firstPanel);
                     insertIntoBuffer("norm:", selectedTable);
-                 break;
+                    break;
                 case "Feature kiválasztás":
                     changePanels(firstPanel);
                     insertIntoBuffer("ftsl:", selectedTable);
@@ -1084,11 +1118,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                 case "Oszlopok törlése":
                     changePanels(dropcolPanel);
                     selectedOperation = "delc:";
-                    
-                    ///BUGOS
-                    addColToDrop();
-                    removeColToDrop();
-                 break;
+                    break;
+                case "Üres értékek kezelése":
+                    //changePanels(nanPanel);
+                    selectedOperation = "nanv:";
+                    break;
             }
         }
     }//GEN-LAST:event_operationCBoxActionPerformed
@@ -1104,17 +1138,14 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                     break;
                 case "AdaBoost Classifier":
                     changePanels(adaPanel);
-
                     selectedOperation = "ada";
                     break;
                 case "Random Forest Classifier":
                     changePanels(rfcPanel);
-
                     selectedOperation = "rfc";
                     break;
                 case "Bagging Classifier":
                     changePanels(baggingPanel);
-
                     selectedOperation = "bag";
                     break;
                 case "Voting Classifier":
@@ -1145,11 +1176,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
             currentTask = JOptionPane.showInputDialog(this, "Munkafolyamat neve: ");
-            if(currentTask.equals("")) JOptionPane.showMessageDialog(this, "Adjon meg nevet!");
-            
+            if (currentTask.equals("")) {
+                JOptionPane.showMessageDialog(this, "Adjon meg nevet!");
+            }
             outDatas = readFromCsv(file);
         }
-        
+
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     private void choseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choseButtonActionPerformed
@@ -1161,6 +1193,16 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_filepathFieldActionPerformed
 
+    private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
+        outDatas.clear();
+        int n= JOptionPane.showConfirmDialog(this, "Biztos ki szeretne jelentkezni?", "Kijelentkezés",  JOptionPane.YES_NO_OPTION);
+        if(n == JOptionPane.YES_OPTION){
+            outDatas.add("bye:");
+        }else{
+            //
+        }
+    }//GEN-LAST:event_logOutActionPerformed
+
     private void addExitOption() {
         addWindowListener(new WindowAdapter() {
 
@@ -1171,14 +1213,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                 if (n == JOptionPane.YES_OPTION) {
                     exit = true;
                     dispose();
-                }
-                if (n == JOptionPane.NO_OPTION) {
+                }else{
                     dispose();
                 }
             }
         });
     }
-    
 
     // </editor-fold>
     //Combo-box feltöltő fv-ek
@@ -1218,42 +1258,55 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
     }
     //</editor-fold>
 
-    private void insertIntoBuffer(String identifier, String selectedTable, String... other){
+    private void insertIntoBuffer(String identifier, String selectedTable, String... other) {
         bufferOutput.clear();
         bufferOutput.add(identifier);
         bufferOutput.add(selectedTable);
         bufferOutput.addAll(Arrays.asList(other));
     }
-    
-    //CSV kezelő fv-ek
-    // <editor-fold defaultstate="collapsed">
-    
+
     protected void fillPrevTable(String[] cols, ArrayList<String[]> items) {
-        
         DefaultTableModel model = new DefaultTableModel(cols, 0);
 
         items.forEach((str) -> {
             model.addRow(str);
         });
         csvPrevTable.setModel(model);
+
+        for (int i = 0; i < cols.length; i++) {
+            csvPrevTable.getColumnModel().getColumn(i).setMinWidth(75);
+        }
         csvPrevTable.setDefaultEditor(Object.class, null);
-        
+
         colModel = new DefaultListModel<>();
         dropColModel = new DefaultListModel<>();
-        
+
         colList.setModel(colModel);
         dropColList.setModel(dropColModel);
-        
+
         for (String c : cols) {
             colModel.addElement(c);
             System.out.println("cols fillprevTable: " + c);
         }
     }
-    
+
+    private void setScrollPane() {
+        csvPrevTable.getParent().addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                if (csvPrevTable.getPreferredSize().width < csvPrevTable.getParent().getWidth()) {
+                    csvPrevTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                } else {
+                    csvPrevTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                }
+            }
+        });
+    }
+
     private ArrayList<String> readFromCsv(String path) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add("csv:");
-        csv.add(currentTask+":");
+        csv.add(currentTask + ":");
         String filename;
 
         BufferedReader br = null;
@@ -1275,8 +1328,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                 if (line == null) {
                     break;
                 } else {
-                    csv.add(line);  
-                    csv.add(">>flag<<"); 
+                    csv.add(line);
+                    csv.add(">>flag<<");
                 }
                 if (index < 500) {
                     String[] items_temp = line.split(",");
@@ -1296,7 +1349,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
         }
         return csv;
     }
-    // </editor-fold>
 
     //GETTEREK-SETTEREK
     // <editor-fold defaultstate="collapsed">
@@ -1313,7 +1365,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
                         outDatas.add("old:");
                         outDatas.add(Integer.toString(currentTaskId));
                         outDatas.add(selected);
-                        
+
                         DefaultTableModel model = new DefaultTableModel(0, 0);
                         csvPrevTable.setModel(model);
                     } catch (ArrayIndexOutOfBoundsException ex) {
@@ -1322,69 +1374,68 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
             }
         });
     }
-    
-    protected void addColToDrop(){
-        
-        colList.addMouseListener(new MouseAdapter(){
+
+    protected void addColToDrop() {
+
+        colList.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e){
-                if(e.getClickCount()==1){
-                    try{
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    try {
                         System.out.println("Clicked.");
-                        String selected = ((String)colList.getModel().getElementAt(colList.locationToIndex(e.getPoint())));
-                        
+                        String selected = ((String) colList.getModel().getElementAt(colList.locationToIndex(e.getPoint())));
+
                         dropColModel.addElement(selected);
                         colModel.removeElement(selected);
-                    }catch(Exception ex){
-                        
+                    } catch (Exception ex) {
+
                     }
                 }
             }
         });
     }
-    
-    protected void removeColToDrop(){
-        dropColList.addMouseListener(new MouseAdapter(){
+
+    protected void removeColToDrop() {
+        dropColList.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e){
-                if(e.getClickCount()==1){
-                    try{
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    try {
                         System.out.println("Clicked.");
-                        String selected = ((String)dropColList.getModel().getElementAt(dropColList.locationToIndex(e.getPoint())));
-                        
+                        String selected = ((String) dropColList.getModel().getElementAt(dropColList.locationToIndex(e.getPoint())));
+
                         colModel.addElement(selected);
                         dropColModel.removeElement(selected);
-                    }catch(Exception ex){
-                        
+                    } catch (Exception ex) {
+
                     }
                 }
             }
         });
     }
-    
-    
-    protected void getSelectedTable(){
-        loadedTablesList.addMouseListener(new MouseAdapter(){
+
+    protected void getSelectedTable() {
+        loadedTablesList.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e){
-                if (e.getClickCount()==1){
-                    try{
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    try {
                         System.out.println("Clicked.");
-                       String selected = ((String)loadedTablesList.getModel().getElementAt(loadedTablesList.locationToIndex(e.getPoint()))).split(" - ")[1];
-                        System.out.println("Selected: "+ selected);
-                        
+                        String selected = ((String) loadedTablesList.getModel().getElementAt(loadedTablesList.locationToIndex(e.getPoint()))).split(" - ")[1];
+                        System.out.println("Selected: " + selected);
+
                         outDatas.clear();
                         outDatas.add("ldt:");
                         outDatas.add(selected);
                         selectedTable = selected;
-                    }catch(ArrayIndexOutOfBoundsException ex){
-                        
+                    } catch (ArrayIndexOutOfBoundsException ex) {
+
                     }
                 }
             }
         });
     }
-    
+
     protected String getFilename(String path) {
         String[] spl = path.split(Pattern.quote("\\"));
         return spl[spl.length - 1];
@@ -1408,15 +1459,26 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
             }
         }
     }
+    
+    protected void changeMainPanels(JPanel visiblePanel, JPanel visibleSidePanel){
+        JPanel[] panels = {loadPanel, sideLoadPanel, workPanel, sideWorkPanel};
+        for(JPanel p: panels){
+            if(visiblePanel == p || visibleSidePanel == p){
+                p.setVisible(true);
+            }else{
+                p.setVisible(false);
+            }
+        }
+    }
 
     private void setClassifierParameters(String classifier, String[] parameters) {
         bufferOutput.clear();
         bufferOutput.add(classifier);
         bufferOutput.addAll(Arrays.asList(parameters));
     }
- 
+
     // </editor-fold>
- 
+    
     //VARIABLES
     // <editor-fold defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1486,6 +1548,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame{
     protected javax.swing.JLabel loadingLabel;
     protected javax.swing.JMenuItem logOut;
     protected javax.swing.JPanel mainPanel;
+    protected javax.swing.JComboBox<String> mergeCBox;
+    protected javax.swing.JLabel mergeLabel;
+    protected javax.swing.JPanel mergePanel;
     protected javax.swing.JPanel newTablePanel;
     protected javax.swing.JScrollPane oldWorkSPane;
     protected javax.swing.JComboBox<String> operationCBox;

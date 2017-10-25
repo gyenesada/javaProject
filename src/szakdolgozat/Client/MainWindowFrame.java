@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class MainWindowFrame extends javax.swing.JFrame{
 
@@ -18,7 +19,6 @@ public class MainWindowFrame extends javax.swing.JFrame{
     public MainWindowFrame() throws IOException {
 
         initComponents();
-
         setTitle("CloudBased classifier - Login");
         setResizable(false);
         addExitOption();
@@ -271,6 +271,13 @@ public class MainWindowFrame extends javax.swing.JFrame{
                 }
             }
         });
+    }
+        
+        
+    protected void setDefaultJTextField(JTextField... textFields){
+        for(JTextField jtx: textFields){
+            jtx.setText("");
+        }
     }
         
     // Variables declaration - do not modify//GEN-BEGIN:variables

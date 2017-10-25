@@ -31,6 +31,7 @@ public class ClientThread implements Runnable {
 
     private String threadName;
     private int threadID;
+    private int currentTableID;
 
     private String rawInput;
 
@@ -133,16 +134,19 @@ public class ClientThread implements Runnable {
                 out = readFromCsv("done:", in.get(1));
                 break;
             case "delc:":
-                System.out.println("DEL:" + in);
-                
                 StringBuilder sb = new StringBuilder();
                 for(int i=2; i<in.size(); i++){
-                    System.out.println("in.get(i) " + in.get(i));
                     sb.append(in.get(i));
                     sb.append(" ");
                 }
                 callingPython("dropout.py", in.get(1), sb.toString());
                 out = readFromCsv("done:", in.get(1));
+                break;
+            case "bye:":
+                setIsOnlineFalse();
+                out.add("bye:");
+                break;
+            case "nanv:":
                 break;
             default:
                 break;
@@ -163,7 +167,6 @@ public class ClientThread implements Runnable {
             int index=0;
             while (index<500/2) {
                 line = br.readLine();
-
                 index++;
                 if (line == null) {
                     break;
@@ -217,18 +220,20 @@ public class ClientThread implements Runnable {
 
         try {
             stat = conn.createStatement();
-            String query = "select password, user_id from users where username='" + name + "';";
+            String query = "select password, user_id, is_online from users where username='" + name + "';";
             rs = stat.executeQuery(query);
             while (rs.next()) {
                 String password = rs.getString("PASSWORD");
-                if (pass.equals(password)) {
+                boolean is_online = rs.getBoolean("IS_ONLINE");
+                if (pass.equals(password) && !is_online) {
                     threadName = name;
                     threadID = rs.getInt("USER_ID");
                     
-                    String updateQuery = "update users set is_online='"+true+"', last_visit='"+new java.sql.Date(Calendar.getInstance().getTimeInMillis())+"';";
+                    String updateQuery = "update users set is_online='"+true+"', last_visit='"+new java.sql.Date(Calendar.getInstance().getTimeInMillis())+"' where user_id='"+threadID+"';";
                     Statement updateStat = conn.createStatement();
                     updateStat.executeUpdate(updateQuery);
                     
+                    PATH = PATH+threadName+"\\";
                     return true;
                 } else {
                     return false;
@@ -267,6 +272,7 @@ public class ClientThread implements Runnable {
                 Statement idstat = conn.createStatement();
                 String insertquery = "insert into users values (?,?,?,?,?,?);";
                 try {
+                    threadName = name;
                     PreparedStatement prepstat = conn.prepareStatement(insertquery);
                     prepstat.setInt(1, id++);
                     prepstat.setString(2, name);
@@ -283,6 +289,8 @@ public class ClientThread implements Runnable {
                 } catch (SQLException ex) {
                     System.out.println("Nem sikerült felvinni az adatokat.");
                 }
+                
+                    new File(PATH+threadName).mkdir();
                 return true;
             }
         } catch (SQLException ex) {
@@ -340,8 +348,8 @@ public class ClientThread implements Runnable {
         try {
             String insertQuery = "insert into tables values (?,?,?,?,?,?,?,?,?);";
             PreparedStatement prep = conn.prepareStatement(insertQuery);
-            int id = getTableID();
-            prep.setInt(1, id);
+            currentTableID= getTableID();
+            prep.setInt(1, currentTableID);
             prep.setInt(2, threadID);
             prep.setString(3, filename);
             prep.setBoolean(4, false);
@@ -444,6 +452,16 @@ public class ClientThread implements Runnable {
             System.out.println("Error: load tasks");
         }
         return returnvalue;
+    }
+    
+    private void setIsOnlineFalse(){
+        try{
+            String updateQuery = "update users set is_online='"+false+"'where user_id = '"+threadID+"';";
+            Statement updateStat = conn.createStatement();
+            updateStat.executeUpdate(updateQuery);
+        }catch(SQLException e){
+            System.out.println("Error: logout client");
+        }
     }
 
     private void modifyTimestamp(int id, String tablename) { //id: table or user_id  --nincs befejezve
