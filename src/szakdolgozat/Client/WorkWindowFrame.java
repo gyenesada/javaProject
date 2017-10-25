@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
 
 public final class WorkWindowFrame extends javax.swing.JFrame {
     protected boolean exit = false;
-
+    
     protected String rawInput;
     protected String selectedOperation = "";
     protected String selectedTable; //oldal menü, 1 táblás műveletekhez 
@@ -1186,7 +1186,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     private void choseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choseButtonActionPerformed
         FileManager fm = new FileManager();
-        fm.setVisible(true);
+        fm.run();
+        filepathField.setText(fm.getAbsoluteFilePath());
     }//GEN-LAST:event_choseButtonActionPerformed
 
     private void filepathFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filepathFieldActionPerformed
@@ -1211,6 +1212,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 int n = JOptionPane.showConfirmDialog(null, "Biztos ki szeretnél lépni?",
                         "Kilépés", JOptionPane.YES_NO_OPTION);
                 if (n == JOptionPane.YES_OPTION) {
+                    outDatas.add("bye:");
                     exit = true;
                     dispose();
                 }else{
