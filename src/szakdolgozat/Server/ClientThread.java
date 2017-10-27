@@ -86,7 +86,8 @@ public class ClientThread implements Runnable {
         ArrayList<String> out = new ArrayList<>();
         String answer;
         String identifier = in.get(0);
-
+String filename;
+int task_id;
         //feladatok elosztása
         switch (identifier) {
             case "log:":
@@ -103,8 +104,8 @@ public class ClientThread implements Runnable {
                 break;
             case "csv:":
                 String taskname = in.get(1).replaceAll(":", "");
-                int task_id = insertTaskIntoDatabase(taskname);
-                String filename = in.get(2).replaceAll(":", "");
+                task_id = insertTaskIntoDatabase(taskname);
+                filename = in.get(2).replaceAll(":", "");
                 answer = Boolean.toString(insertTableIntoDatabase(task_id, filename));
                 
                 out.add(identifier);
@@ -112,11 +113,22 @@ public class ClientThread implements Runnable {
                 out.add(Integer.toString(task_id));
                 writeToCsv(filename);
                 break;
+            case "wcsv:":
+                filename = in.get(2).replaceAll(":", "");
+                task_id = Integer.parseInt(in.get(1).replaceAll(":", ""));
+                answer = Boolean.toString(insertTableIntoDatabase(task_id, filename));
+                
+                out.add(identifier);
+                out.add(answer);
+                out.add(filename);
+                writeToCsv(filename);
+                break;
             case "wrk:":
                 out = getTasks();
                 break;
             case "old:":
                 out = getTasksTable(Integer.parseInt(in.get(1)));
+                System.out.println("OLD: " + out);
                 break;
             case "ldt:":
                 out = readFromCsv("ldt:",in.get(1));
@@ -174,7 +186,6 @@ public class ClientThread implements Runnable {
                     csv.add(line);
                     csv.add(">>enter_flag<<");
                 }
-                
             }
         } catch (IOException ex) {
             System.out.println("File not found.");
@@ -418,12 +429,11 @@ public class ClientThread implements Runnable {
 
         try {
             Statement stat = conn.createStatement();
-            String query = "select name, modified from tables where user_id='" + threadID + "' and task_id='"+task_id+"';";
+            String query = "select name from tables where user_id='" + threadID + "' and task_id='"+task_id+"';";
             ResultSet rs = stat.executeQuery(query);
 
             while (rs.next()) {
                 returnvalue.add(rs.getString("NAME"));
-                returnvalue.add(rs.getDate("MODIFIED").toString());
             }
 
         } catch (SQLException ex) {

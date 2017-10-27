@@ -6,8 +6,12 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class MainWindowFrame extends javax.swing.JFrame{
 
@@ -17,6 +21,13 @@ public class MainWindowFrame extends javax.swing.JFrame{
     protected ArrayList<String> outDatas = new ArrayList<>();
 
     public MainWindowFrame() throws IOException {
+         for(javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()){
+            try {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         initComponents();
         setTitle("CloudBased classifier - Login");

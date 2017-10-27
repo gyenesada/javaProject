@@ -13,11 +13,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
 public final class WorkWindowFrame extends javax.swing.JFrame {
@@ -45,6 +49,14 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     //FELÜLET
     // <editor-fold defaultstate="collapsed">
     public WorkWindowFrame() throws Exception {
+        
+        //initcomponentsbe kellene majd.
+            try {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
         initComponents();
 
         setTitle("CloudBased classifier");
@@ -326,6 +338,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         });
 
         workChoseButton.setText("Kiválaszt");
+        workChoseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                workChoseButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout newTablePanelLayout = new javax.swing.GroupLayout(newTablePanel);
         newTablePanel.setLayout(newTablePanelLayout);
@@ -1070,7 +1087,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 for (int i = 0; i < dropColList.getModel().getSize(); i++) {
                     colToDel[i] = dropColList.getModel().getElementAt(i);
                 }
-                String[] columnsToDel = {};
+               
                 insertIntoBuffer("delc:", selectedTable, colToDel);
                 break;
             default:
@@ -1081,13 +1098,16 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_doButtonActionPerformed
 
     private void workUploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workUploadButtonActionPerformed
-        outDatas.clear();
         String file = workPathField.getText();
-        if (file.equals("")) {
+        System.out.println("Selected to be upload: " + getFilename(file));
+        if(file.equals("")){
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
-        } else {
-            outDatas = readFromCsv(getFilename(file));
+        }else{
+            //currentTask már adott, ID-val együtt
+            System.out.println("Task: " + currentTask + " ID: " + currentTaskId);
+            outDatas = readFromCsv(file, true);
         }
+        
     }//GEN-LAST:event_workUploadButtonActionPerformed
 
     private void showLoadPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLoadPanelActionPerformed
@@ -1179,9 +1199,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             if (currentTask.equals("")) {
                 JOptionPane.showMessageDialog(this, "Adjon meg nevet!");
             }
-            outDatas = readFromCsv(file);
+            outDatas = readFromCsv(file, false);
         }
-
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     private void choseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choseButtonActionPerformed
@@ -1203,6 +1222,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             //
         }
     }//GEN-LAST:event_logOutActionPerformed
+
+    private void workChoseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workChoseButtonActionPerformed
+        FileManager fm = new FileManager();
+        fm.run();
+        workPathField.setText(fm.getAbsoluteFilePath());
+    }//GEN-LAST:event_workChoseButtonActionPerformed
 
     private void addExitOption() {
         addWindowListener(new WindowAdapter() {
@@ -1305,10 +1330,16 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         });
     }
 
-    private ArrayList<String> readFromCsv(String path) {
+    //work: munkafolyamat közben töltődik fel a tábla?
+    private ArrayList<String> readFromCsv(String path, boolean work) {
         ArrayList<String> csv = new ArrayList<>();
-        csv.add("csv:");
-        csv.add(currentTask + ":");
+        if(work){
+            csv.add("wcsv:");
+            csv.add(Integer.toString(currentTaskId)+":");
+        }else{
+            csv.add("csv:");
+            csv.add(currentTask + ":");
+        }
         String filename;
 
         BufferedReader br = null;
@@ -1349,7 +1380,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Nem létező file.");
             }
         }
-        return csv;
+       return csv;
     }
 
     //GETTEREK-SETTEREK
@@ -1423,7 +1454,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 if (e.getClickCount() == 1) {
                     try {
                         System.out.println("Clicked.");
-                        String selected = ((String) loadedTablesList.getModel().getElementAt(loadedTablesList.locationToIndex(e.getPoint()))).split(" - ")[1];
+                        String selected = ((String) loadedTablesList.getModel().getElementAt(loadedTablesList.locationToIndex(e.getPoint())));
                         System.out.println("Selected: " + selected);
 
                         outDatas.clear();

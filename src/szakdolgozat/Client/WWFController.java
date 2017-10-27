@@ -39,9 +39,7 @@ public class WWFController implements Runnable {
             System.out.println("---------------" + index + "--------------");
             try {
                 while (wwf.outDatas.isEmpty()) {
-
                     Thread.sleep(10); //to prevent dataloss
-
                 }
                 pw.println(wwf.outDatas);
                 wwf.inDatas.clear();
@@ -80,6 +78,11 @@ public class WWFController implements Runnable {
                     JOptionPane.showMessageDialog(wwf, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
                 }
                 break;
+            case "wcsv:":
+                System.out.println("w: " + in.get(2));
+                wwf.selectedTable = in.get(2);
+                fillLoadedTablesList(in, true);
+                break;
             case "wrk:":
                 for (int i = 1; i < in.size() - 1; i = i + 2) {
                     wwf.list.add(in.get(i) + "    -    " + in.get(i + 1));
@@ -87,7 +90,7 @@ public class WWFController implements Runnable {
                 wwf.getSelectedTask();
                 break;
             case "old:":
-                fillLoadedTablesList(in);
+                fillLoadedTablesList(in, false);
                 Thread.sleep(10);
                 wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
                 wwf.getSelectedTable();
@@ -114,12 +117,15 @@ public class WWFController implements Runnable {
         return out;
     }
 
-    protected void fillLoadedTablesList(ArrayList<String> in) {
+    //add: van-e már tábla benne?
+    protected void fillLoadedTablesList(ArrayList<String> in, boolean add) {
+        
         DefaultListModel<String> model = new DefaultListModel<>();
-        wwf.loadedTablesList.setModel(model);
-        for (int i = 1; i < in.size() - 1; i = i + 2) {
-            model.addElement(in.get(i + 1) + " - " + in.get(i));
-        }
+        
+            wwf.loadedTablesList.setModel(model);
+            for (int i = 1; i < in.size(); i++) {
+                model.addElement(in.get(i));
+            }
     }
 
     private void loadedTablePreprocess() {
