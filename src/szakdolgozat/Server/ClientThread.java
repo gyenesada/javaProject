@@ -90,19 +90,19 @@ String filename;
 int task_id;
         //feladatok elosztása
         switch (identifier) {
-            case "log:":
+            case "log:": //log in
                 answer = Boolean.toString(validateClient(in));
 
                 out.add(identifier);
                 out.add(answer);
                 break;
-            case "reg:":
+            case "reg:": //registration
                 answer = Boolean.toString(regClient(in));
 
                 out.add(identifier);
                 out.add(answer);
                 break;
-            case "csv:":
+            case "csv:": //csv upload on load page
                 String taskname = in.get(1).replaceAll(":", "");
                 task_id = insertTaskIntoDatabase(taskname);
                 filename = in.get(2).replaceAll(":", "");
@@ -113,39 +113,39 @@ int task_id;
                 out.add(Integer.toString(task_id));
                 writeToCsv(filename);
                 break;
-            case "wcsv:":
+            case "wcsv:": //csv upload on work page
                 filename = in.get(2).replaceAll(":", "");
                 task_id = Integer.parseInt(in.get(1).replaceAll(":", ""));
-                answer = Boolean.toString(insertTableIntoDatabase(task_id, filename));
-                
-                out.add(identifier);
-                out.add(answer);
-                out.add(filename);
-                writeToCsv(filename);
+                if(insertTableIntoDatabase(task_id, filename)){
+                    out = getTasksTable(task_id);
+                    writeToCsv(filename);
+                }else{
+                    out.add("err:");
+                }
                 break;
-            case "wrk:":
+            case "wrk:": //old task loading 
                 out = getTasks();
                 break;
-            case "old:":
+            case "old:": //old tables loading
                 out = getTasksTable(Integer.parseInt(in.get(1)));
                 System.out.println("OLD: " + out);
                 break;
-            case "ldt:":
+            case "ldt:": //chosen table loading
                 out = readFromCsv("ldt:",in.get(1));
                 break;
-            case "fact:":
+            case "fact:": //factorize
                 callingPython("factorize.py", in.get(1));
                 out = readFromCsv("done:", in.get(1));
                 break;
-            case "norm:":
+            case "norm:": //normalize
                 callingPython("normalize.py", in.get(1));
                 out = readFromCsv("done:", in.get(1));
                 break;
-            case "ftsl:":
+            case "ftsl:": //feature selection
                 callingPython("variance.py", in.get(1));
                 out = readFromCsv("done:", in.get(1));
                 break;
-            case "delc:":
+            case "delc:": //delete columns
                 StringBuilder sb = new StringBuilder();
                 for(int i=2; i<in.size(); i++){
                     sb.append(in.get(i));
@@ -154,11 +154,21 @@ int task_id;
                 callingPython("dropout.py", in.get(1), sb.toString());
                 out = readFromCsv("done:", in.get(1));
                 break;
-            case "bye:":
+            case "bye:": //log out
                 setIsOnlineFalse();
                 out.add("bye:");
                 break;
-            case "nanv:":
+            case "mrg:": //merge tables
+                sb = new StringBuilder();
+                
+                for(int i=2; i<in.size(); i++){
+                    sb.append(in.get(i));
+                    sb.append(" ");
+                }
+                
+                callingPython("merge.py", in.get(1), sb.toString());
+                break;
+            case "nanv:": //handle nan values
                 break;
             default:
                 break;
@@ -449,7 +459,6 @@ int task_id;
         
         try{
             Statement stat =  conn.createStatement();
-            //Egyenlőre modifier nélkül!!!
             String query = "select task_id, task_name from tasks where user_id='"+threadID+"';";
             ResultSet rs = stat.executeQuery(query);
             

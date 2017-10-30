@@ -357,6 +357,9 @@
                         <Column editable="true" title="Title 4" type="java.lang.Object"/>
                       </Table>
                     </Property>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Default Cursor"/>
+                    </Property>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -1245,10 +1248,20 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="mergeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="mergeCBox" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
+                                      <Component id="mergeLabel" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="mergeCBox" min="-2" pref="188" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="innerJoin" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                          <Component id="fullJoin" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="rightJoin" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="leftJoin" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <EmptySpace pref="440" max="32767" attributes="0"/>
+                                  <EmptySpace pref="32" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1258,8 +1271,14 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="mergeLabel" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="mergeCBox" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="120" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="mergeCBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="innerJoin" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="fullJoin" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rightJoin" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="leftJoin" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace pref="118" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1279,6 +1298,38 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="&#xd6;sszef&#x171;z&#xe9;s:"/>
                           </Properties>
+                        </Component>
+                        <Component class="javax.swing.JRadioButton" name="innerJoin">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Inner Join"/>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JRadioButton" name="leftJoin">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Left Join"/>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JRadioButton" name="rightJoin">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Right Join"/>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JRadioButton" name="fullJoin">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Full Join"/>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                          </AuxValues>
                         </Component>
                       </SubComponents>
                     </Container>

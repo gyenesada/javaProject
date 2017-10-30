@@ -32,7 +32,9 @@ public class MainWindowFrame extends javax.swing.JFrame{
         initComponents();
         setTitle("CloudBased classifier - Login");
         setResizable(false);
-        addExitOption();
+        
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
         setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
     }
 
@@ -264,26 +266,7 @@ public class MainWindowFrame extends javax.swing.JFrame{
         d.update(pass.getBytes());
         d.digest();
         return new String(d.digest(), StandardCharsets.UTF_8);
-    }
-
-        private void addExitOption() {
-        addWindowListener(new WindowAdapter() {
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                int n = JOptionPane.showConfirmDialog(null, "Biztos ki szeretnél lépni?",
-                        "Kilépés", JOptionPane.YES_NO_OPTION);
-                if (n == JOptionPane.YES_OPTION) {
-                    exit = true;
-                    dispose();
-                }
-                if (n == JOptionPane.NO_OPTION) {
-                    dispose();
-                }
-            }
-        });
-    }
-        
+    }        
         
     protected void setDefaultJTextField(JTextField... textFields){
         for(JTextField jtx: textFields){

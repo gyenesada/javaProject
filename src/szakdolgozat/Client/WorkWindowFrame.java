@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,11 +26,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
 public final class WorkWindowFrame extends javax.swing.JFrame {
+
     protected boolean exit = false;
-    
+
     protected String rawInput;
     protected String selectedOperation = "";
-    protected String selectedTable; //oldal menü, 1 táblás műveletekhez 
+    protected String selectedTable; 
     protected String currentTask;
     protected int currentTaskId;
 
@@ -45,24 +47,25 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     DefaultListModel<String> colModel;
     DefaultListModel<String> dropColModel;
+    ButtonGroup mergeRadioGroup;
 
     //FELÜLET
     // <editor-fold defaultstate="collapsed">
     public WorkWindowFrame() throws Exception {
-        
+
         //initcomponentsbe kellene majd.
-            try {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-                Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         initComponents();
 
         setTitle("CloudBased classifier");
         setResizable(false);
         setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
-        
+
         addExitOption();
         changePanels(firstPanel);
         fillOperationsList();
@@ -71,6 +74,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         addColToDrop();
         removeColToDrop();
         setScrollPane();
+        setRadioButtonGroup();
         outDatas.add("wrk:");
     }
 
@@ -164,6 +168,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         mergePanel = new javax.swing.JPanel();
         mergeCBox = new javax.swing.JComboBox<>();
         mergeLabel = new javax.swing.JLabel();
+        innerJoin = new javax.swing.JRadioButton();
+        leftJoin = new javax.swing.JRadioButton();
+        rightJoin = new javax.swing.JRadioButton();
+        fullJoin = new javax.swing.JRadioButton();
         cancelButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -322,6 +330,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        csvPrevTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         previewScPane.setViewportView(csvPrevTable);
 
         newTablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -777,6 +786,14 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         mergeLabel.setText("Összefűzés:");
 
+        innerJoin.setText("Inner Join");
+
+        leftJoin.setText("Left Join");
+
+        rightJoin.setText("Right Join");
+
+        fullJoin.setText("Full Join");
+
         javax.swing.GroupLayout mergePanelLayout = new javax.swing.GroupLayout(mergePanel);
         mergePanel.setLayout(mergePanelLayout);
         mergePanelLayout.setHorizontalGroup(
@@ -785,8 +802,17 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(mergeLabel)
-                    .addComponent(mergeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(440, Short.MAX_VALUE))
+                    .addGroup(mergePanelLayout.createSequentialGroup()
+                        .addComponent(mergeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(innerJoin)
+                        .addGap(26, 26, 26)
+                        .addComponent(fullJoin)
+                        .addGap(18, 18, 18)
+                        .addComponent(rightJoin)
+                        .addGap(18, 18, 18)
+                        .addComponent(leftJoin)))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         mergePanelLayout.setVerticalGroup(
             mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -794,8 +820,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(mergeLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mergeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(120, Short.MAX_VALUE))
+                .addGroup(mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(mergeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(innerJoin)
+                    .addComponent(fullJoin)
+                    .addComponent(rightJoin)
+                    .addComponent(leftJoin))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(mergePanel, "card7");
@@ -1051,7 +1082,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addGap(105, 105, 105)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1087,8 +1118,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 for (int i = 0; i < dropColList.getModel().getSize(); i++) {
                     colToDel[i] = dropColList.getModel().getElementAt(i);
                 }
-               
+
                 insertIntoBuffer("delc:", selectedTable, colToDel);
+                break;
+            case "mrg:":
+                String join = getSelectedMergeOption();
+                String otherTable = getSelectedMergeTable();
+                insertIntoBuffer("mrg:", selectedTable,  otherTable, join);
                 break;
             default:
                 break;
@@ -1099,21 +1135,23 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     private void workUploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workUploadButtonActionPerformed
         String file = workPathField.getText();
+        
+        selectedTable = getFilename(file);
         System.out.println("Selected to be upload: " + getFilename(file));
-        if(file.equals("")){
+        if (file.equals("")) {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
-        }else{
+        } else {
             //currentTask már adott, ID-val együtt
             System.out.println("Task: " + currentTask + " ID: " + currentTaskId);
             outDatas = readFromCsv(file, true);
         }
-        
+
     }//GEN-LAST:event_workUploadButtonActionPerformed
 
     private void showLoadPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLoadPanelActionPerformed
         operationCBox.setSelectedItem("...");
         classifierCBox.setSelectedItem("...");
-        
+        outDatas.add("wrk:");
         changeMainPanels(loadPanel, sideLoadPanel);
     }//GEN-LAST:event_showLoadPanelActionPerformed
 
@@ -1142,6 +1180,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 case "Üres értékek kezelése":
                     //changePanels(nanPanel);
                     selectedOperation = "nanv:";
+                    break;
+                case "Összefűzés":
+                    changePanels(mergePanel);
+                    selectedOperation = "mrg:";
                     break;
             }
         }
@@ -1215,10 +1257,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
         outDatas.clear();
-        int n= JOptionPane.showConfirmDialog(this, "Biztos ki szeretne jelentkezni?", "Kijelentkezés",  JOptionPane.YES_NO_OPTION);
-        if(n == JOptionPane.YES_OPTION){
+        int n = JOptionPane.showConfirmDialog(this, "Biztos ki szeretne jelentkezni?", "Kijelentkezés", JOptionPane.YES_NO_OPTION);
+        if (n == JOptionPane.YES_OPTION) {
             outDatas.add("bye:");
-        }else{
+        } else {
             //
         }
     }//GEN-LAST:event_logOutActionPerformed
@@ -1240,7 +1282,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     outDatas.add("bye:");
                     exit = true;
                     dispose();
-                }else{
+                } else {
                     dispose();
                 }
             }
@@ -1329,14 +1371,17 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+    private String getSelectedMergeTable(){
+        return mergeCBox.getItemAt(mergeCBox.getSelectedIndex());
+    }
 
-    //work: munkafolyamat közben töltődik fel a tábla?
     private ArrayList<String> readFromCsv(String path, boolean work) {
         ArrayList<String> csv = new ArrayList<>();
-        if(work){
+        if (work) {
             csv.add("wcsv:");
-            csv.add(Integer.toString(currentTaskId)+":");
-        }else{
+            csv.add(Integer.toString(currentTaskId) + ":");
+        } else {
             csv.add("csv:");
             csv.add(currentTask + ":");
         }
@@ -1380,7 +1425,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Nem létező file.");
             }
         }
-       return csv;
+        return csv;
     }
 
     //GETTEREK-SETTEREK
@@ -1408,6 +1453,18 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         });
     }
 
+    private void setRadioButtonGroup() {
+        mergeRadioGroup = new ButtonGroup();
+        innerJoin.setActionCommand("inner");
+        mergeRadioGroup.add(innerJoin);
+        rightJoin.setActionCommand("right");
+        mergeRadioGroup.add(rightJoin);
+        leftJoin.setActionCommand("left");
+        mergeRadioGroup.add(leftJoin);
+        fullJoin.setActionCommand("full");
+        mergeRadioGroup.add(fullJoin);
+    }
+
     protected void addColToDrop() {
 
         colList.addMouseListener(new MouseAdapter() {
@@ -1420,7 +1477,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
                         dropColModel.addElement(selected);
                         colModel.removeElement(selected);
-                    } catch (Exception ex) {
+                    } catch (ArrayIndexOutOfBoundsException ex) {
 
                     }
                 }
@@ -1439,8 +1496,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
                         colModel.addElement(selected);
                         dropColModel.removeElement(selected);
-                    } catch (Exception ex) {
-
+                    } catch (ArrayIndexOutOfBoundsException ex) {
                     }
                 }
             }
@@ -1453,10 +1509,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
                     try {
-                        System.out.println("Clicked.");
                         String selected = ((String) loadedTablesList.getModel().getElementAt(loadedTablesList.locationToIndex(e.getPoint())));
                         System.out.println("Selected: " + selected);
 
+                        String[] loadedTables = new String[loadedTablesList.getModel().getSize()];
+                        fillMergeCBox(loadedTables);
                         outDatas.clear();
                         outDatas.add("ldt:");
                         outDatas.add(selected);
@@ -1467,6 +1524,23 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 }
             }
         });
+    }
+
+    protected void fillMergeCBox(String[] loadedTables) {
+        mergeCBox.removeAllItems();
+        for (int i = 0; i < loadedTablesList.getModel().getSize(); i++) {
+            loadedTables[i] = loadedTablesList.getModel().getElementAt(i);
+        }
+        
+        for (String s : loadedTables) {
+            if (!s.equals(selectedTable)) {
+                mergeCBox.addItem(s);
+            }
+        }
+    }
+    
+    private String getSelectedMergeOption(){
+        return mergeRadioGroup.getSelection().getActionCommand();
     }
 
     protected String getFilename(String path) {
@@ -1483,7 +1557,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
 
     private void changePanels(JPanel visiblePanel) {
-        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel, dropcolPanel};
+        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel, dropcolPanel, mergePanel};
         for (JPanel p : panels) {
             if (visiblePanel == p) {
                 p.setVisible(true);
@@ -1492,13 +1566,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         }
     }
-    
-    protected void changeMainPanels(JPanel visiblePanel, JPanel visibleSidePanel){
+
+    protected void changeMainPanels(JPanel visiblePanel, JPanel visibleSidePanel) {
         JPanel[] panels = {loadPanel, sideLoadPanel, workPanel, sideWorkPanel};
-        for(JPanel p: panels){
-            if(visiblePanel == p || visibleSidePanel == p){
+        for (JPanel p : panels) {
+            if (visiblePanel == p || visibleSidePanel == p) {
                 p.setVisible(true);
-            }else{
+            } else {
                 p.setVisible(false);
             }
         }
@@ -1511,7 +1585,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
 
     // </editor-fold>
-    
     //VARIABLES
     // <editor-fold defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1559,6 +1632,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JLabel fileUploadLabel;
     protected javax.swing.JTextField filepathField;
     protected javax.swing.JPanel firstPanel;
+    protected javax.swing.JRadioButton fullJoin;
+    protected javax.swing.JRadioButton innerJoin;
     protected javax.swing.JLabel jLabel1;
     protected javax.swing.JLabel jLabel2;
     protected javax.swing.JLabel jLabel4;
@@ -1573,6 +1648,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JScrollPane jScrollPane4;
     protected javax.swing.JSeparator jSeparator1;
     protected javax.swing.JTable jTable1;
+    protected javax.swing.JRadioButton leftJoin;
     protected java.awt.List list;
     protected javax.swing.JPanel loadFileUploadPanel;
     protected javax.swing.JPanel loadOldWorkPanel;
@@ -1608,6 +1684,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JTextField rfc_rsField;
     protected javax.swing.JLabel rfc_rsLabel;
     protected javax.swing.JLabel rfs_neLabel;
+    protected javax.swing.JRadioButton rightJoin;
     protected javax.swing.JPanel sentimentPanel;
     protected javax.swing.JSeparator separator;
     protected javax.swing.JSeparator separator1;

@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import szakdolgozat.Client.FileManager;
 
 /*
     Ez az osztály készen van.
@@ -33,7 +36,7 @@ public class Server implements Runnable {
                 System.out.println("The server is up..");
             }
         } catch (Exception ex) {
-            System.out.println("Error: Server, run()");
+             Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -46,6 +49,6 @@ public class Server implements Runnable {
     }
 
     public static void main(String[] args) {
-        new Server(2018).run();
+        new Server(1995).run();
     }
 }
