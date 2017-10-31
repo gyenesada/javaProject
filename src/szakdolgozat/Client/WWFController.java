@@ -66,7 +66,7 @@ public class WWFController implements Runnable{ //extends Application implements
         switch (identifier) {
             case "csv:":
                 if (Boolean.valueOf(in.get(1))) {
-                    wwf.currentTaskId = Integer.parseInt(in.get(2));
+                    wwf.currentTaskID = Integer.parseInt(in.get(2));
 
                     DefaultListModel<String> model = new DefaultListModel<>();
                     wwf.loadedTablesList.setModel(model);

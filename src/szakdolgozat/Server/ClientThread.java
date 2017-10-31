@@ -32,13 +32,14 @@ public class ClientThread implements Runnable {
     private String threadName;
     private int threadID;
     private int currentTableID;
+    private int currentTaskID;
 
     private String rawInput;
 
     private ArrayList<String> inDatas = new ArrayList<>();
     private ArrayList<String> outDatas = new ArrayList<>();
 
-    ClientThread(Socket s, Connection conn) {
+    public ClientThread(Socket s, Connection conn) {
         this.s = s;
         this.conn = conn;
 
@@ -86,8 +87,7 @@ public class ClientThread implements Runnable {
         ArrayList<String> out = new ArrayList<>();
         String answer;
         String identifier = in.get(0);
-String filename;
-int task_id;
+        String filename;
         //feladatok elosztása
         switch (identifier) {
             case "log:": //log in
@@ -104,20 +104,25 @@ int task_id;
                 break;
             case "csv:": //csv upload on load page
                 String taskname = in.get(1).replaceAll(":", "");
-                task_id = insertTaskIntoDatabase(taskname);
-                filename = in.get(2).replaceAll(":", "");
-                answer = Boolean.toString(insertTableIntoDatabase(task_id, filename));
-                
-                out.add(identifier);
-                out.add(answer);
-                out.add(Integer.toString(task_id));
-                writeToCsv(filename);
+                int task = insertTaskIntoDatabase(taskname);
+                if(task == -1){
+                    out.add("err:"); //Nem lehet feltölteni, mert már van ilyen nevű task.
+                }else{
+                    currentTaskID = task;
+                    filename = in.get(2).replaceAll(":", "");
+                    answer = Boolean.toString(insertTableIntoDatabase(filename));
+
+                    out.add(identifier);
+                    out.add(answer);
+                    out.add(Integer.toString(currentTaskID));
+                    writeToCsv(filename);
+                }
                 break;
             case "wcsv:": //csv upload on work page
                 filename = in.get(2).replaceAll(":", "");
-                task_id = Integer.parseInt(in.get(1).replaceAll(":", ""));
-                if(insertTableIntoDatabase(task_id, filename)){
-                    out = getTasksTable(task_id);
+                currentTaskID = Integer.parseInt(in.get(1).replaceAll(":", ""));
+                if(insertTableIntoDatabase(filename)){
+                    out = getTasksTable();
                     writeToCsv(filename);
                 }else{
                     out.add("err:");
@@ -127,48 +132,46 @@ int task_id;
                 out = getTasks();
                 break;
             case "old:": //old tables loading
-                out = getTasksTable(Integer.parseInt(in.get(1)));
+                currentTaskID = Integer.parseInt(in.get(1));
+                out = getTasksTable();
                 System.out.println("OLD: " + out);
                 break;
             case "ldt:": //chosen table loading
-                out = readFromCsv("ldt:",in.get(1));
+                currentTaskID = Integer.parseInt(in.get(1));
+                out = readFromCsv("ldt:",in.get(2));
                 break;
             case "fact:": //factorize
-                callingPython("factorize.py", in.get(1));
-                out = readFromCsv("done:", in.get(1));
+                currentTaskID = Integer.parseInt(in.get(1));
+                callingPython("factorize.py", in.get(2));
+                modifyIsFactorizedInTables(in.get(2));
+                out = readFromCsv("done:", in.get(2));
                 break;
             case "norm:": //normalize
-                callingPython("normalize.py", in.get(1));
-                out = readFromCsv("done:", in.get(1));
+                currentTaskID = Integer.parseInt(in.get(1));
+                callingPython("normalize.py", in.get(2));
+                modifyIsNormalisedInTables(in.get(2));
+                out = readFromCsv("done:", in.get(2));
                 break;
             case "ftsl:": //feature selection
-                callingPython("variance.py", in.get(1));
-                out = readFromCsv("done:", in.get(1));
+                currentTaskID = Integer.parseInt(in.get(1));
+                callingPython("variance.py", in.get(2));
+                modifyIsFeatureSelectedInTables(in.get(2));
+                out = readFromCsv("done:", in.get(2));
                 break;
             case "delc:": //delete columns
-                StringBuilder sb = new StringBuilder();
-                for(int i=2; i<in.size(); i++){
-                    sb.append(in.get(i));
-                    sb.append(" ");
-                }
-                callingPython("dropout.py", in.get(1), sb.toString());
-                out = readFromCsv("done:", in.get(1));
+                currentTaskID = Integer.parseInt(in.get(1));
+                callingPython("dropout.py", in.get(2), parametersToString(in));
+                out = readFromCsv("done:", in.get(2));
+                break;
+            case "mrg:": //merge tables  
+                currentTaskID = Integer.parseInt(in.get(1));
+                callingPython("merge.py", in.get(2), parametersToString(in));
+                break;
+            case "nanv:": //handle nan values
                 break;
             case "bye:": //log out
                 setIsOnlineFalse();
                 out.add("bye:");
-                break;
-            case "mrg:": //merge tables
-                sb = new StringBuilder();
-                
-                for(int i=2; i<in.size(); i++){
-                    sb.append(in.get(i));
-                    sb.append(" ");
-                }
-                
-                callingPython("merge.py", in.get(1), sb.toString());
-                break;
-            case "nanv:": //handle nan values
                 break;
             default:
                 break;
@@ -176,11 +179,21 @@ int task_id;
         return out;
     }
 
+    private String parametersToString(ArrayList<String> in){
+        StringBuilder sb = new StringBuilder();
+        
+        for(int i=3; i<in.size(); i++){
+            sb.append(in.get(i));
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+    
     private ArrayList<String> readFromCsv(String identifier, String filename) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add(identifier);
         System.out.println("Loading chosen table: " + filename);
-        File file = new File(PATH + filename);
+        File file = new File(PATH + getTaskName() +"\\"+filename);
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
@@ -204,7 +217,11 @@ int task_id;
     }
 
     private void writeToCsv(String filename) {
-        String fullFilepath = PATH + filename;
+         new File(PATH+getTaskName()).mkdir();
+         
+        String fullFilepath = PATH + getTaskName() + "\\"+ filename;
+        System.out.println("Fullpath: " + fullFilepath);
+        
         BufferedWriter bw = null;
         FileWriter fw = null;
 
@@ -331,18 +348,37 @@ int task_id;
             prep.setString(2, taskname);
             prep.setInt(3, threadID);
             
-            //ellenőrizni kell, létezik-e ugyanilyen vagy sem.
-            
-            prep.addBatch();
-            conn.setAutoCommit(false);
-            prep.executeBatch();
-            conn.setAutoCommit(true);
-            returnvalue = id;
-            
+           if(isTaskNameValid(taskname)){
+               prep.addBatch();
+               conn.setAutoCommit(false);
+               prep.executeBatch();
+               conn.setAutoCommit(true);
+               returnvalue = id;
+           }else{
+               returnvalue = -1;
+           }
             System.out.println("Task bejegyezve: "+returnvalue+" számmal.");
         }catch(SQLException e){
             
         }        
+        return returnvalue;
+    }
+    
+    private boolean isTaskNameValid(String taskname){
+        boolean returnvalue=true;
+        try {
+            Statement stat = conn.createStatement();
+            String query = "select task_name from tasks where user_id = '"+threadID+"';";
+            ResultSet rs = stat.executeQuery(query);
+            while(rs.next()){
+                String dbtask = rs.getString("TASK_NAME");
+                if(taskname.equals(dbtask)){
+                    returnvalue = false;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return returnvalue;
     }
     
@@ -364,7 +400,23 @@ int task_id;
         return ++returnvalue;
     }
     
-    private boolean insertTableIntoDatabase(int task_id, String filename) { //ha full egyezés van, akkor ne illesszük be mégegyszer.
+    private String getTaskName(){
+        String returnvalue="";
+        try {
+            String query = "select task_name from tasks where task_id = '"+currentTaskID+"';";
+            Statement stat = conn.createStatement();
+            
+            ResultSet rs = stat.executeQuery(query);
+            while(rs.next()){
+                returnvalue = rs.getString("TASK_NAME");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnvalue;
+    }
+    
+    private boolean insertTableIntoDatabase(String filename) { //ha full egyezés van, akkor ne illesszük be mégegyszer.
         boolean returnvalue = false;
         try {
             String insertQuery = "insert into tables values (?,?,?,?,?,?,?,?,?);";
@@ -378,7 +430,7 @@ int task_id;
             prep.setBoolean(6, false);
             prep.setBoolean(7, false);
             prep.setDate(8, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-            prep.setInt(9, task_id);
+            prep.setInt(9, currentTaskID);
            // if (!(isTheTableAlreadyInDatabase(id, threadID, filename, false, false, false, false))) {
                 prep.addBatch();
 
@@ -433,13 +485,13 @@ int task_id;
         return ++returnvalue;
     }
 
-    private ArrayList<String> getTasksTable(int task_id) {
+    private ArrayList<String> getTasksTable() {
         ArrayList<String> returnvalue = new ArrayList<>();
         returnvalue.add("old:");
 
         try {
             Statement stat = conn.createStatement();
-            String query = "select name from tables where user_id='" + threadID + "' and task_id='"+task_id+"';";
+            String query = "select name from tables where user_id='" + threadID + "' and task_id='"+currentTaskID+"';";
             ResultSet rs = stat.executeQuery(query);
 
             while (rs.next()) {
@@ -482,7 +534,8 @@ int task_id;
             System.out.println("Error: logout client");
         }
     }
-
+    
+    //
     private void modifyTimestamp(int id, String tablename) { //id: table or user_id  --nincs befejezve
         try {
             //tables és users tábla módosítás
@@ -499,36 +552,50 @@ int task_id;
         }
     }
 
-    private void modifyIsClassifiedInTables() {
-
+    private void modifyIsClassifiedInTables(String tablename) {
+        try{
+            Statement updateStat =  conn.createStatement();
+            String updateQuery = "update tables set is_classified = true where name ='"+tablename+"' and task_id = '"+currentTaskID+"'; ";
+            updateStat.executeUpdate(updateQuery);
+        }catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
-    //ID alapján kell a táblát azonosítani. (how?)
-    private void modifyIsFactorizedInTables(String table_id) {
+    
+    private void modifyIsFactorizedInTables(String tablename) {
         try {
-            Statement stat =  conn.createStatement();
-            String query = "update tables set is_factorized = true where id='"+table_id+"'; ";
+            Statement updateStat =  conn.createStatement();
+            String updateQuery = "update tables set is_factorized = true where name ='"+tablename+"' and task_id = '"+currentTaskID+"'; ";
+            updateStat.executeUpdate(updateQuery);
         } catch (SQLException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
     }
 
-    private void modifyIsNormalisedInTables() {
-
+    private void modifyIsNormalisedInTables(String tablename) {
+        try{
+            Statement updateStat = conn.createStatement();
+            String updateQuery = "update tables set is_normalized = true where name ='"+tablename+"' and task_id = '"+currentTaskID+"';";
+            updateStat.executeUpdate(updateQuery);
+        }catch(SQLException ex){
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    private void modifyIsFeatureSelectedInTables() {
-
+    private void modifyIsFeatureSelectedInTables(String tablename) {
+        try{
+            Statement updateStat = conn.createStatement();
+            String updateQuery = "update tables set is_feautre_selected = true where name = '"+tablename+"' and task_id = '"+currentTaskID+"';";
+            updateStat.executeUpdate(updateQuery);
+        }catch(SQLException ex){
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     // </editor-fold>
-    
-    //.py functioncalls
-    // <editor-fold defaultstate="collapsed">
     private void callingPython(String py, String file, String... other){
         String string=Arrays.toString(other).replaceAll("[\\[\\]]", "").replaceAll("\\t", " ");
         
-        String cmd = "python "+PY_PATH+py +" "+PATH+file+" "+string+"";
+        String cmd = "python "+PY_PATH+py +" "+PATH+getTaskName()+"\\"+file+" "+string+"";
         System.out.println("cmdl: " + cmd);
 
         try {
@@ -544,5 +611,4 @@ int task_id;
         }
     }
 
-    // </editor-fold>
 }

@@ -33,7 +33,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected String selectedOperation = "";
     protected String selectedTable; 
     protected String currentTask;
-    protected int currentTaskId;
+    protected int currentTaskID;
 
     protected ArrayList<String> loadedTables = new ArrayList<>();
     protected ArrayList<String> csvToTable = new ArrayList<>();
@@ -1119,12 +1119,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     colToDel[i] = dropColList.getModel().getElementAt(i);
                 }
 
-                insertIntoBuffer("delc:", selectedTable, colToDel);
+                insertIntoBuffer("delc:", Integer.toString(currentTaskID), selectedTable, colToDel);
                 break;
             case "mrg:":
                 String join = getSelectedMergeOption();
                 String otherTable = getSelectedMergeTable();
-                insertIntoBuffer("mrg:", selectedTable,  otherTable, join);
+                insertIntoBuffer("mrg:", Integer.toString(currentTaskID), selectedTable,  otherTable, join);
                 break;
             default:
                 break;
@@ -1142,7 +1142,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
             //currentTask már adott, ID-val együtt
-            System.out.println("Task: " + currentTask + " ID: " + currentTaskId);
+            System.out.println("Task: " + currentTask + " ID: " + currentTaskID);
             outDatas = readFromCsv(file, true);
         }
 
@@ -1163,15 +1163,15 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             switch (chosen) {
                 case "Faktorizálás":
                     changePanels(firstPanel);
-                    insertIntoBuffer("fact:", selectedTable);
+                    insertIntoBuffer("fact:", Integer.toString(currentTaskID), selectedTable);
                     break;
                 case "Normalizálás":
                     changePanels(firstPanel);
-                    insertIntoBuffer("norm:", selectedTable);
+                    insertIntoBuffer("norm:", Integer.toString(currentTaskID), selectedTable);
                     break;
                 case "Feature kiválasztás":
                     changePanels(firstPanel);
-                    insertIntoBuffer("ftsl:", selectedTable);
+                    insertIntoBuffer("ftsl:", Integer.toString(currentTaskID), selectedTable);
                     break;
                 case "Oszlopok törlése":
                     changePanels(dropcolPanel);
@@ -1327,9 +1327,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
     //</editor-fold>
 
-    private void insertIntoBuffer(String identifier, String selectedTable, String... other) {
+    private void insertIntoBuffer(String identifier, String currentTaskID, String selectedTable, String... other) {
         bufferOutput.clear();
         bufferOutput.add(identifier);
+        bufferOutput.add(currentTaskID);
         bufferOutput.add(selectedTable);
         bufferOutput.addAll(Arrays.asList(other));
     }
@@ -1380,7 +1381,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         ArrayList<String> csv = new ArrayList<>();
         if (work) {
             csv.add("wcsv:");
-            csv.add(Integer.toString(currentTaskId) + ":");
+            csv.add(Integer.toString(currentTaskID) + ":");
         } else {
             csv.add("csv:");
             csv.add(currentTask + ":");
@@ -1437,11 +1438,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 if (e.getClickCount() == 2) {
                     try {
                         String selected = list.getComponentAt(e.getPoint()).toString().split("    -    ")[1];
-                        currentTaskId = Integer.parseInt((list.getComponentAt(e.getPoint()).toString().split("    -    ")[0]).split("selected=")[1]);
+                        currentTaskID = Integer.parseInt((list.getComponentAt(e.getPoint()).toString().split("    -    ")[0]).split("selected=")[1]);
                         outDatas.clear();
-                        //outDatas.add("ldt:");
                         outDatas.add("old:");
-                        outDatas.add(Integer.toString(currentTaskId));
+                        outDatas.add(Integer.toString(currentTaskID));
                         outDatas.add(selected);
 
                         DefaultTableModel model = new DefaultTableModel(0, 0);
@@ -1516,6 +1516,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         fillMergeCBox(loadedTables);
                         outDatas.clear();
                         outDatas.add("ldt:");
+                        outDatas.add(Integer.toString(currentTaskID));
                         outDatas.add(selected);
                         selectedTable = selected;
                     } catch (ArrayIndexOutOfBoundsException ex) {
