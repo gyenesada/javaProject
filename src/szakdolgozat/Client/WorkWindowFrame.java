@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -47,7 +48,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     DefaultListModel<String> colModel;
     DefaultListModel<String> dropColModel;
-    ButtonGroup mergeRadioGroup;
+    
+    ButtonGroup nanRadioGroup;
 
     //FELÜLET
     // <editor-fold defaultstate="collapsed">
@@ -74,7 +76,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         addColToDrop();
         removeColToDrop();
         setScrollPane();
-        setRadioButtonGroup();
+        setNanRadioButtons();
         outDatas.add("wrk:");
     }
 
@@ -99,7 +101,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         previewScPane = new javax.swing.JScrollPane();
         csvPrevTable = new javax.swing.JTable();
         newTablePanel = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
+        workUploadLabel = new javax.swing.JLabel();
         workPathField = new javax.swing.JTextField();
         workUploadButton = new javax.swing.JButton();
         workChoseButton = new javax.swing.JButton();
@@ -110,6 +112,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         operationLabel = new javax.swing.JLabel();
         doButton = new javax.swing.JButton();
         parameterMainPanel = new javax.swing.JPanel();
+        nanPanel = new javax.swing.JPanel();
+        zeroRButton = new javax.swing.JRadioButton();
+        meanRButton = new javax.swing.JRadioButton();
+        delRButton = new javax.swing.JRadioButton();
+        medianRButton = new javax.swing.JRadioButton();
+        modeRButton = new javax.swing.JRadioButton();
         votingPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         firstPanel = new javax.swing.JPanel();
@@ -165,13 +173,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         delColLabel = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         dropColList = new javax.swing.JList<>();
-        mergePanel = new javax.swing.JPanel();
-        mergeCBox = new javax.swing.JComboBox<>();
-        mergeLabel = new javax.swing.JLabel();
-        innerJoin = new javax.swing.JRadioButton();
-        leftJoin = new javax.swing.JRadioButton();
-        rightJoin = new javax.swing.JRadioButton();
-        fullJoin = new javax.swing.JRadioButton();
         cancelButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -336,7 +337,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         newTablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         newTablePanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel8.setText("Új tábla feltöltése: ");
+        workUploadLabel.setText("Új tábla feltöltése: ");
 
         workUploadButton.setText("Feltöltés");
         workUploadButton.setToolTipText("");
@@ -359,7 +360,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             newTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(newTablePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel8)
+                .addComponent(workUploadLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(workPathField)
                 .addGap(18, 18, 18)
@@ -373,7 +374,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newTablePanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(newTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
+                    .addComponent(workUploadLabel)
                     .addComponent(workPathField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(workUploadButton)
                     .addComponent(workChoseButton))
@@ -410,6 +411,48 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         parameterMainPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Paraméterek", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Trebuchet MS", 0, 12))); // NOI18N
         parameterMainPanel.setLayout(new java.awt.CardLayout());
+
+        zeroRButton.setText("Üres értékek kezelése nulla értékkel");
+
+        meanRButton.setText("Üres értékek kezelése matematikai középpel");
+
+        delRButton.setText("Üres értékek törlése");
+
+        medianRButton.setText("Üres értékek kezelése az értékek mediánjával");
+
+        modeRButton.setText("Üres értékek kezelése az értékek móduszával");
+
+        javax.swing.GroupLayout nanPanelLayout = new javax.swing.GroupLayout(nanPanel);
+        nanPanel.setLayout(nanPanelLayout);
+        nanPanelLayout.setHorizontalGroup(
+            nanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(nanPanelLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(nanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(modeRButton)
+                    .addComponent(medianRButton)
+                    .addComponent(zeroRButton)
+                    .addComponent(meanRButton)
+                    .addComponent(delRButton))
+                .addContainerGap(319, Short.MAX_VALUE))
+        );
+        nanPanelLayout.setVerticalGroup(
+            nanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(nanPanelLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(zeroRButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(meanRButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(delRButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(medianRButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(modeRButton)
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
+
+        parameterMainPanel.add(nanPanel, "card9");
 
         jLabel1.setText("Voting panel");
 
@@ -784,53 +827,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         parameterMainPanel.add(dropcolPanel, "card2");
 
-        mergeLabel.setText("Összefűzés:");
-
-        innerJoin.setText("Inner Join");
-
-        leftJoin.setText("Left Join");
-
-        rightJoin.setText("Right Join");
-
-        fullJoin.setText("Full Join");
-
-        javax.swing.GroupLayout mergePanelLayout = new javax.swing.GroupLayout(mergePanel);
-        mergePanel.setLayout(mergePanelLayout);
-        mergePanelLayout.setHorizontalGroup(
-            mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mergePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mergeLabel)
-                    .addGroup(mergePanelLayout.createSequentialGroup()
-                        .addComponent(mergeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(innerJoin)
-                        .addGap(26, 26, 26)
-                        .addComponent(fullJoin)
-                        .addGap(18, 18, 18)
-                        .addComponent(rightJoin)
-                        .addGap(18, 18, 18)
-                        .addComponent(leftJoin)))
-                .addContainerGap(32, Short.MAX_VALUE))
-        );
-        mergePanelLayout.setVerticalGroup(
-            mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mergePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(mergeLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(mergePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(mergeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(innerJoin)
-                    .addComponent(fullJoin)
-                    .addComponent(rightJoin)
-                    .addComponent(leftJoin))
-                .addContainerGap(118, Short.MAX_VALUE))
-        );
-
-        parameterMainPanel.add(mergePanel, "card7");
-
         cancelButton.setText("Alapértelmezés");
 
         javax.swing.GroupLayout tablesPanelLayout = new javax.swing.GroupLayout(tablesPanel);
@@ -1082,7 +1078,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addGap(105, 105, 105)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1113,18 +1109,15 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 setClassifierParameters("vot:", vot_parameters);
                 break;
             case "delc:":
-                // getTextFromPane();
                 String[] colToDel = new String[dropColList.getModel().getSize()];
                 for (int i = 0; i < dropColList.getModel().getSize(); i++) {
                     colToDel[i] = dropColList.getModel().getElementAt(i);
                 }
-
                 insertIntoBuffer("delc:", Integer.toString(currentTaskID), selectedTable, colToDel);
                 break;
-            case "mrg:":
-                String join = getSelectedMergeOption();
-                String otherTable = getSelectedMergeTable();
-                insertIntoBuffer("mrg:", Integer.toString(currentTaskID), selectedTable,  otherTable, join);
+            case "nanv:":
+                String mode = getSelectedRButton(nanRadioGroup);
+                insertIntoBuffer("nanv:", Integer.toString(currentTaskID), selectedTable, mode);
                 break;
             default:
                 break;
@@ -1141,11 +1134,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         if (file.equals("")) {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
-            //currentTask már adott, ID-val együtt
             System.out.println("Task: " + currentTask + " ID: " + currentTaskID);
             outDatas = readFromCsv(file, true);
         }
-
+        workPathField.setText("");
     }//GEN-LAST:event_workUploadButtonActionPerformed
 
     private void showLoadPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLoadPanelActionPerformed
@@ -1178,12 +1170,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     selectedOperation = "delc:";
                     break;
                 case "Üres értékek kezelése":
-                    //changePanels(nanPanel);
+                    changePanels(nanPanel);
                     selectedOperation = "nanv:";
-                    break;
-                case "Összefűzés":
-                    changePanels(mergePanel);
-                    selectedOperation = "mrg:";
                     break;
             }
         }
@@ -1243,6 +1231,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
             outDatas = readFromCsv(file, false);
         }
+        filepathField.setText("");
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     private void choseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choseButtonActionPerformed
@@ -1300,7 +1289,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         operations.add("Üres értékek kezelése");
         operations.add("Faktorizálás");
         operations.add("Normalizálás");
-        operations.add("Összefűzés");
         operations.add("Oszlopok törlése");
         operations.add("Feature kiválasztás");
 
@@ -1356,7 +1344,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         for (String c : cols) {
             colModel.addElement(c);
-            System.out.println("cols fillprevTable: " + c);
         }
     }
 
@@ -1373,10 +1360,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         });
     }
     
-    private String getSelectedMergeTable(){
-        return mergeCBox.getItemAt(mergeCBox.getSelectedIndex());
-    }
-
     private ArrayList<String> readFromCsv(String path, boolean work) {
         ArrayList<String> csv = new ArrayList<>();
         if (work) {
@@ -1411,7 +1394,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     csv.add(">>flag<<");
                 }
                 if (index < 500) {
-                    String[] items_temp = line.split(",");
+                    String[] items_temp = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
                     items.add(items_temp);
                 }
                 index++;
@@ -1451,18 +1434,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 }
             }
         });
-    }
-
-    private void setRadioButtonGroup() {
-        mergeRadioGroup = new ButtonGroup();
-        innerJoin.setActionCommand("inner");
-        mergeRadioGroup.add(innerJoin);
-        rightJoin.setActionCommand("right");
-        mergeRadioGroup.add(rightJoin);
-        leftJoin.setActionCommand("left");
-        mergeRadioGroup.add(leftJoin);
-        fullJoin.setActionCommand("full");
-        mergeRadioGroup.add(fullJoin);
     }
 
     protected void addColToDrop() {
@@ -1513,7 +1484,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         System.out.println("Selected: " + selected);
 
                         String[] loadedTables = new String[loadedTablesList.getModel().getSize()];
-                        fillMergeCBox(loadedTables);
                         outDatas.clear();
                         outDatas.add("ldt:");
                         outDatas.add(Integer.toString(currentTaskID));
@@ -1526,27 +1496,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
     }
-
-    protected void fillMergeCBox(String[] loadedTables) {
-        mergeCBox.removeAllItems();
-        for (int i = 0; i < loadedTablesList.getModel().getSize(); i++) {
-            loadedTables[i] = loadedTablesList.getModel().getElementAt(i);
-        }
-        
-        for (String s : loadedTables) {
-            if (!s.equals(selectedTable)) {
-                mergeCBox.addItem(s);
-            }
-        }
-    }
-    
-    private String getSelectedMergeOption(){
-        return mergeRadioGroup.getSelection().getActionCommand();
-    }
-
+  
     protected String getFilename(String path) {
+        String returnvalue;
         String[] spl = path.split(Pattern.quote("\\"));
-        return spl[spl.length - 1];
+        returnvalue = spl[spl.length - 1].replaceAll(" ", "_");
+        System.out.println("Filename: " + returnvalue);
+        return returnvalue;
     }
 
     private String getSelectedOperation() {
@@ -1556,9 +1512,27 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     private String getSelectedClassifier() {
         return classifierCBox.getItemAt(classifierCBox.getSelectedIndex());
     }
+    
+    private void setNanRadioButtons(){
+        nanRadioGroup = new ButtonGroup();
+        zeroRButton.setActionCommand("zero");
+        nanRadioGroup.add(zeroRButton);
+        meanRButton.setActionCommand("mean");
+        nanRadioGroup.add(meanRButton);
+        delRButton.setActionCommand("del");
+        nanRadioGroup.add(delRButton);
+        medianRButton.setActionCommand("median");
+        nanRadioGroup.add(medianRButton);
+        modeRButton.setActionCommand("modusz");
+        nanRadioGroup.add(modeRButton);
+    }
 
+    private String getSelectedRButton(ButtonGroup bg){
+        return bg.getSelection().getActionCommand();
+    }
+    
     private void changePanels(JPanel visiblePanel) {
-        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel, dropcolPanel, mergePanel};
+        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel, dropcolPanel, nanPanel};
         for (JPanel p : panels) {
             if (visiblePanel == p) {
                 p.setVisible(true);
@@ -1625,6 +1599,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JList<String> colList;
     protected javax.swing.JTable csvPrevTable;
     protected javax.swing.JLabel delColLabel;
+    protected javax.swing.JRadioButton delRButton;
     protected javax.swing.JLabel deleteTaskLabel;
     protected javax.swing.JButton doButton;
     protected javax.swing.JList<String> dropColList;
@@ -1633,15 +1608,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JLabel fileUploadLabel;
     protected javax.swing.JTextField filepathField;
     protected javax.swing.JPanel firstPanel;
-    protected javax.swing.JRadioButton fullJoin;
-    protected javax.swing.JRadioButton innerJoin;
     protected javax.swing.JLabel jLabel1;
     protected javax.swing.JLabel jLabel2;
     protected javax.swing.JLabel jLabel4;
     protected javax.swing.JLabel jLabel5;
     protected javax.swing.JLabel jLabel6;
     protected javax.swing.JLabel jLabel7;
-    protected javax.swing.JLabel jLabel8;
     protected javax.swing.JMenu jMenu2;
     protected javax.swing.JMenuBar jMenuBar1;
     protected javax.swing.JScrollPane jScrollPane1;
@@ -1649,7 +1621,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JScrollPane jScrollPane4;
     protected javax.swing.JSeparator jSeparator1;
     protected javax.swing.JTable jTable1;
-    protected javax.swing.JRadioButton leftJoin;
     protected java.awt.List list;
     protected javax.swing.JPanel loadFileUploadPanel;
     protected javax.swing.JPanel loadOldWorkPanel;
@@ -1658,9 +1629,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JLabel loadingLabel;
     protected javax.swing.JMenuItem logOut;
     protected javax.swing.JPanel mainPanel;
-    protected javax.swing.JComboBox<String> mergeCBox;
-    protected javax.swing.JLabel mergeLabel;
-    protected javax.swing.JPanel mergePanel;
+    protected javax.swing.JRadioButton meanRButton;
+    protected javax.swing.JRadioButton medianRButton;
+    protected javax.swing.JRadioButton modeRButton;
+    protected javax.swing.JPanel nanPanel;
     protected javax.swing.JPanel newTablePanel;
     protected javax.swing.JScrollPane oldWorkSPane;
     protected javax.swing.JComboBox<String> operationCBox;
@@ -1685,7 +1657,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JTextField rfc_rsField;
     protected javax.swing.JLabel rfc_rsLabel;
     protected javax.swing.JLabel rfs_neLabel;
-    protected javax.swing.JRadioButton rightJoin;
     protected javax.swing.JPanel sentimentPanel;
     protected javax.swing.JSeparator separator;
     protected javax.swing.JSeparator separator1;
@@ -1703,6 +1674,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JTextField workPathField;
     protected javax.swing.JButton workSave;
     protected javax.swing.JButton workUploadButton;
+    protected javax.swing.JLabel workUploadLabel;
+    protected javax.swing.JRadioButton zeroRButton;
     // End of variables declaration//GEN-END:variables
 
     // </editor-fold>

@@ -381,7 +381,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                          <Component id="workUploadLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="workPathField" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -397,7 +397,7 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="workUploadLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="workPathField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="workUploadButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="workChoseButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -408,10 +408,13 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel8">
+                <Component class="javax.swing.JLabel" name="workUploadLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#xda;j t&#xe1;bla felt&#xf6;lt&#xe9;se: "/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JTextField" name="workPathField">
                 </Component>
@@ -562,6 +565,78 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
                   <SubComponents>
+                    <Container class="javax.swing.JPanel" name="nanPanel">
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                      </AuxValues>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                          <CardConstraints cardName="card9"/>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="modeRButton" min="-2" max="-2" attributes="0"/>
+                                      <Component id="medianRButton" min="-2" max="-2" attributes="0"/>
+                                      <Component id="zeroRButton" min="-2" max="-2" attributes="0"/>
+                                      <Component id="meanRButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="delRButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace pref="319" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                                  <Component id="zeroRButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="meanRButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="delRButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="medianRButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="modeRButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="22" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JRadioButton" name="zeroRButton">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="&#xdc;res &#xe9;rt&#xe9;kek kezel&#xe9;se nulla &#xe9;rt&#xe9;kkel"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JRadioButton" name="meanRButton">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="&#xdc;res &#xe9;rt&#xe9;kek kezel&#xe9;se matematikai k&#xf6;z&#xe9;ppel"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JRadioButton" name="delRButton">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="&#xdc;res &#xe9;rt&#xe9;kek t&#xf6;rl&#xe9;se"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JRadioButton" name="medianRButton">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="&#xdc;res &#xe9;rt&#xe9;kek kezel&#xe9;se az &#xe9;rt&#xe9;kek medi&#xe1;nj&#xe1;val"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JRadioButton" name="modeRButton">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="&#xdc;res &#xe9;rt&#xe9;kek kezel&#xe9;se az &#xe9;rt&#xe9;kek m&#xf3;dusz&#xe1;val"/>
+                          </Properties>
+                        </Component>
+                      </SubComponents>
+                    </Container>
                     <Container class="javax.swing.JPanel" name="votingPanel">
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
@@ -1233,104 +1308,6 @@
                             </Component>
                           </SubComponents>
                         </Container>
-                      </SubComponents>
-                    </Container>
-                    <Container class="javax.swing.JPanel" name="mergePanel">
-                      <Constraints>
-                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                          <CardConstraints cardName="card7"/>
-                        </Constraint>
-                      </Constraints>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="mergeLabel" min="-2" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="mergeCBox" min="-2" pref="188" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="innerJoin" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                          <Component id="fullJoin" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="rightJoin" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="leftJoin" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <EmptySpace pref="32" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="mergeLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="mergeCBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="innerJoin" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="fullJoin" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="rightJoin" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="leftJoin" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace pref="118" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JComboBox" name="mergeCBox">
-                          <Properties>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="0"/>
-                            </Property>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="mergeLabel">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="&#xd6;sszef&#x171;z&#xe9;s:"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JRadioButton" name="innerJoin">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Inner Join"/>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JRadioButton" name="leftJoin">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Left Join"/>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JRadioButton" name="rightJoin">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Right Join"/>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JRadioButton" name="fullJoin">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Full Join"/>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-                          </AuxValues>
-                        </Component>
                       </SubComponents>
                     </Container>
                   </SubComponents>

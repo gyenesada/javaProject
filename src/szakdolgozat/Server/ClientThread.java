@@ -61,7 +61,7 @@ public class ClientThread implements Runnable {
     private void communicationWithClients(PrintWriter pw, Scanner sc) {
         int index = 0;
         while (true) {
-            System.out.println("---------------" + index + ". kérés--------------");
+            System.out.println(index + ". kérés: ");
             System.out.println("");
             outDatas.clear();
             inputPreprocess(sc.nextLine());
@@ -71,6 +71,7 @@ public class ClientThread implements Runnable {
           //  System.out.println("Output: " + outDatas);
 
             index++;
+            System.out.println("Kérés vége.");
         }
     }
 
@@ -163,11 +164,10 @@ public class ClientThread implements Runnable {
                 callingPython("dropout.py", in.get(2), parametersToString(in));
                 out = readFromCsv("done:", in.get(2));
                 break;
-            case "mrg:": //merge tables  
-                currentTaskID = Integer.parseInt(in.get(1));
-                callingPython("merge.py", in.get(2), parametersToString(in));
-                break;
             case "nanv:": //handle nan values
+                currentTaskID = Integer.parseInt(in.get(1));
+                callingPython("nanvalues.py", in.get(2), in.get(3));
+                out = readFromCsv("done:", in.get(2));
                 break;
             case "bye:": //log out
                 setIsOnlineFalse();
@@ -263,7 +263,7 @@ public class ClientThread implements Runnable {
             while (rs.next()) {
                 String password = rs.getString("PASSWORD");
                 boolean is_online = rs.getBoolean("IS_ONLINE");
-                if (pass.equals(password) && !is_online) {
+                if (pass.equals(password)){// && !is_online) {
                     threadName = name;
                     threadID = rs.getInt("USER_ID");
                     
@@ -307,7 +307,6 @@ public class ClientThread implements Runnable {
             if (rs.next()) {
                 return false;
             } else {
-                Statement idstat = conn.createStatement();
                 String insertquery = "insert into users values (?,?,?,?,?,?);";
                 try {
                     threadName = name;
@@ -327,8 +326,7 @@ public class ClientThread implements Runnable {
                 } catch (SQLException ex) {
                     System.out.println("Nem sikerült felvinni az adatokat.");
                 }
-                
-                    new File(PATH+threadName).mkdir();
+                new File(PATH+threadName).mkdir();
                 return true;
             }
         } catch (SQLException ex) {
@@ -416,7 +414,7 @@ public class ClientThread implements Runnable {
         return returnvalue;
     }
     
-    private boolean insertTableIntoDatabase(String filename) { //ha full egyezés van, akkor ne illesszük be mégegyszer.
+    private boolean insertTableIntoDatabase(String filename) { 
         boolean returnvalue = false;
         try {
             String insertQuery = "insert into tables values (?,?,?,?,?,?,?,?,?);";
@@ -431,35 +429,31 @@ public class ClientThread implements Runnable {
             prep.setBoolean(7, false);
             prep.setDate(8, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             prep.setInt(9, currentTaskID);
-           // if (!(isTheTableAlreadyInDatabase(id, threadID, filename, false, false, false, false))) {
+            if(!isTableInTask(filename)){
                 prep.addBatch();
 
                 conn.setAutoCommit(false);
                 prep.executeBatch();
                 conn.setAutoCommit(true);
                 returnvalue = true;
-          //  }
+            }
         } catch (SQLException ex) {
             System.out.println("Error inserting to database");
         }
         return returnvalue;
     }
-
-    private boolean isTheTableAlreadyInDatabase(int table_id, int user_id, String tablename, boolean isclassif, boolean isfact, boolean isnorm, boolean isfeatsel) throws SQLException {
+    
+    private boolean isTableInTask(String tablename) throws SQLException{
         boolean returnvalue = false;
-        String query = "select * from tables where name='" + tablename + "';";
+        
         Statement stat = conn.createStatement();
+        String query = "select name from tables where user_id = '"+threadID+"'  and task_id = '"+currentTaskID+"';";
+       
         ResultSet rs = stat.executeQuery(query);
-        while (rs.next()) {
-            int tableID = rs.getInt("TABLE_ID");
-            int userID = rs.getInt("USER_ID");
+        while(rs.next()){
             String name = rs.getString("NAME");
-            boolean isc = rs.getBoolean("IS_CLASSIFIED");
-            boolean isf = rs.getBoolean("IS_FACTORIZED");
-            boolean isn = rs.getBoolean("IS_NORMALIZED");
-            boolean isfs = rs.getBoolean("IS_FEAUTRE_SELECTED");
-
-            if (table_id == tableID && user_id == userID && name.equals(tablename) && isclassif == isc && isfact == isf && isnorm == isn && isfeatsel == isfs) {
+            
+            if(tablename.equals(name)){
                 returnvalue = true;
             }
         }
@@ -535,8 +529,7 @@ public class ClientThread implements Runnable {
         }
     }
     
-    //
-    private void modifyTimestamp(int id, String tablename) { //id: table or user_id  --nincs befejezve
+    private void modifyTimestamp(int id, String tablename) {
         try {
             //tables és users tábla módosítás
             Statement stat = conn.createStatement();
@@ -592,6 +585,7 @@ public class ClientThread implements Runnable {
         }
     }
     // </editor-fold>
+    
     private void callingPython(String py, String file, String... other){
         String string=Arrays.toString(other).replaceAll("[\\[\\]]", "").replaceAll("\\t", " ");
         

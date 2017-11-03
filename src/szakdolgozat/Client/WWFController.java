@@ -137,7 +137,7 @@ public class WWFController implements Runnable{ //extends Application implements
 
         String[] lines = content.split(", >>enter_flag<<, ");
         for (String str : lines) {
-            String[] temp = str.split("(?!\"),(?! \")"); //titanic csv-ben nem jól split-el.
+            String[] temp = str.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
             items.add(temp);
         }
         wwf.fillPrevTable(colnames, items);
