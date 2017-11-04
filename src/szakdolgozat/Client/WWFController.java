@@ -72,7 +72,9 @@ public class WWFController implements Runnable{ //extends Application implements
                     wwf.loadedTablesList.setModel(model);
                     model.addElement(wwf.selectedTable);
                     Thread.sleep(10);
+                    wwf.lf.dispose();
                     wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
+                    
                 } else {
                     JOptionPane.showMessageDialog(wwf, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
                 }
@@ -86,7 +88,7 @@ public class WWFController implements Runnable{ //extends Application implements
                 for (int i = 1; i < in.size() - 1; i = i + 2) {
                     wwf.list.add(in.get(i) + "    -    " + in.get(i + 1));
                 }
-                wwf.getSelectedTask();
+                wwf.loadSelectedTask();
                 break;
             case "old:":
                 fillLoadedTablesList(in);
@@ -99,6 +101,9 @@ public class WWFController implements Runnable{ //extends Application implements
                 break;
             case "done:":
                 loadedTablePreprocess();
+                break;
+            case "delt:":
+                
                 break;
             case "bye:":
                 wwf.dispose();

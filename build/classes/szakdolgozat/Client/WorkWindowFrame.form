@@ -459,8 +459,8 @@
                               <Component id="classifierCBox" min="-2" pref="253" max="-2" attributes="0"/>
                               <Component id="operationCBox" min="-2" pref="253" max="-2" attributes="0"/>
                               <Component id="operationLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="newTableCB" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="doButton" min="-2" pref="105" max="-2" attributes="0"/>
                               </Group>
@@ -491,7 +491,7 @@
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="doButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="newTableCB" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1312,9 +1312,9 @@
                     </Container>
                   </SubComponents>
                 </Container>
-                <Component class="javax.swing.JButton" name="cancelButton">
+                <Component class="javax.swing.JCheckBox" name="newTableCB">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Alap&#xe9;rtelmez&#xe9;s"/>
+                    <Property name="text" type="java.lang.String" value="&#xda;j t&#xe1;bla gener&#xe1;l&#xe1;s"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -1388,25 +1388,18 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                          <Component id="otherLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel4" max="32767" attributes="0"/>
+                          <Component id="jLabel4" pref="138" max="32767" attributes="0"/>
                           <Component id="jLabel5" max="32767" attributes="0"/>
                           <Component id="jLabel6" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="loadingLabel" min="-2" max="-2" attributes="0"/>
-                                  <Component id="deleteTaskLabel" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="renameTaskLabel" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="loadingLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="138" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -1423,13 +1416,7 @@
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="otherLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="deleteTaskLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="renameTaskLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="280" max="32767" attributes="0"/>
+                      <EmptySpace pref="349" max="32767" attributes="0"/>
                       <Component id="loadingLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   </Group>
@@ -1465,30 +1452,6 @@
             </Component>
             <Component class="javax.swing.JLabel" name="loadingLabel">
             </Component>
-            <Component class="javax.swing.JLabel" name="otherLabel">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Trebuchet MS" size="14" style="0"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="66" green="66" red="66" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Egy&#xe9;b"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JLabel" name="deleteTaskLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Munkafolyam t&#xf6;rl&#xe9;se"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="renameTaskLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Munkafolyam &#xe1;tnevez&#xe9;se"/>
-              </Properties>
-            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="sideWorkPanel">
@@ -1501,9 +1464,11 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="loadedTablesList" alignment="1" pref="151" max="32767" attributes="0"/>
+                  <Component id="loadedTablesList" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="delSessionButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="workSave" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1515,7 +1480,10 @@
                       <EmptySpace pref="12" max="32767" attributes="0"/>
                       <Component id="loadedTablesList" min="-2" pref="189" max="-2" attributes="0"/>
                       <EmptySpace pref="226" max="32767" attributes="0"/>
-                      <Component id="workSave" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="workSave" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="delSessionButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1553,6 +1521,14 @@
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
               </AuxValues>
+            </Component>
+            <Component class="javax.swing.JButton" name="delSessionButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="T&#xf6;rl&#xe9;s"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="delSessionButtonActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

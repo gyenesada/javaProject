@@ -89,6 +89,7 @@ public class ClientThread implements Runnable {
         String answer;
         String identifier = in.get(0);
         String filename;
+        boolean newtable;
         //feladatok elosztása
         switch (identifier) {
             case "log:": //log in
@@ -105,10 +106,10 @@ public class ClientThread implements Runnable {
                 break;
             case "csv:": //csv upload on load page
                 String taskname = in.get(1).replaceAll(":", "");
+                System.out.println("Taskname:: " + taskname);
                 int task = insertTaskIntoDatabase(taskname);
-                if(task == -1){
-                    out.add("err:"); //Nem lehet feltölteni, mert már van ilyen nevű task.
-                }else{
+                System.out.println("Task: " + task);
+              //IsTaskNameValid() értéke kell még ide.
                     currentTaskID = task;
                     filename = in.get(2).replaceAll(":", "");
                     answer = Boolean.toString(insertTableIntoDatabase(filename));
@@ -117,7 +118,7 @@ public class ClientThread implements Runnable {
                     out.add(answer);
                     out.add(Integer.toString(currentTaskID));
                     writeToCsv(filename);
-                }
+                
                 break;
             case "wcsv:": //csv upload on work page
                 filename = in.get(2).replaceAll(":", "");
@@ -142,35 +143,50 @@ public class ClientThread implements Runnable {
                 out = readFromCsv("ldt:",in.get(2));
                 break;
             case "fact:": //factorize
-                currentTaskID = Integer.parseInt(in.get(1));
-                callingPython("factorize.py", in.get(2));
-                modifyIsFactorizedInTables(in.get(2));
-                out = readFromCsv("done:", in.get(2));
+                currentTaskID = Integer.parseInt(in.get(2));
+               
+                System.out.println(
+                newtable = Boolean.valueOf(in.get(1)));
+                callingPython(newtable, "factorize.py", in.get(3));
+                modifyIsFactorizedInTables(in.get(3));
+                out = readFromCsv("done:", in.get(3));
                 break;
             case "norm:": //normalize
-                currentTaskID = Integer.parseInt(in.get(1));
-                callingPython("normalize.py", in.get(2));
-                modifyIsNormalisedInTables(in.get(2));
-                out = readFromCsv("done:", in.get(2));
+                currentTaskID = Integer.parseInt(in.get(2));
+                newtable = Boolean.valueOf(in.get(1));
+                callingPython(newtable, "normalize.py", in.get(3));
+                modifyIsNormalisedInTables(in.get(3));
+                out = readFromCsv("done:", in.get(3));
                 break;
             case "ftsl:": //feature selection
-                currentTaskID = Integer.parseInt(in.get(1));
-                callingPython("variance.py", in.get(2));
-                modifyIsFeatureSelectedInTables(in.get(2));
-                out = readFromCsv("done:", in.get(2));
+                currentTaskID = Integer.parseInt(in.get(2));
+                newtable = Boolean.valueOf(in.get(1));
+                callingPython(newtable, "variance.py", in.get(3));
+                modifyIsFeatureSelectedInTables(in.get(3));
+                out = readFromCsv("done:", in.get(3));
                 break;
             case "delc:": //delete columns
-                currentTaskID = Integer.parseInt(in.get(1));
-                callingPython("dropout.py", in.get(2), parametersToString(in));
-                out = readFromCsv("done:", in.get(2));
+                currentTaskID = Integer.parseInt(in.get(2));
+                newtable = Boolean.valueOf(in.get(1));
+                System.out.println("Kell új tábla? " + newtable);
+                callingPython(newtable, "dropout.py",parametersToString(in));
+                out = readFromCsv("done:", in.get(3));
                 break;
             case "nanv:": //handle nan values
-                currentTaskID = Integer.parseInt(in.get(1));
-                callingPython("nanvalues.py", in.get(2), in.get(3));
-                out = readFromCsv("done:", in.get(2));
+                currentTaskID = Integer.parseInt(in.get(2));
+                
+                newtable = Boolean.valueOf(in.get(1));
+                callingPython(newtable, "nanvalues.py", in.get(3), in.get(4));
+                out = readFromCsv("done:", in.get(3));
+                break;
+            case "delt:":
+                setTaskInactive(in.get(1));
+                out.add("delt:");
+                out = getTasks();
                 break;
             case "bye:": //log out
                 setIsOnlineFalse();
+                setLogStatusNormal();
                 out.add("bye:");
                 break;
             default:
@@ -258,20 +274,23 @@ public class ClientThread implements Runnable {
 
         try {
             stat = conn.createStatement();
-            String query = "select password, user_id, is_online from users where username='" + name + "';";
+           String query = "select password, user_id, is_online, log_status from users where username='" + name + "';";
             rs = stat.executeQuery(query);
             while (rs.next()) {
                 String password = rs.getString("PASSWORD");
                 boolean is_online = rs.getBoolean("IS_ONLINE");
-                if (pass.equals(password)){// && !is_online) {
+                String log_status = rs.getString("LOG_STATUS");
+              
+                //nem jó.
+                if ((pass.equals(password))){// && !is_online) || (pass.equals(password) && "null".equals(log_status))) {
                     threadName = name;
                     threadID = rs.getInt("USER_ID");
-                    
-                    String updateQuery = "update users set is_online='"+true+"', last_visit='"+new java.sql.Date(Calendar.getInstance().getTimeInMillis())+"' where user_id='"+threadID+"';";
+                                      
+                   String updateQuery = "update users set is_online='"+true+"', log_status = '"+"null"+"' where user_id='"+threadID+"';";
                     Statement updateStat = conn.createStatement();
                     updateStat.executeUpdate(updateQuery);
-                    
                     PATH = PATH+threadName+"\\";
+                    System.out.println("Path: " + PATH);
                     return true;
                 } else {
                     return false;
@@ -316,7 +335,7 @@ public class ClientThread implements Runnable {
                     prepstat.setString(3, mail);
                     prepstat.setString(4, pass);
                     prepstat.setBoolean(5, false);
-                    prepstat.setDate(6, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+                    prepstat.setString(6,"null");
                     prepstat.addBatch();
 
                     conn.setAutoCommit(false);
@@ -327,6 +346,7 @@ public class ClientThread implements Runnable {
                     System.out.println("Nem sikerült felvinni az adatokat.");
                 }
                 new File(PATH+threadName).mkdir();
+                System.out.println(threadName + " nevű mappa elkészítve.");
                 return true;
             }
         } catch (SQLException ex) {
@@ -338,15 +358,17 @@ public class ClientThread implements Runnable {
     private int insertTaskIntoDatabase(String taskname){
         int returnvalue=0;
         try{
-            String insertQuery = "insert into tasks values (?,?,?);";
+            String insertQuery = "insert into tasks values (?,?,?,?);";
             PreparedStatement prep = conn.prepareStatement(insertQuery);
             
             int id = getTaskID();
             prep.setInt(1, id);
             prep.setString(2, taskname);
             prep.setInt(3, threadID);
+            prep.setBoolean(4, true);
             
            if(isTaskNameValid(taskname)){
+               System.out.println("Taskname is valid.");
                prep.addBatch();
                conn.setAutoCommit(false);
                prep.executeBatch();
@@ -479,6 +501,23 @@ public class ClientThread implements Runnable {
         return ++returnvalue;
     }
 
+    private boolean setTaskInactive(String taskID){
+        boolean returnvalue=true;
+        try {
+            //isTaskExists
+            
+            int id = Integer.parseInt(taskID);
+            Statement stat = conn.createStatement();
+            String query = "update tasks set is_active = false where task_id = '"+id+"';";
+            //while(rs) empty, akkor error: mert nincs olyan ID-jű task
+            
+            stat.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnvalue;
+    }
+    
     private ArrayList<String> getTasksTable() {
         ArrayList<String> returnvalue = new ArrayList<>();
         returnvalue.add("old:");
@@ -505,7 +544,7 @@ public class ClientThread implements Runnable {
         
         try{
             Statement stat =  conn.createStatement();
-            String query = "select task_id, task_name from tasks where user_id='"+threadID+"';";
+            String query = "select task_id, task_name from tasks where user_id='"+threadID+"' and is_active = true;";
             ResultSet rs = stat.executeQuery(query);
             
             while(rs.next()){
@@ -529,22 +568,16 @@ public class ClientThread implements Runnable {
         }
     }
     
-    private void modifyTimestamp(int id, String tablename) {
-        try {
-            //tables és users tábla módosítás
-            Statement stat = conn.createStatement();
-            if (tablename.equals("users")) {
-                String query = "select timestamp from users where user_id = '" + id + "' ;";
-
-            } else if (tablename.equals("tables")) {
-                String query = "select modified from tables where table_id = '" + id + "' ;";
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+    private void setLogStatusNormal(){
+        try{
+            String updateQuery = "update users set log_status='"+"normal"+"' where user_id = '"+threadID+"';";
+            Statement updateStat = conn.createStatement();
+            updateStat.executeUpdate(updateQuery);
+        }catch(SQLException e){
+            System.out.println("Error: logout client");
         }
     }
-
+           
     private void modifyIsClassifiedInTables(String tablename) {
         try{
             Statement updateStat =  conn.createStatement();
@@ -586,12 +619,13 @@ public class ClientThread implements Runnable {
     }
     // </editor-fold>
     
-    private void callingPython(String py, String file, String... other){
+    private void callingPython(Boolean newtable, String py, String file, String... other){
         String string=Arrays.toString(other).replaceAll("[\\[\\]]", "").replaceAll("\\t", " ");
         
-        String cmd = "python "+PY_PATH+py +" "+PATH+getTaskName()+"\\"+file+" "+string+"";
+        //newtable beillesztése a PATH-ba
+        String cmd = "python "+PY_PATH+py +" "+newtable+" "+PATH+getTaskName()+"\\"+file+" "+string+"";
         System.out.println("cmdl: " + cmd);
-
+        insertNewTableToDB(py, file);
         try {
             Process p = Runtime.getRuntime().exec(cmd);
             int exitVal = p.waitFor();
@@ -605,4 +639,10 @@ public class ClientThread implements Runnable {
         }
     }
 
+    private void insertNewTableToDB(String python, String file){
+        String prefix = python.replaceAll(".py", "_");
+        System.out.println("Prefix: " + prefix);
+        String fullfilename = prefix+file;
+        System.out.println("Full: " + fullfilename);
+    }
 }
