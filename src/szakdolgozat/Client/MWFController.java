@@ -20,7 +20,7 @@ public class MWFController implements Runnable {
     private final int port;
     private String rawInput;
 
-    private static MainWindowFrame wf; //felület
+    private static MainWindowFrame wf;
 
     public MWFController() throws IOException {
         this.host = "localhost";
@@ -47,7 +47,6 @@ public class MWFController implements Runnable {
         int index = 0;
         while (!wf.exit) {
 
-            System.out.println("---------------" + index + "--------------");
             while (wf.outDatas.isEmpty()) {
                 try {
                     Thread.sleep(10);
@@ -103,12 +102,10 @@ public class MWFController implements Runnable {
     }
 
     private void inputPreprocess(String input) {
-        System.out.println("input: " + input);
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
 
         String[] string = withoutBrackets.split(", ");
         wf.inDatas.addAll(Arrays.asList(string));
-        System.out.println("Input: " + wf.inDatas);
     }
     
 }

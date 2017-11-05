@@ -1,14 +1,11 @@
 package szakdolgozat.Client;
 
 import java.awt.Toolkit;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -248,7 +245,7 @@ public class MainWindowFrame extends javax.swing.JFrame{
             outDatas.clear();
             String username = regNameField.getText();
             String mail = regMailField.getText();
-            String password = encrypt(regPassField.getText()); //kell encrypt
+            String password = encrypt(regPassField.getText());
             outDatas.add("reg:");
             outDatas.add(username);
             outDatas.add(mail);

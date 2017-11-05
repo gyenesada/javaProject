@@ -7,11 +7,10 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
-public class WWFController implements Runnable{ //extends Application implements Runnable {
+public class WWFController implements Runnable{ 
 
     private final Scanner sc;
     private final PrintWriter pw;
@@ -44,6 +43,7 @@ public class WWFController implements Runnable{ //extends Application implements
                 while (wwf.outDatas.isEmpty()) {
                     Thread.sleep(10); //to prevent dataloss
                 }
+                System.out.println("wwf." +  wwf.outDatas);
                 pw.println(wwf.outDatas);
                 wwf.inDatas.clear();
                 wwf.rawInput = sc.nextLine();
@@ -101,6 +101,8 @@ public class WWFController implements Runnable{ //extends Application implements
                 break;
             case "done:":
                 loadedTablePreprocess();
+                addTableToList(in);
+                wwf.lf.dispose();
                 break;
             case "delt:":
                 
@@ -133,7 +135,7 @@ public class WWFController implements Runnable{ //extends Application implements
 
     private void loadedTablePreprocess() {
         ArrayList<String[]> items = new ArrayList<>();
-        String input = wwf.rawInput.split(":, ")[1];
+        String input = wwf.rawInput.split(":, ")[2];
         String[] splitted = input.split(", >>first_line_end_flag<<, ");
         String cols = splitted[0];
         String content = splitted[1];
@@ -153,5 +155,23 @@ public class WWFController implements Runnable{ //extends Application implements
 
         String[] string = withoutBrackets.split(", ");
         wwf.inDatas.addAll(Arrays.asList(string));
+    }
+    
+    private void addTableToList(ArrayList<String> in){
+        DefaultListModel dlm = (DefaultListModel) wwf.loadedTablesList.getModel();
+        String newTable = in.get(1).replaceAll(":", "");
+        boolean canInsert=true;
+        String[] oldTables = dlm.toString().replaceAll("[\\[\\]]", "").split(", ");
+        
+        for(String ot: oldTables){
+            if(ot.equals(newTable)){
+                System.out.println("Egyezik");
+                canInsert = false;
+            }
+        }
+        
+        if(canInsert){
+            dlm.addElement(in.get(1).replaceAll(":", ""));
+        }
     }
 }

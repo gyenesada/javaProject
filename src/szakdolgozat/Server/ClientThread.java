@@ -144,40 +144,41 @@ public class ClientThread implements Runnable {
                 break;
             case "fact:": //factorize
                 currentTaskID = Integer.parseInt(in.get(2));
-               
-                System.out.println(
-                newtable = Boolean.valueOf(in.get(1)));
-                callingPython(newtable, "factorize.py", in.get(3));
+                newtable = Boolean.valueOf(in.get(1));
+                
+                answer = callingPython(newtable, "factorize.py", in.get(3));
                 modifyIsFactorizedInTables(in.get(3));
-                out = readFromCsv("done:", in.get(3));
+                out = readFromCsv("done:", answer);
                 break;
             case "norm:": //normalize
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
-                callingPython(newtable, "normalize.py", in.get(3));
+                
+                answer = callingPython(newtable, "normalize.py", in.get(3));
                 modifyIsNormalisedInTables(in.get(3));
-                out = readFromCsv("done:", in.get(3));
+                out = readFromCsv("done:", answer);
                 break;
             case "ftsl:": //feature selection
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
-                callingPython(newtable, "variance.py", in.get(3));
+                
+                answer = callingPython(newtable, "variance.py", in.get(3));
                 modifyIsFeatureSelectedInTables(in.get(3));
-                out = readFromCsv("done:", in.get(3));
+                out = readFromCsv("done:", answer);
                 break;
             case "delc:": //delete columns
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
-                System.out.println("Kell új tábla? " + newtable);
-                callingPython(newtable, "dropout.py",parametersToString(in));
-                out = readFromCsv("done:", in.get(3));
+                
+                answer = callingPython(newtable, "dropout.py", in.get(3), parametersToString(in));
+                out = readFromCsv("done:", answer);
                 break;
             case "nanv:": //handle nan values
                 currentTaskID = Integer.parseInt(in.get(2));
-                
                 newtable = Boolean.valueOf(in.get(1));
-                callingPython(newtable, "nanvalues.py", in.get(3), in.get(4));
-                out = readFromCsv("done:", in.get(3));
+                
+                answer = callingPython(newtable, "nanvalues.py", in.get(3), in.get(4));
+                out = readFromCsv("done:", answer);
                 break;
             case "delt:":
                 setTaskInactive(in.get(1));
@@ -198,7 +199,7 @@ public class ClientThread implements Runnable {
     private String parametersToString(ArrayList<String> in){
         StringBuilder sb = new StringBuilder();
         
-        for(int i=3; i<in.size(); i++){
+        for(int i=4; i<in.size(); i++){
             sb.append(in.get(i));
             sb.append(" ");
         }
@@ -208,6 +209,7 @@ public class ClientThread implements Runnable {
     private ArrayList<String> readFromCsv(String identifier, String filename) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add(identifier);
+        csv.add(filename + ":");
         System.out.println("Loading chosen table: " + filename);
         File file = new File(PATH + getTaskName() +"\\"+filename);
         try {
@@ -619,30 +621,37 @@ public class ClientThread implements Runnable {
     }
     // </editor-fold>
     
-    private void callingPython(Boolean newtable, String py, String file, String... other){
+    private String callingPython(Boolean newtable, String py, String file, String... other){
+        System.out.println("Python file: " + file);
+        String returnvalue=file;
         String string=Arrays.toString(other).replaceAll("[\\[\\]]", "").replaceAll("\\t", " ");
         
-        //newtable beillesztése a PATH-ba
         String cmd = "python "+PY_PATH+py +" "+newtable+" "+PATH+getTaskName()+"\\"+file+" "+string+"";
         System.out.println("cmdl: " + cmd);
-        insertNewTableToDB(py, file);
         try {
             Process p = Runtime.getRuntime().exec(cmd);
             int exitVal = p.waitFor();
             if(exitVal==0){
                 System.out.println("Python script completed successfully.");
             }else{
-                System.out.println("Python script completed with an error.");
+                System.out.println("Python script finished with an error.");
+            }
+            
+            if(newtable && exitVal == 0){
+                String newtablename = prefixedTableName(py, file);
+                insertTableIntoDatabase(newtablename);
+                returnvalue = newtablename;
             }
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return returnvalue;
     }
 
-    private void insertNewTableToDB(String python, String file){
+    private String prefixedTableName(String python, String file){
         String prefix = python.replaceAll(".py", "_");
-        System.out.println("Prefix: " + prefix);
         String fullfilename = prefix+file;
         System.out.println("Full: " + fullfilename);
+        return fullfilename;
     }
 }

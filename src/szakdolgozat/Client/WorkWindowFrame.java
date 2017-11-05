@@ -956,12 +956,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             .addGroup(sideLoadPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(sideLoadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(sideLoadPanelLayout.createSequentialGroup()
                         .addComponent(loadingLabel)
-                        .addGap(0, 138, Short.MAX_VALUE)))
+                        .addGap(0, 148, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         sideLoadPanelLayout.setVerticalGroup(
@@ -1002,20 +1002,20 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         sideWorkPanel.setLayout(sideWorkPanelLayout);
         sideWorkPanelLayout.setHorizontalGroup(
             sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(loadedTablesList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideWorkPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(sideWorkPanelLayout.createSequentialGroup()
+                .addContainerGap(20, Short.MAX_VALUE)
                 .addComponent(delSessionButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(workSave)
                 .addContainerGap())
+            .addComponent(loadedTablesList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         sideWorkPanelLayout.setVerticalGroup(
             sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideWorkPanelLayout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addGap(12, 12, 12)
                 .addComponent(loadedTablesList, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
+                .addGap(226, 226, 226)
                 .addGroup(sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(workSave)
                     .addComponent(delSessionButton))
@@ -1107,7 +1107,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     colToDel[i] = dropColList.getModel().getElementAt(i);
                 }
                 insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable, colToDel);
-                
                 break;
             case "nanv:":
                 String mode = getSelectedRButton(nanRadioGroup);
@@ -1128,6 +1127,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         }
 
         outDatas = bufferOutput;
+        lf = new LoadingFrame(this, "pythonCall", null);
+        lf.setVisible(true);
     }//GEN-LAST:event_doButtonActionPerformed
 
     protected void workUploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workUploadButtonActionPerformed
@@ -1243,7 +1244,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         }
         filepathField.setText("");
         
-        lf = new LoadingFrame("A kiválasztott tábla feltöltése folyamatban van.");
+        lf = new LoadingFrame(this, "tableUpload", null);
         lf.setVisible(true);
     }//GEN-LAST:event_uploadButtonActionPerformed
 
@@ -1505,7 +1506,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         String selected = ((String) loadedTablesList.getModel().getElementAt(loadedTablesList.locationToIndex(e.getPoint())));
                         System.out.println("Selected: " + selected);
 
-                        String[] loadedTables = new String[loadedTablesList.getModel().getSize()];
+                       // String[] loadedTables = new String[loadedTablesList.getModel().getSize()];
                         outDatas.clear();
                         outDatas.add("ldt:");
                         outDatas.add(Integer.toString(currentTaskID));
@@ -1519,6 +1520,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         });
     }
   
+    protected void removeSelectedTable(){
+        //ugyanúgy, mint a task törlés.
+    }
+    
     protected String getFilename(String path) {
         String returnvalue;
         String[] spl = path.split(Pattern.quote("\\"));

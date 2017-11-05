@@ -8,10 +8,31 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class LoadingFrame extends javax.swing.JFrame {
 
-    public LoadingFrame(String text) {
+    private String mode;
+    Process p;
+    private boolean kill;
+    WorkWindowFrame wwf;
+    
+    public LoadingFrame(WorkWindowFrame wwf, String mode, Process p) {
+        this.mode = mode;
+        this.wwf = wwf;
+        this.p = p;
+        this.kill = false;
         initComponents();
         setTitle("Információ");
-        informLabel.setText(text);
+        
+       switch (mode) {
+            case "tableUpload":
+                cancelButton.setEnabled(false);
+                informLabel.setText("Kiválasztott tábla feltöltése folyamatban van.");
+                break;
+            case "pythonCall":
+                cancelButton.setEnabled(true);
+                informLabel.setText("A kiválasztott művelet végrehajtása folyamatban van.");
+                break;
+            default:
+                break;
+        }
         
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         
@@ -30,13 +51,23 @@ public class LoadingFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         informLabel = new javax.swing.JLabel();
-        pBar = new javax.swing.JProgressBar();
+        cancelButton = new javax.swing.JButton();
+        pleaseWaitLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         informLabel.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         informLabel.setForeground(new java.awt.Color(51, 51, 51));
         informLabel.setText("A kérés teljesítése folyamatban van.");
+
+        cancelButton.setText("Mégsem");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+
+        pleaseWaitLabel.setText("Kérjük várjon!");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -45,27 +76,39 @@ public class LoadingFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(cancelButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(informLabel)
-                        .addGap(0, 87, Short.MAX_VALUE))
-                    .addComponent(pBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(informLabel)
+                            .addComponent(pleaseWaitLabel))
+                        .addGap(0, 87, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(24, 24, 24)
                 .addComponent(informLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addComponent(pleaseWaitLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(cancelButton)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        wwf.outDatas.clear();
+        wwf.outDatas.add("kill:");
+    }//GEN-LAST:event_cancelButtonActionPerformed
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cancelButton;
     private javax.swing.JLabel informLabel;
-    private javax.swing.JProgressBar pBar;
+    private javax.swing.JLabel pleaseWaitLabel;
     // End of variables declaration//GEN-END:variables
 }
