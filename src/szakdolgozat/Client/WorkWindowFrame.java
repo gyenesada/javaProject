@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -118,20 +119,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         delRButton = new javax.swing.JRadioButton();
         medianRButton = new javax.swing.JRadioButton();
         modeRButton = new javax.swing.JRadioButton();
-        votingPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         firstPanel = new javax.swing.JPanel();
-        adaPanel = new javax.swing.JPanel();
-        ada_beField = new javax.swing.JTextField();
-        ada_beLabel = new javax.swing.JLabel();
-        ada_neLabel = new javax.swing.JLabel();
-        ada_neField = new javax.swing.JTextField();
-        ada_lrLabel = new javax.swing.JLabel();
-        ada_lrField = new javax.swing.JTextField();
-        ada_algorithm = new javax.swing.JLabel();
-        ada_algCBox = new javax.swing.JComboBox<>();
-        ada_rsLabel = new javax.swing.JLabel();
-        ada_rsField = new javax.swing.JTextField();
         sentimentPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         rfcPanel = new javax.swing.JPanel();
@@ -141,31 +129,23 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         rfc_mdField = new javax.swing.JTextField();
         rfc_rsLabel = new javax.swing.JLabel();
         rfc_rsField = new javax.swing.JTextField();
-        rfc_bsLabel = new javax.swing.JLabel();
-        rfc_bsField = new javax.swing.JTextField();
-        rfc_critLabel = new javax.swing.JLabel();
-        rfc_critCBox = new javax.swing.JComboBox<>();
-        rfc_oosLabel = new javax.swing.JLabel();
-        rfc_oosField = new javax.swing.JTextField();
         rfc_njLabel = new javax.swing.JLabel();
         rfc_njField = new javax.swing.JTextField();
-        baggingPanel = new javax.swing.JPanel();
-        bc_beLabel = new javax.swing.JLabel();
-        bc_beField = new javax.swing.JTextField();
-        bc_neLabel = new javax.swing.JLabel();
-        bc_neField = new javax.swing.JTextField();
-        bc_bsLabel = new javax.swing.JLabel();
-        bc_bsField = new javax.swing.JTextField();
-        bc_bsfLabel = new javax.swing.JLabel();
-        bc_bsfField = new javax.swing.JTextField();
-        bc_oosLabel = new javax.swing.JLabel();
-        bc_oosCBox = new javax.swing.JComboBox<>();
-        bc_wsLabel = new javax.swing.JLabel();
-        bc_wsField = new javax.swing.JTextField();
-        bc_njLabel = new javax.swing.JLabel();
-        bc_njField = new javax.swing.JTextField();
-        bc_verLabel = new javax.swing.JLabel();
-        bc_verField = new javax.swing.JTextField();
+        rfc_targetLabel = new javax.swing.JLabel();
+        rfc_modeLabel = new javax.swing.JLabel();
+        rfc_targetCBox = new javax.swing.JComboBox<>();
+        rfc_modeCBox = new javax.swing.JComboBox<>();
+        rfc_featLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        rfc_fromList = new javax.swing.JList<>();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        rfc_toList = new javax.swing.JList<>();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        rfc_outLabel = new javax.swing.JLabel();
+        rfc_outCBox = new javax.swing.JComboBox<>();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        rfc_outList = new javax.swing.JList<>();
         dropcolPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         colList = new javax.swing.JList<>();
@@ -173,6 +153,52 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         delColLabel = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         dropColList = new javax.swing.JList<>();
+        adaPanel = new javax.swing.JPanel();
+        ada_neLabel = new javax.swing.JLabel();
+        ada_neField = new javax.swing.JTextField();
+        ada_lrLabel = new javax.swing.JLabel();
+        ada_lrField = new javax.swing.JTextField();
+        ada_rsLabel = new javax.swing.JLabel();
+        ada_rsField = new javax.swing.JTextField();
+        ada_algLabel = new javax.swing.JLabel();
+        ada_targetLabel = new javax.swing.JLabel();
+        ada_modeLabel = new javax.swing.JLabel();
+        ada_targetCBox = new javax.swing.JComboBox<>();
+        ada_modeCBox = new javax.swing.JComboBox<>();
+        ada_featLabel = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        ada_fromList = new javax.swing.JList<>();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        ada_toList = new javax.swing.JList<>();
+        jSeparator4 = new javax.swing.JSeparator();
+        jSeparator5 = new javax.swing.JSeparator();
+        ada_outLabel = new javax.swing.JLabel();
+        ada_outCBox = new javax.swing.JComboBox<>();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        ada_outList = new javax.swing.JList<>();
+        ada_algCBox = new javax.swing.JComboBox<>();
+        dtcPanel = new javax.swing.JPanel();
+        dtc_psLabel = new javax.swing.JLabel();
+        dtc_psField = new javax.swing.JTextField();
+        dtc_mdLabel = new javax.swing.JLabel();
+        dtc_mdField = new javax.swing.JTextField();
+        dtc_rsLabel = new javax.swing.JLabel();
+        dtc_rsField = new javax.swing.JTextField();
+        dtc_targetLabel = new javax.swing.JLabel();
+        dtc_modeLabel = new javax.swing.JLabel();
+        dtc_targetCBox = new javax.swing.JComboBox<>();
+        dtc_modeCBox = new javax.swing.JComboBox<>();
+        dtc_featLabel = new javax.swing.JLabel();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        dtc_fromList = new javax.swing.JList<>();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        dtc_toList = new javax.swing.JList<>();
+        jSeparator6 = new javax.swing.JSeparator();
+        jSeparator7 = new javax.swing.JSeparator();
+        dtc_outLabel = new javax.swing.JLabel();
+        dtc_outCBox = new javax.swing.JComboBox<>();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        dtc_outList = new javax.swing.JList<>();
         newTableCB = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -447,31 +473,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addComponent(medianRButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(modeRButton)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(nanPanel, "card9");
-
-        jLabel1.setText("Voting panel");
-
-        javax.swing.GroupLayout votingPanelLayout = new javax.swing.GroupLayout(votingPanel);
-        votingPanel.setLayout(votingPanelLayout);
-        votingPanelLayout.setHorizontalGroup(
-            votingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, votingPanelLayout.createSequentialGroup()
-                .addContainerGap(256, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(271, 271, 271))
-        );
-        votingPanelLayout.setVerticalGroup(
-            votingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(votingPanelLayout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addComponent(jLabel1)
-                .addContainerGap(91, Short.MAX_VALUE))
-        );
-
-        parameterMainPanel.add(votingPanel, "card7");
 
         javax.swing.GroupLayout firstPanelLayout = new javax.swing.GroupLayout(firstPanel);
         firstPanel.setLayout(firstPanelLayout);
@@ -481,84 +486,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         );
         firstPanelLayout.setVerticalGroup(
             firstPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 171, Short.MAX_VALUE)
+            .addGap(0, 194, Short.MAX_VALUE)
         );
 
         parameterMainPanel.add(firstPanel, "card2");
-
-        ada_beField.setText("DecisionTreeClassifier");
-
-        ada_beLabel.setText("base_estimator:");
-
-        ada_neLabel.setText("n_estimators:");
-
-        ada_neField.setText("50");
-        ada_neField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ada_neFieldActionPerformed(evt);
-            }
-        });
-
-        ada_lrLabel.setText("learning_rate:");
-
-        ada_lrField.setText("1");
-
-        ada_algorithm.setText("algorithm: ");
-
-        ada_algCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SAMME.R", "SAMME" }));
-
-        ada_rsLabel.setText("random_state:");
-
-        ada_rsField.setText("None");
-
-        javax.swing.GroupLayout adaPanelLayout = new javax.swing.GroupLayout(adaPanel);
-        adaPanel.setLayout(adaPanelLayout);
-        adaPanelLayout.setHorizontalGroup(
-            adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(adaPanelLayout.createSequentialGroup()
-                .addContainerGap(48, Short.MAX_VALUE)
-                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ada_beLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ada_algorithm, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ada_beField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ada_algCBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ada_neLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ada_rsLabel, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ada_neField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ada_rsField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(ada_lrLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ada_lrField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
-        );
-        adaPanelLayout.setVerticalGroup(
-            adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(adaPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ada_beField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ada_beLabel)
-                    .addComponent(ada_neLabel)
-                    .addComponent(ada_neField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ada_lrLabel)
-                    .addComponent(ada_lrField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ada_algorithm)
-                    .addComponent(ada_algCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ada_rsLabel)
-                    .addComponent(ada_rsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(102, Short.MAX_VALUE))
-        );
-
-        parameterMainPanel.add(adaPanel, "card2");
 
         jLabel2.setText("Sentiment Panel");
 
@@ -576,7 +507,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             .addGroup(sentimentPanelLayout.createSequentialGroup()
                 .addGap(68, 68, 68)
                 .addComponent(jLabel2)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(sentimentPanel, "card2");
@@ -593,198 +524,150 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_rsField.setText("None");
 
-        rfc_bsLabel.setText("bootstrap:");
-
-        rfc_bsField.setText("True");
-
-        rfc_critLabel.setText("criterion: ");
-
-        rfc_critCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "gini", "entropty" }));
-
-        rfc_oosLabel.setText("oob_score:");
-
-        rfc_oosField.setText("True");
-
         rfc_njLabel.setText("n_jobs:");
 
         rfc_njField.setText("1");
+
+        rfc_targetLabel.setText("Target:");
+
+        rfc_modeLabel.setText("Mode:");
+
+        rfc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        rfc_targetCBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rfc_targetCBoxActionPerformed(evt);
+            }
+        });
+
+        rfc_modeCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        rfc_featLabel.setText("Features:");
+
+        rfc_fromList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(rfc_fromList);
+
+        rfc_toList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane5.setViewportView(rfc_toList);
+
+        jSeparator2.setForeground(new java.awt.Color(204, 204, 204));
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jSeparator3.setForeground(new java.awt.Color(204, 204, 204));
+        jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        rfc_outLabel.setText("Kimeneti tábla oszlopai");
+
+        rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        rfc_outCBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rfc_outCBoxActionPerformed(evt);
+            }
+        });
+
+        rfc_outList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane6.setViewportView(rfc_outList);
 
         javax.swing.GroupLayout rfcPanelLayout = new javax.swing.GroupLayout(rfcPanel);
         rfcPanel.setLayout(rfcPanelLayout);
         rfcPanelLayout.setHorizontalGroup(
             rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rfcPanelLayout.createSequentialGroup()
-                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(rfcPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(rfc_rsLabel)
-                            .addComponent(rfc_bsLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rfc_rsField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rfc_bsField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(rfcPanelLayout.createSequentialGroup()
-                        .addContainerGap(23, Short.MAX_VALUE)
-                        .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(rfcPanelLayout.createSequentialGroup()
-                                .addComponent(rfs_neLabel)
-                                .addGap(31, 31, 31)
-                                .addComponent(rfc_neField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(rfcPanelLayout.createSequentialGroup()
-                                .addComponent(rfc_mdLabel)
-                                .addGap(31, 31, 31)
-                                .addComponent(rfc_mdField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(rfcPanelLayout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(rfc_oosLabel))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rfcPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rfc_critLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(rfc_njLabel, javax.swing.GroupLayout.Alignment.TRAILING))))
+                    .addComponent(rfc_mdLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(rfs_neLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(rfc_rsLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(rfc_njLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(31, 31, 31)
+                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(rfc_neField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(rfc_mdField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(rfc_rsField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(rfc_njField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rfc_oosField, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rfc_critCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rfc_njField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(269, 269, 269))
+                    .addComponent(rfc_featLabel)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rfc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rfc_targetLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(rfc_modeLabel)
+                        .addComponent(rfc_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(rfc_outLabel)
+                    .addComponent(rfc_outCBox, 0, 140, Short.MAX_VALUE)
+                    .addComponent(jScrollPane6))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         rfcPanelLayout.setVerticalGroup(
             rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator2)
+            .addComponent(jSeparator3)
             .addGroup(rfcPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rfs_neLabel)
-                    .addComponent(rfc_neField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rfc_critLabel)
-                    .addComponent(rfc_critCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rfc_mdLabel)
-                    .addComponent(rfc_mdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rfc_oosLabel)
-                    .addComponent(rfc_oosField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rfc_rsLabel)
-                    .addComponent(rfc_rsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rfc_njLabel)
-                    .addComponent(rfc_njField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rfc_bsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rfc_bsLabel))
-                .addContainerGap())
+                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(rfcPanelLayout.createSequentialGroup()
+                        .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rfc_modeLabel)
+                            .addComponent(rfc_targetLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rfs_neLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(rfc_neField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rfc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rfc_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rfc_mdLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(rfc_mdField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rfc_featLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(rfcPanelLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rfc_rsLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(rfc_rsField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(rfc_njLabel)
+                                    .addComponent(rfc_njField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(rfcPanelLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(20, 20, 20))
+                    .addGroup(rfcPanelLayout.createSequentialGroup()
+                        .addComponent(rfc_outLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rfc_outCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         parameterMainPanel.add(rfcPanel, "card2");
-
-        bc_beLabel.setText("base_estimator:");
-
-        bc_beField.setText("None");
-
-        bc_neLabel.setText("n_estimators:");
-
-        bc_neField.setText("10");
-        bc_neField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bc_neFieldActionPerformed(evt);
-            }
-        });
-
-        bc_bsLabel.setText("bootstrap:");
-
-        bc_bsField.setText("True");
-
-        bc_bsfLabel.setText("bootstrap_features:");
-
-        bc_bsfField.setText("False");
-
-        bc_oosLabel.setText("oob_score:");
-
-        bc_oosCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "True", "False" }));
-
-        bc_wsLabel.setText("warm_stat:");
-
-        bc_wsField.setText("False");
-
-        bc_njLabel.setText("n_jobs:");
-
-        bc_njField.setText("1");
-
-        bc_verLabel.setText("verbose:");
-
-        bc_verField.setText("0");
-
-        javax.swing.GroupLayout baggingPanelLayout = new javax.swing.GroupLayout(baggingPanel);
-        baggingPanel.setLayout(baggingPanelLayout);
-        baggingPanelLayout.setHorizontalGroup(
-            baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(baggingPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bc_bsfLabel)
-                    .addComponent(bc_bsLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bc_neLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bc_beLabel, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bc_beField, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(bc_neField)
-                    .addComponent(bc_bsField)
-                    .addComponent(bc_bsfField))
-                .addGap(46, 46, 46)
-                .addGroup(baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(baggingPanelLayout.createSequentialGroup()
-                        .addComponent(bc_oosLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(bc_oosCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(baggingPanelLayout.createSequentialGroup()
-                        .addGroup(baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(bc_njLabel)
-                            .addComponent(bc_wsLabel)
-                            .addComponent(bc_verLabel))
-                        .addGap(18, 18, 18)
-                        .addGroup(baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bc_wsField, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                            .addComponent(bc_njField)
-                            .addComponent(bc_verField))
-                        .addGap(265, 265, 265))))
-        );
-        baggingPanelLayout.setVerticalGroup(
-            baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(baggingPanelLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bc_beLabel)
-                    .addComponent(bc_beField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bc_oosLabel)
-                    .addComponent(bc_oosCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bc_neLabel)
-                    .addComponent(bc_neField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bc_wsLabel)
-                    .addComponent(bc_wsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addGroup(baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bc_bsLabel)
-                    .addComponent(bc_bsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bc_njLabel)
-                    .addComponent(bc_njField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(baggingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bc_bsfLabel)
-                    .addComponent(bc_bsfField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bc_verLabel)
-                    .addComponent(bc_verField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-
-        parameterMainPanel.add(baggingPanel, "card2");
 
         jScrollPane3.setViewportView(colList);
 
@@ -820,10 +703,317 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addGroup(dropcolPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         parameterMainPanel.add(dropcolPanel, "card2");
+
+        ada_neLabel.setText("n_estimators:");
+
+        ada_neField.setText("10");
+
+        ada_lrLabel.setText("learning_rate:");
+
+        ada_lrField.setText("None");
+
+        ada_rsLabel.setText("random_state:");
+
+        ada_rsField.setText("None");
+
+        ada_algLabel.setText("algorithm:");
+
+        ada_targetLabel.setText("Target:");
+
+        ada_modeLabel.setText("Mode:");
+
+        ada_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        ada_modeCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        ada_featLabel.setText("Features:");
+
+        ada_fromList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane7.setViewportView(ada_fromList);
+
+        ada_toList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane8.setViewportView(ada_toList);
+
+        jSeparator4.setForeground(new java.awt.Color(204, 204, 204));
+        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jSeparator5.setForeground(new java.awt.Color(204, 204, 204));
+        jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        ada_outLabel.setText("Kimeneti tábla oszlopai");
+
+        ada_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        ada_outList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane9.setViewportView(ada_outList);
+
+        ada_algCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SAMME", "SAMME.R" }));
+
+        javax.swing.GroupLayout adaPanelLayout = new javax.swing.GroupLayout(adaPanel);
+        adaPanel.setLayout(adaPanelLayout);
+        adaPanelLayout.setHorizontalGroup(
+            adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ada_lrLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ada_neLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ada_rsLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createSequentialGroup()
+                        .addComponent(ada_algLabel)
+                        .addGap(15, 15, 15)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(adaPanelLayout.createSequentialGroup()
+                        .addComponent(ada_algCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createSequentialGroup()
+                        .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ada_lrField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ada_rsField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ada_neField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)))
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ada_featLabel)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ada_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ada_targetLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(ada_modeLabel)
+                        .addComponent(ada_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(ada_outLabel)
+                    .addComponent(ada_outCBox, 0, 140, Short.MAX_VALUE)
+                    .addComponent(jScrollPane9))
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+        adaPanelLayout.setVerticalGroup(
+            adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator4)
+            .addComponent(jSeparator5)
+            .addGroup(adaPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(adaPanelLayout.createSequentialGroup()
+                        .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ada_modeLabel)
+                            .addComponent(ada_targetLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(ada_neLabel)
+                                .addComponent(ada_neField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(ada_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ada_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(ada_lrLabel)
+                                .addComponent(ada_lrField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ada_featLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(adaPanelLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ada_rsLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(ada_rsField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(ada_algLabel)
+                                    .addComponent(ada_algCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(adaPanelLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(20, 20, 20))
+                    .addGroup(adaPanelLayout.createSequentialGroup()
+                        .addComponent(ada_outLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ada_outCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+
+        parameterMainPanel.add(adaPanel, "card2");
+
+        dtc_psLabel.setText("presort:");
+
+        dtc_psField.setText("False");
+
+        dtc_mdLabel.setText("max_depth:");
+
+        dtc_mdField.setText("None");
+
+        dtc_rsLabel.setText("random_state:");
+
+        dtc_rsField.setText("None");
+        dtc_rsField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dtc_rsFieldActionPerformed(evt);
+            }
+        });
+
+        dtc_targetLabel.setText("Target:");
+
+        dtc_modeLabel.setText("Mode:");
+
+        dtc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dtc_targetCBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dtc_targetCBoxActionPerformed(evt);
+            }
+        });
+
+        dtc_modeCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        dtc_featLabel.setText("Features:");
+
+        dtc_fromList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane10.setViewportView(dtc_fromList);
+
+        dtc_toList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane11.setViewportView(dtc_toList);
+
+        jSeparator6.setForeground(new java.awt.Color(204, 204, 204));
+        jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jSeparator7.setForeground(new java.awt.Color(204, 204, 204));
+        jSeparator7.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        dtc_outLabel.setText("Kimeneti tábla oszlopai");
+
+        dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dtc_outCBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dtc_outCBoxActionPerformed(evt);
+            }
+        });
+
+        dtc_outList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane12.setViewportView(dtc_outList);
+
+        javax.swing.GroupLayout dtcPanelLayout = new javax.swing.GroupLayout(dtcPanel);
+        dtcPanel.setLayout(dtcPanelLayout);
+        dtcPanelLayout.setHorizontalGroup(
+            dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dtcPanelLayout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dtc_mdLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(dtc_psLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(dtc_rsLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(31, 31, 31)
+                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(dtc_psField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(dtc_mdField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(dtc_rsField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dtc_featLabel)
+                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dtc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dtc_targetLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(dtc_modeLabel)
+                        .addComponent(dtc_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dtc_outLabel)
+                    .addComponent(dtc_outCBox, 0, 140, Short.MAX_VALUE)
+                    .addComponent(jScrollPane12))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        dtcPanelLayout.setVerticalGroup(
+            dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator6)
+            .addComponent(jSeparator7)
+            .addGroup(dtcPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dtcPanelLayout.createSequentialGroup()
+                        .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(dtc_modeLabel)
+                            .addComponent(dtc_targetLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dtc_psLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(dtc_psField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(dtc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(dtc_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dtc_mdLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(dtc_mdField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dtc_featLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(dtcPanelLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dtc_rsLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(dtc_rsField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(dtcPanelLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(20, 20, 20))
+                    .addGroup(dtcPanelLayout.createSequentialGroup()
+                        .addComponent(dtc_outLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dtc_outCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+
+        parameterMainPanel.add(dtcPanel, "card2");
 
         newTableCB.setText("Új tábla generálás");
 
@@ -858,14 +1048,14 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         .addComponent(operationLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(operationCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(25, 25, 25)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(newTableCB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(classifierLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(classifierCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(doButton)
-                            .addComponent(newTableCB))))
+                        .addComponent(doButton)))
                 .addGap(26, 26, 26))
         );
 
@@ -910,7 +1100,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(previewScPane, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                .addComponent(previewScPane, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1085,21 +1275,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         switch (selectedOperation) {
             case "ada":
-                String[] ada_parameters = {ada_beField.getText(), ada_neField.getText(), ada_lrField.getText(), ada_algCBox.getSelectedItem().toString(), ada_rsField.getText()};
+                String[] ada_parameters = {ada_neField.getText(), ada_lrField.getText(), ada_algCBox.getSelectedItem().toString(), ada_rsField.getText()};
                 setClassifierParameters(selectedOperation, ada_parameters);
                 break;
             case "rfc":
                 System.out.println("selected: " + selectedOperation);
-                String[] rfc_parameters = {rfc_mdField.getText(), rfc_neField.getText(), rfc_rsField.getText(), rfc_bsField.getText(), rfc_critCBox.getSelectedItem().toString(), rfc_oosField.getText(), rfc_njField.getText()};
+                String[] rfc_parameters = {rfc_mdField.getText(), rfc_neField.getText(), rfc_rsField.getText(), rfc_njField.getText()};
                 setClassifierParameters(selectedOperation, rfc_parameters);
-                break;
-            case "bag":
-                String[] bag_parameters = {bc_beField.getText(), bc_neField.getText(), bc_bsField.getText(), bc_bsfField.getText(), bc_oosCBox.getSelectedItem().toString(), bc_wsField.getText(), bc_njField.getText(), bc_verField.getText()};
-                setClassifierParameters(selectedOperation, bag_parameters);
-                break;
-            case "vot":
-                String[] vot_parameters = {};
-                setClassifierParameters(selectedOperation, vot_parameters);
                 break;
             case "delc:":
                 String[] colToDel = new String[dropColList.getModel().getSize()];
@@ -1205,25 +1387,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     changePanels(rfcPanel);
                     selectedOperation = "rfc";
                     break;
-                case "Bagging Classifier":
-                    changePanels(baggingPanel);
-                    selectedOperation = "bag";
-                    break;
-                case "Voting Classifier":
-                    changePanels(votingPanel);
-                    selectedOperation = "vot";
+                case "Decision Tree Classifier":
+                    changePanels(dtcPanel);
+                    selectedOperation = "dtc:";
                     break;
             }
         }
     }//GEN-LAST:event_classifierCBoxActionPerformed
-
-    protected void ada_neFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ada_neFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ada_neFieldActionPerformed
-
-    protected void bc_neFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bc_neFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bc_neFieldActionPerformed
 
     protected void listActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listActionPerformed
 
@@ -1284,6 +1454,26 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         }        
     }//GEN-LAST:event_delSessionButtonActionPerformed
 
+    protected void rfc_targetCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rfc_targetCBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rfc_targetCBoxActionPerformed
+
+    protected void rfc_outCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rfc_outCBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rfc_outCBoxActionPerformed
+
+    protected void dtc_targetCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtc_targetCBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dtc_targetCBoxActionPerformed
+
+    protected void dtc_outCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtc_outCBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dtc_outCBoxActionPerformed
+
+    protected void dtc_rsFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtc_rsFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dtc_rsFieldActionPerformed
+
     protected void addExitOption() {
         addWindowListener(new WindowAdapter() {
 
@@ -1326,15 +1516,16 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         classifiers.add("...");
         classifiers.add("AdaBoost Classifier");
         classifiers.add("Random Forest Classifier");
-        classifiers.add("Sentiment Analysis");
-        classifiers.add("Bagging Classifier");
-        classifiers.add("Voting Classifier");
+        classifiers.add("Decision Tree Classifier");
         classifiers.add("Gradient Tree Boost");
+        classifiers.add("Sentiment Analysis");
 
         classifiers.forEach((str) -> {
             classifierCBox.addItem(str);
         });
     }
+    
+    
     //</editor-fold>
 
     protected void insertIntoBuffer(String identifier, String newtable, String currentTaskID, String selectedTable, String... other) {
@@ -1558,7 +1749,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
     
     protected void changePanels(JPanel visiblePanel) {
-        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, baggingPanel, votingPanel, dropcolPanel, nanPanel};
+        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, dropcolPanel, nanPanel, dtcPanel};
         for (JPanel p : panels) {
             if (visiblePanel == p) {
                 p.setVisible(true);
@@ -1584,6 +1775,18 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         bufferOutput.add(classifier);
         bufferOutput.addAll(Arrays.asList(parameters));
     }
+    
+    //ezek valszeg nem is kellenek
+    private String getTarget(JComboBox<String> cb){
+        return cb.getSelectedItem().toString();
+    }
+    
+    private String getModel(JComboBox<String> cb){
+        return cb.getSelectedItem().toString();
+    }
+    
+    //KELL: actionlistener a feature selection listákhoz, action listener a mode-hoz
+    
 
     // </editor-fold>
     
@@ -1592,32 +1795,23 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JPanel adaPanel;
     protected javax.swing.JComboBox<String> ada_algCBox;
-    protected javax.swing.JLabel ada_algorithm;
-    protected javax.swing.JTextField ada_beField;
-    protected javax.swing.JLabel ada_beLabel;
+    protected javax.swing.JLabel ada_algLabel;
+    protected javax.swing.JLabel ada_featLabel;
+    protected javax.swing.JList<String> ada_fromList;
     protected javax.swing.JTextField ada_lrField;
     protected javax.swing.JLabel ada_lrLabel;
+    protected javax.swing.JComboBox<String> ada_modeCBox;
+    protected javax.swing.JLabel ada_modeLabel;
     protected javax.swing.JTextField ada_neField;
     protected javax.swing.JLabel ada_neLabel;
+    protected javax.swing.JComboBox<String> ada_outCBox;
+    protected javax.swing.JLabel ada_outLabel;
+    protected javax.swing.JList<String> ada_outList;
     protected javax.swing.JTextField ada_rsField;
     protected javax.swing.JLabel ada_rsLabel;
-    protected javax.swing.JPanel baggingPanel;
-    protected javax.swing.JTextField bc_beField;
-    protected javax.swing.JLabel bc_beLabel;
-    protected javax.swing.JTextField bc_bsField;
-    protected javax.swing.JLabel bc_bsLabel;
-    protected javax.swing.JTextField bc_bsfField;
-    protected javax.swing.JLabel bc_bsfLabel;
-    protected javax.swing.JTextField bc_neField;
-    protected javax.swing.JLabel bc_neLabel;
-    protected javax.swing.JTextField bc_njField;
-    protected javax.swing.JLabel bc_njLabel;
-    protected javax.swing.JComboBox<String> bc_oosCBox;
-    protected javax.swing.JLabel bc_oosLabel;
-    protected javax.swing.JTextField bc_verField;
-    protected javax.swing.JLabel bc_verLabel;
-    protected javax.swing.JTextField bc_wsField;
-    protected javax.swing.JLabel bc_wsLabel;
+    protected javax.swing.JComboBox<String> ada_targetCBox;
+    protected javax.swing.JLabel ada_targetLabel;
+    protected javax.swing.JList<String> ada_toList;
     protected javax.swing.JButton choseButton;
     protected javax.swing.JComboBox<String> classifierCBox;
     protected javax.swing.JLabel classifierLabel;
@@ -1630,11 +1824,27 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JButton doButton;
     protected javax.swing.JList<String> dropColList;
     protected javax.swing.JPanel dropcolPanel;
+    protected javax.swing.JPanel dtcPanel;
+    protected javax.swing.JLabel dtc_featLabel;
+    protected javax.swing.JList<String> dtc_fromList;
+    protected javax.swing.JTextField dtc_mdField;
+    protected javax.swing.JLabel dtc_mdLabel;
+    protected javax.swing.JComboBox<String> dtc_modeCBox;
+    protected javax.swing.JLabel dtc_modeLabel;
+    protected javax.swing.JComboBox<String> dtc_outCBox;
+    protected javax.swing.JLabel dtc_outLabel;
+    protected javax.swing.JList<String> dtc_outList;
+    protected javax.swing.JTextField dtc_psField;
+    protected javax.swing.JLabel dtc_psLabel;
+    protected javax.swing.JTextField dtc_rsField;
+    protected javax.swing.JLabel dtc_rsLabel;
+    protected javax.swing.JComboBox<String> dtc_targetCBox;
+    protected javax.swing.JLabel dtc_targetLabel;
+    protected javax.swing.JList<String> dtc_toList;
     protected javax.swing.JMenu fileMenu;
     protected javax.swing.JLabel fileUploadLabel;
     protected javax.swing.JTextField filepathField;
     protected javax.swing.JPanel firstPanel;
-    protected javax.swing.JLabel jLabel1;
     protected javax.swing.JLabel jLabel2;
     protected javax.swing.JLabel jLabel4;
     protected javax.swing.JLabel jLabel5;
@@ -1643,9 +1853,24 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JMenu jMenu2;
     protected javax.swing.JMenuBar jMenuBar1;
     protected javax.swing.JScrollPane jScrollPane1;
+    protected javax.swing.JScrollPane jScrollPane10;
+    protected javax.swing.JScrollPane jScrollPane11;
+    protected javax.swing.JScrollPane jScrollPane12;
+    protected javax.swing.JScrollPane jScrollPane2;
     protected javax.swing.JScrollPane jScrollPane3;
     protected javax.swing.JScrollPane jScrollPane4;
+    protected javax.swing.JScrollPane jScrollPane5;
+    protected javax.swing.JScrollPane jScrollPane6;
+    protected javax.swing.JScrollPane jScrollPane7;
+    protected javax.swing.JScrollPane jScrollPane8;
+    protected javax.swing.JScrollPane jScrollPane9;
     protected javax.swing.JSeparator jSeparator1;
+    protected javax.swing.JSeparator jSeparator2;
+    protected javax.swing.JSeparator jSeparator3;
+    protected javax.swing.JSeparator jSeparator4;
+    protected javax.swing.JSeparator jSeparator5;
+    protected javax.swing.JSeparator jSeparator6;
+    protected javax.swing.JSeparator jSeparator7;
     protected javax.swing.JTable jTable1;
     protected java.awt.List list;
     protected javax.swing.JPanel loadFileUploadPanel;
@@ -1668,19 +1893,23 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JScrollPane previewScPane;
     protected javax.swing.JPanel profilePanel;
     protected javax.swing.JPanel rfcPanel;
-    protected javax.swing.JTextField rfc_bsField;
-    protected javax.swing.JLabel rfc_bsLabel;
-    protected javax.swing.JComboBox<String> rfc_critCBox;
-    protected javax.swing.JLabel rfc_critLabel;
+    protected javax.swing.JLabel rfc_featLabel;
+    protected javax.swing.JList<String> rfc_fromList;
     protected javax.swing.JTextField rfc_mdField;
     protected javax.swing.JLabel rfc_mdLabel;
+    protected javax.swing.JComboBox<String> rfc_modeCBox;
+    protected javax.swing.JLabel rfc_modeLabel;
     protected javax.swing.JTextField rfc_neField;
     protected javax.swing.JTextField rfc_njField;
     protected javax.swing.JLabel rfc_njLabel;
-    protected javax.swing.JTextField rfc_oosField;
-    protected javax.swing.JLabel rfc_oosLabel;
+    protected javax.swing.JComboBox<String> rfc_outCBox;
+    protected javax.swing.JLabel rfc_outLabel;
+    protected javax.swing.JList<String> rfc_outList;
     protected javax.swing.JTextField rfc_rsField;
     protected javax.swing.JLabel rfc_rsLabel;
+    protected javax.swing.JComboBox<String> rfc_targetCBox;
+    protected javax.swing.JLabel rfc_targetLabel;
+    protected javax.swing.JList<String> rfc_toList;
     protected javax.swing.JLabel rfs_neLabel;
     protected javax.swing.JPanel sentimentPanel;
     protected javax.swing.JSeparator separator;
@@ -1693,7 +1922,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JPanel tablesPanel;
     protected javax.swing.JButton uploadButton;
     protected javax.swing.JLabel usernameLabel;
-    protected javax.swing.JPanel votingPanel;
     protected javax.swing.JButton workChoseButton;
     protected javax.swing.JPanel workPanel;
     protected javax.swing.JTextField workPathField;
