@@ -68,7 +68,7 @@ public class ClientThread implements Runnable {
             outDatas = controller(inDatas);
             inDatas.clear();
             pw.println(outDatas);
-          //  System.out.println("Output: " + outDatas);
+            System.out.println("Output: " + outDatas);
 
             index++;
             System.out.println("Kérés vége.");
@@ -81,7 +81,7 @@ public class ClientThread implements Runnable {
 
         String[] string = withoutBrackets.split(", ");
         inDatas.addAll(Arrays.asList(string));
-    //    System.out.println("Input: " + inDatas);
+    System.out.println("Input: " + inDatas);
     }
 
     private ArrayList<String> controller(ArrayList<String> in) {
@@ -140,7 +140,7 @@ public class ClientThread implements Runnable {
                 break;
             case "ldt:": //chosen table loading
                 currentTaskID = Integer.parseInt(in.get(1));
-                out = readFromCsv("ldt:",in.get(2));
+                out = readFromCsv("ldt:",in.get(2), true);
                 break;
             case "fact:": //factorize
                 currentTaskID = Integer.parseInt(in.get(2));
@@ -148,7 +148,7 @@ public class ClientThread implements Runnable {
                 
                 answer = callingPython(newtable, "factorize.py", in.get(3));
                 modifyIsFactorizedInTables(in.get(3));
-                out = readFromCsv("done:", answer);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "norm:": //normalize
                 currentTaskID = Integer.parseInt(in.get(2));
@@ -156,7 +156,7 @@ public class ClientThread implements Runnable {
                 
                 answer = callingPython(newtable, "normalize.py", in.get(3));
                 modifyIsNormalisedInTables(in.get(3));
-                out = readFromCsv("done:", answer);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "ftsl:": //feature selection
                 currentTaskID = Integer.parseInt(in.get(2));
@@ -164,26 +164,33 @@ public class ClientThread implements Runnable {
                 
                 answer = callingPython(newtable, "variance.py", in.get(3));
                 modifyIsFeatureSelectedInTables(in.get(3));
-                out = readFromCsv("done:", answer);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "delc:": //delete columns
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
                 
                 answer = callingPython(newtable, "dropout.py", in.get(3), parametersToString(in));
-                out = readFromCsv("done:", answer);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "nanv:": //handle nan values
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
                 
                 answer = callingPython(newtable, "nanvalues.py", in.get(3), in.get(4));
-                out = readFromCsv("done:", answer);
+                out = readFromCsv("done:", answer, true);
                 break;
-            case "delt:":
+            case "dels:": //delete sessions
                 setTaskInactive(in.get(1));
-                out.add("delt:");
                 out = getTasks();
+                break;
+            case "delt:": //delete tables
+                setTableInactive(in.get(1), in.get(2));
+                out = getTasksTable("delt:");
+                break;
+            case "tdl:": //table download
+                currentTaskID = Integer.parseInt(in.get(1));
+                out = readFromCsv("tdl:", in.get(2), false);
                 break;
             case "bye:": //log out
                 setIsOnlineFalse();
@@ -206,7 +213,7 @@ public class ClientThread implements Runnable {
         return sb.toString();
     }
     
-    private ArrayList<String> readFromCsv(String identifier, String filename) {
+    private ArrayList<String> readFromCsv(String identifier, String filename, boolean preview) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add(identifier);
         csv.add(filename + ":");
@@ -218,7 +225,14 @@ public class ClientThread implements Runnable {
             csv.add(line);
             csv.add(">>first_line_end_flag<<"); 
             int index=0;
-            while (index<500/2) {
+            boolean loopcond;
+            if(preview){
+                loopcond = index<500/2;
+            }else{
+                loopcond = line != null;
+            }
+            
+            while (loopcond) {
                 line = br.readLine();
                 index++;
                 if (line == null) {
@@ -451,8 +465,9 @@ public class ClientThread implements Runnable {
             prep.setBoolean(5, false);
             prep.setBoolean(6, false);
             prep.setBoolean(7, false);
-            prep.setDate(8, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+            prep.setBoolean(8, true);
             prep.setInt(9, currentTaskID);
+            
             if(!isTableInTask(filename)){
                 prep.addBatch();
 
@@ -506,13 +521,9 @@ public class ClientThread implements Runnable {
     private boolean setTaskInactive(String taskID){
         boolean returnvalue=true;
         try {
-            //isTaskExists
-            
             int id = Integer.parseInt(taskID);
             Statement stat = conn.createStatement();
-            String query = "update tasks set is_active = false where task_id = '"+id+"';";
-            //while(rs) empty, akkor error: mert nincs olyan ID-jű task
-            
+            String query = "update tasks set is_active = false where task_id = '"+id+"';";            
             stat.executeUpdate(query);
         } catch (SQLException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -520,13 +531,31 @@ public class ClientThread implements Runnable {
         return returnvalue;
     }
     
-    private ArrayList<String> getTasksTable() {
+    private boolean setTableInactive(String task_id, String table_name){
+        boolean returnvalue=true;
+        try {
+            int id = Integer.parseInt(task_id);
+            Statement stat = conn.createStatement();
+            String query = "update tables set is_active = false, name = '"+"CB_deleted_table"+"' where name = '"+table_name+"' and task_id = '"+id+"';";            
+            stat.executeUpdate(query);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnvalue;
+    }
+    
+    private ArrayList<String> getTasksTable(String... other) {
         ArrayList<String> returnvalue = new ArrayList<>();
-        returnvalue.add("old:");
+        if(other.length == 0){
+            returnvalue.add("old:");
+        }else{
+            returnvalue.add(Arrays.toString(other));
+        }
 
         try {
             Statement stat = conn.createStatement();
-            String query = "select name from tables where user_id='" + threadID + "' and task_id='"+currentTaskID+"';";
+            String query = "select name from tables where user_id='" + threadID + "' and task_id='"+currentTaskID+"' and is_active= true;";
             ResultSet rs = stat.executeQuery(query);
 
             while (rs.next()) {

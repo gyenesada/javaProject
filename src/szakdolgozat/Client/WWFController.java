@@ -1,5 +1,8 @@
 package szakdolgozat.Client;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class WWFController implements Runnable{ 
 
@@ -37,7 +41,10 @@ public class WWFController implements Runnable{
 
     private void communicateWithServer(PrintWriter pw, Scanner sc) {
         int index = 0;
-        do {
+        
+            
+//        do {
+         while(!wwf.exit){
             System.out.println("---------------" + index + "--------------");
             try {
                 while (wwf.outDatas.isEmpty()) {
@@ -45,6 +52,7 @@ public class WWFController implements Runnable{
                 }
                 System.out.println("wwf." +  wwf.outDatas);
                 pw.println(wwf.outDatas);
+                System.out.println("out: " + wwf.outDatas);
                 wwf.inDatas.clear();
                 wwf.rawInput = sc.nextLine();
                 inputPreprocess(wwf.rawInput);
@@ -54,9 +62,11 @@ public class WWFController implements Runnable{
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //System.out.println("Input: " + inDatas);
+            System.out.println("Input: " + wwf.inDatas);
             index++;
-        }while (!wwf.exit);
+//            System.out.println("EXIT: " + wwf.exit);
+//        }while (!wwf.exit);
+         }
     }
 
     private ArrayList<String> controller(ArrayList<String> in) throws InterruptedException {
@@ -74,7 +84,6 @@ public class WWFController implements Runnable{
                     Thread.sleep(10);
                     wwf.lf.dispose();
                     wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
-                    
                 } else {
                     JOptionPane.showMessageDialog(wwf, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
                 }
@@ -94,6 +103,9 @@ public class WWFController implements Runnable{
                 fillLoadedTablesList(in);
                 Thread.sleep(10);
                 wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
+                
+                wwf.delTableButton.setEnabled(false);
+                wwf.downloadTableButton.setEnabled(false);
                 wwf.getSelectedTable();
                 break;
             case "ldt:":
@@ -105,11 +117,22 @@ public class WWFController implements Runnable{
                 wwf.lf.dispose();
                 break;
             case "delt:":
-                
+                fillLoadedTablesList(in);
+                wwf.selectedTable = null;
+                  DefaultTableModel model = new DefaultTableModel(0, 0);
+                  wwf.csvPrevTable.setModel(model);
+                  
+                wwf.delTableButton.setEnabled(false);
+                wwf.downloadTableButton.setEnabled(false);
+                wwf.getSelectedTable();
+                break;
+            case "tdl:":
+                writeToCsv(in.get(1));
                 break;
             case "bye:":
-                wwf.dispose();
-
+                System.out.println("IDE ELÉR.");
+                
+                
                 MWFController controller;
                 try {
                     controller = new MWFController();
@@ -117,6 +140,8 @@ public class WWFController implements Runnable{
                 } catch (IOException ex) {
                     Logger.getLogger(WWFController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                wwf.dispose();
                 break;
             case "err:":
                 JOptionPane.showMessageDialog(wwf, "A művelet végrehajtása közben probléma lépett fel.");
@@ -148,6 +173,40 @@ public class WWFController implements Runnable{
             items.add(temp);
         }
         wwf.fillPrevTable(colnames, items);
+    }
+     
+    private void writeToCsv(String filename) {
+        filename = filename.replaceAll(":", "");
+        //new File(PATH+getTaskName()).mkdir();
+         String fs =System.getProperty("file.separator");
+        String fullFilepath = System.getProperty("user.home") + fs +"Desktop"+fs+filename;
+        System.out.println("Fullpath: " + fullFilepath);
+        
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+
+        try {
+            fw = new FileWriter(fullFilepath);
+            bw = new BufferedWriter(fw);
+            
+            //System.out.println("raw: " + rawInput);
+            String lines = wwf.rawInput.split(":, ")[2];
+            
+            String line = (lines.replaceAll(", >>first_line_end_flag<<, ", "\n").replaceAll(", >>enter_flag<<, ", "\n")).replaceAll(", >>enter_flag<<", "");
+            
+            bw.write(line);
+            JOptionPane.showMessageDialog(wwf, "A kiválasztott tábla lementve: "+fullFilepath+". ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bw.close();
+                fw.close();
+            } catch (IOException e) {
+                System.out.println("Error closing bw and fw");
+            }
+        }
+
     }
 
     private void inputPreprocess(String input) {

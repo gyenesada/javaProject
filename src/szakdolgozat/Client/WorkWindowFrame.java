@@ -24,16 +24,16 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 
 public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected boolean exit = false;
 
-    protected String rawInput;
+    protected String rawInput, selectedTable, currentTask, path;
     protected String selectedOperation = "";
-    protected String selectedTable; 
-    protected String currentTask;
+    
     protected int currentTaskID;
 
     protected ArrayList<String> loadedTables = new ArrayList<>();
@@ -185,9 +185,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         dtc_rsLabel = new javax.swing.JLabel();
         dtc_rsField = new javax.swing.JTextField();
         dtc_targetLabel = new javax.swing.JLabel();
-        dtc_modeLabel = new javax.swing.JLabel();
         dtc_targetCBox = new javax.swing.JComboBox<>();
-        dtc_modeCBox = new javax.swing.JComboBox<>();
         dtc_featLabel = new javax.swing.JLabel();
         jScrollPane10 = new javax.swing.JScrollPane();
         dtc_fromList = new javax.swing.JList<>();
@@ -215,6 +213,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         loadedTablesList = new javax.swing.JList<>();
         workSave = new javax.swing.JButton();
         delSessionButton = new javax.swing.JButton();
+        delTableButton = new javax.swing.JButton();
+        downloadTableButton = new javax.swing.JButton();
+        selectedTableLabel = new javax.swing.JLabel();
         separator = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -882,16 +883,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         dtc_targetLabel.setText("Target:");
 
-        dtc_modeLabel.setText("Mode:");
-
         dtc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         dtc_targetCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dtc_targetCBoxActionPerformed(evt);
             }
         });
-
-        dtc_modeCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         dtc_featLabel.setText("Features:");
 
@@ -949,17 +946,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(dtc_featLabel)
-                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dtc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dtc_targetLabel))
+                    .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(dtc_targetLabel)
+                    .addComponent(dtc_targetCBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(dtc_modeLabel)
-                        .addComponent(dtc_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -977,16 +970,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dtcPanelLayout.createSequentialGroup()
-                        .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dtc_modeLabel)
-                            .addComponent(dtc_targetLabel))
+                        .addComponent(dtc_targetLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(dtc_psLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(dtc_psField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(dtc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(dtc_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(dtc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(dtc_mdLabel, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1146,12 +1136,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             .addGroup(sideLoadPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(sideLoadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(sideLoadPanelLayout.createSequentialGroup()
                         .addComponent(loadingLabel)
-                        .addGap(0, 148, Short.MAX_VALUE)))
+                        .addGap(0, 152, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         sideLoadPanelLayout.setVerticalGroup(
@@ -1188,24 +1178,55 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
 
+        delTableButton.setText("Törlés");
+        delTableButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delTableButtonActionPerformed(evt);
+            }
+        });
+
+        downloadTableButton.setText("Letöltés");
+        downloadTableButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downloadTableButtonActionPerformed(evt);
+            }
+        });
+
+        selectedTableLabel.setText("Kijelölt tábla:");
+
         javax.swing.GroupLayout sideWorkPanelLayout = new javax.swing.GroupLayout(sideWorkPanel);
         sideWorkPanel.setLayout(sideWorkPanelLayout);
         sideWorkPanelLayout.setHorizontalGroup(
             sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sideWorkPanelLayout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addComponent(delSessionButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(workSave)
-                .addContainerGap())
             .addComponent(loadedTablesList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(sideWorkPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(sideWorkPanelLayout.createSequentialGroup()
+                        .addComponent(delSessionButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(workSave))
+                    .addGroup(sideWorkPanelLayout.createSequentialGroup()
+                        .addComponent(selectedTableLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(sideWorkPanelLayout.createSequentialGroup()
+                        .addComponent(delTableButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addComponent(downloadTableButton)))
+                .addContainerGap())
         );
         sideWorkPanelLayout.setVerticalGroup(
             sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideWorkPanelLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addComponent(loadedTablesList, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(226, 226, 226)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(selectedTableLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(delTableButton)
+                    .addComponent(downloadTableButton))
+                .addGap(177, 177, 177)
                 .addGroup(sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(workSave)
                     .addComponent(delSessionButton))
@@ -1314,15 +1335,15 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_doButtonActionPerformed
 
     protected void workUploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workUploadButtonActionPerformed
-        String file = workPathField.getText();
+        path = workPathField.getText();
         
-        selectedTable = getFilename(file);
-        System.out.println("Selected to be upload: " + getFilename(file));
-        if (file.equals("")) {
+        selectedTable = getFilename(path);
+        System.out.println("Selected to be upload: " + getFilename(path));
+        if (path.equals("")) {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
             System.out.println("Task: " + currentTask + " ID: " + currentTaskID);
-            outDatas = readFromCsv(file, true);
+            outDatas = readFromCsv(path, true);
         }
         workPathField.setText("");
     }//GEN-LAST:event_workUploadButtonActionPerformed
@@ -1400,17 +1421,17 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_listActionPerformed
 
     protected void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
-        String file = filepathField.getText();
-        selectedTable = getFilename(file);
+        path = filepathField.getText();
+        selectedTable = getFilename(path);
         System.out.println("selected: " + selectedTable);
-        if (file.equals("")) {
+        if (path.equals("")) {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
             currentTask = JOptionPane.showInputDialog(this, "Munkafolyamat neve: ");
             if (currentTask.equals("")) {
                 JOptionPane.showMessageDialog(this, "Adjon meg nevet!");
             }
-            outDatas = readFromCsv(file, false);
+            outDatas = readFromCsv(path, false);
         }
         filepathField.setText("");
         
@@ -1448,7 +1469,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         outDatas.clear();
         int n = JOptionPane.showConfirmDialog(this, "Biztos törli?", "Munkamenet törlés", JOptionPane.YES_NO_OPTION);
         if(n==JOptionPane.YES_OPTION){
-            outDatas.add("delt:");
+            outDatas.add("dels:");
             outDatas.add(Integer.toString(currentTaskID));
             changeMainPanels(loadPanel, sideLoadPanel);
         }        
@@ -1474,16 +1495,33 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_dtc_rsFieldActionPerformed
 
-    protected void addExitOption() {
-        addWindowListener(new WindowAdapter() {
+    protected void delTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delTableButtonActionPerformed
+        int n = JOptionPane.showConfirmDialog(this, "Biztos törli?", "Törlési megerősítés", JOptionPane.YES_NO_OPTION);
+        if(n==JOptionPane.YES_OPTION){
+            outDatas.clear();
+            outDatas.add("delt:");
+            outDatas.add(Integer.toString(currentTaskID)); 
+            outDatas.add(selectedTable);
+        }
+    }//GEN-LAST:event_delTableButtonActionPerformed
 
+    protected void downloadTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadTableButtonActionPerformed
+        outDatas.clear();
+        outDatas.add("tdl:");
+        outDatas.add(Integer.toString(currentTaskID));
+        outDatas.add(selectedTable);
+    }//GEN-LAST:event_downloadTableButtonActionPerformed
+
+    protected void addExitOption() {
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 int n = JOptionPane.showConfirmDialog(null, "Biztos ki szeretnél lépni?",
                         "Kilépés", JOptionPane.YES_NO_OPTION);
                 if (n == JOptionPane.YES_OPTION) {
                     outDatas.add("bye:");
-                    exit = true;
+                    //exit = true;
                     dispose();
                 } 
             }
@@ -1636,6 +1674,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     try {
                         String selected = list.getComponentAt(e.getPoint()).toString().split("    -    ")[1];
                         currentTaskID = Integer.parseInt((list.getComponentAt(e.getPoint()).toString().split("    -    ")[0]).split("selected=")[1]);
+                        currentTask = list.getComponentAt(e.getPoint()).toString().split("    -    ")[1];
                         outDatas.clear();
                         outDatas.add("old:");
                         outDatas.add(Integer.toString(currentTaskID));
@@ -1703,6 +1742,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         outDatas.add(Integer.toString(currentTaskID));
                         outDatas.add(selected);
                         selectedTable = selected;
+                        
+                        delTableButton.setEnabled(true);
+                        downloadTableButton.setEnabled(true);
                     } catch (ArrayIndexOutOfBoundsException ex) {
 
                     }
@@ -1777,11 +1819,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
     
     //ezek valszeg nem is kellenek
-    private String getTarget(JComboBox<String> cb){
+    protected String getTarget(JComboBox<String> cb){
         return cb.getSelectedItem().toString();
     }
     
-    private String getModel(JComboBox<String> cb){
+    protected String getModel(JComboBox<String> cb){
         return cb.getSelectedItem().toString();
     }
     
@@ -1821,7 +1863,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JLabel delColLabel;
     protected javax.swing.JRadioButton delRButton;
     protected javax.swing.JButton delSessionButton;
+    protected javax.swing.JButton delTableButton;
     protected javax.swing.JButton doButton;
+    protected javax.swing.JButton downloadTableButton;
     protected javax.swing.JList<String> dropColList;
     protected javax.swing.JPanel dropcolPanel;
     protected javax.swing.JPanel dtcPanel;
@@ -1829,8 +1873,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JList<String> dtc_fromList;
     protected javax.swing.JTextField dtc_mdField;
     protected javax.swing.JLabel dtc_mdLabel;
-    protected javax.swing.JComboBox<String> dtc_modeCBox;
-    protected javax.swing.JLabel dtc_modeLabel;
     protected javax.swing.JComboBox<String> dtc_outCBox;
     protected javax.swing.JLabel dtc_outLabel;
     protected javax.swing.JList<String> dtc_outList;
@@ -1911,6 +1953,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JLabel rfc_targetLabel;
     protected javax.swing.JList<String> rfc_toList;
     protected javax.swing.JLabel rfs_neLabel;
+    protected javax.swing.JLabel selectedTableLabel;
     protected javax.swing.JPanel sentimentPanel;
     protected javax.swing.JSeparator separator;
     protected javax.swing.JSeparator separator1;
