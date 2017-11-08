@@ -36,19 +36,16 @@ public class WWFController implements Runnable{
     public void run() {
         wwf.usernameLabel.setText("Üdvözöljük " + loggedUser + "!");
         communicateWithServer(pw, sc);
-      
     }
 
     private void communicateWithServer(PrintWriter pw, Scanner sc) {
         int index = 0;
         
-            
-//        do {
          while(!wwf.exit){
             System.out.println("---------------" + index + "--------------");
             try {
                 while (wwf.outDatas.isEmpty()) {
-                    Thread.sleep(10); //to prevent dataloss
+                    Thread.sleep(10);
                 }
                 System.out.println("wwf." +  wwf.outDatas);
                 pw.println(wwf.outDatas);
@@ -64,8 +61,6 @@ public class WWFController implements Runnable{
             }
             System.out.println("Input: " + wwf.inDatas);
             index++;
-//            System.out.println("EXIT: " + wwf.exit);
-//        }while (!wwf.exit);
          }
     }
 
@@ -83,6 +78,7 @@ public class WWFController implements Runnable{
                     model.addElement(wwf.selectedTable);
                     Thread.sleep(10);
                     wwf.lf.dispose();
+                    wwf.operationCBox.setEnabled(true); wwf.classifierCBox.setEnabled(true);
                     wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
                 } else {
                     JOptionPane.showMessageDialog(wwf, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
@@ -98,6 +94,8 @@ public class WWFController implements Runnable{
                     wwf.list.add(in.get(i) + "    -    " + in.get(i + 1));
                 }
                 wwf.loadSelectedTask();
+                wwf.operationCBox.setEnabled(false);
+                wwf.classifierCBox.setEnabled(false);
                 break;
             case "old:":
                 fillLoadedTablesList(in);
@@ -130,9 +128,6 @@ public class WWFController implements Runnable{
                 writeToCsv(in.get(1));
                 break;
             case "bye:":
-                System.out.println("IDE ELÉR.");
-                
-                
                 MWFController controller;
                 try {
                     controller = new MWFController();
@@ -177,7 +172,6 @@ public class WWFController implements Runnable{
      
     private void writeToCsv(String filename) {
         filename = filename.replaceAll(":", "");
-        //new File(PATH+getTaskName()).mkdir();
          String fs =System.getProperty("file.separator");
         String fullFilepath = System.getProperty("user.home") + fs +"Desktop"+fs+filename;
         System.out.println("Fullpath: " + fullFilepath);
@@ -189,10 +183,9 @@ public class WWFController implements Runnable{
             fw = new FileWriter(fullFilepath);
             bw = new BufferedWriter(fw);
             
-            //System.out.println("raw: " + rawInput);
             String lines = wwf.rawInput.split(":, ")[2];
             
-            String line = (lines.replaceAll(", >>first_line_end_flag<<, ", "\n").replaceAll(", >>enter_flag<<, ", "\n")).replaceAll(", >>enter_flag<<", "");
+            String line = (lines.replaceAll(", >>first_line_end_flag<<, ", "\n").replaceAll(", >>enter_flag<<, ", "\n")).replaceAll(", >>enter_flag<<]", "");
             
             bw.write(line);
             JOptionPane.showMessageDialog(wwf, "A kiválasztott tábla lementve: "+fullFilepath+". ");
@@ -224,7 +217,6 @@ public class WWFController implements Runnable{
         
         for(String ot: oldTables){
             if(ot.equals(newTable)){
-                System.out.println("Egyezik");
                 canInsert = false;
             }
         }
