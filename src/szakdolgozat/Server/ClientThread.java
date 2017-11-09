@@ -15,12 +15,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClientThread implements Runnable {
+    // PATH gyenesadrienn\\csv\\;
+    // PY_PATH gyenesadrienn\\python\\;
     String PATH = "C:\\Users\\Adrienn\\Desktop\\szerver\\csv\\";
     String PY_PATH = "C:\\Users\\Adrienn\\Desktop\\szerver\\python\\";
 

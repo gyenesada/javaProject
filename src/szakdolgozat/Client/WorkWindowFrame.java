@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
@@ -31,12 +32,13 @@ import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 
 public final class WorkWindowFrame extends javax.swing.JFrame {
+
     protected boolean exit = false;
 
     protected String rawInput, selectedTable, currentTask, path;
     protected String selectedOperation = "";
     protected String[] columns;
-    
+
     protected int currentTaskID;
 
     protected ArrayList<String> loadedTables = new ArrayList<>();
@@ -48,10 +50,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     //container to send and receive datas
     protected ArrayList<String> outDatas = new ArrayList<>();
     protected ArrayList<String> inDatas = new ArrayList();
-    
+
     protected ButtonGroup nanRadioGroup;
     protected LoadingFrame lf;
-    
+
     //FELÜLET
     // <editor-fold defaultstate="collapsed">
     public WorkWindowFrame() throws Exception {
@@ -78,6 +80,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         removeColToDrop();
         setScrollPane();
         setNanRadioButtons();
+
         outDatas.add("wrk:");
     }
 
@@ -1255,22 +1258,23 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected void doButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doButtonActionPerformed
         outDatas.clear();
-        
-        //Hozzon-e létre új táblát a művelet
-        String newtable = Boolean.toString(newTableCB.isSelected());
-        
-        if(selectedTable == null){
+
+        if (selectedTable == null) {
             JOptionPane.showMessageDialog(this, "Kérem válasszon ki egy táblát!");
-        }else{
+        } else {
             switch (selectedOperation) {
                 case "ada":
                     String[] ada_parameters = {ada_neField.getText(), ada_lrField.getText(), ada_algCBox.getSelectedItem().toString(), ada_rsField.getText()};
-                    setClassifierParameters(selectedOperation, ada_parameters);
+                    setClassifierParameters(selectedOperation, ada_parameters, ada_targetCBox, ada_toList, ada_outList);
                     break;
                 case "rfc":
                     System.out.println("selected: " + selectedOperation);
                     String[] rfc_parameters = {rfc_mdField.getText(), rfc_neField.getText(), rfc_rsField.getText(), rfc_njField.getText()};
-                    setClassifierParameters(selectedOperation, rfc_parameters);
+//                    setClassifierParameters(selectedOperation, rfc_parameters);
+                    break;
+                case "dtc":
+                    String[] dtc_prarameters = {dtc_psField.getText(), dtc_mdField.getText(), dtc_rsField.getText()};
+                    
                     break;
                 case "delc:":
                     String[] colToDel = new String[dropColList.getModel().getSize()];
@@ -1288,7 +1292,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable);
                     break;
                 case "norm:":
-                    insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()),  Integer.toString(currentTaskID), selectedTable);
+                    insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable);
                     break;
                 case "ftsl:":
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable);
@@ -1305,7 +1309,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected void workUploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workUploadButtonActionPerformed
         path = workPathField.getText();
-        
+
         selectedTable = getFilename(path);
         System.out.println("Selected to be upload: " + getFilename(path));
         if (path.equals("")) {
@@ -1326,9 +1330,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected void operationCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationCBoxActionPerformed
         String chosen = getSelectedOperation();
-        
+
         //Hozzon-e létre új táblát a művelet
-        String newtable =Boolean.toString(newTableCB.isSelected());
+        String newtable = Boolean.toString(newTableCB.isSelected());
         if (chosen == null) {
             //  donothing
         } else {
@@ -1358,31 +1362,42 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_operationCBoxActionPerformed
 
     protected void classifierCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classifierCBoxActionPerformed
-        
         String chosen = getSelectedClassifier();
-        if (chosen == null) {
+        if (chosen == null && selectedTable == null) {
             //  donothing
         } else {
             switch (chosen) {
                 case "...":
                     changePanels(firstPanel);
                     break;
-                case "AdaBoost Classifier":
+                case "AdaBoost Classifier":        
                     changePanels(adaPanel);
-                    setFromToList(ada_fromList, ada_toList, ada_targetCBox);
+                    
                     getOutCol(ada_outCBox, ada_outList);
+                    setFromToList(ada_fromList, ada_toList, ada_targetCBox);
                     selectedOperation = "ada";
+                    System.out.println(selectedOperation);
                     break;
                 case "Random Forest Classifier":
                     changePanels(rfcPanel);
+                    
+                    getOutCol(rfc_outCBox, rfc_outList);
+                    setFromToList(rfc_fromList, rfc_toList, rfc_targetCBox);
                     selectedOperation = "rfc";
+
+                    System.out.println(selectedOperation);
                     break;
                 case "Decision Tree Classifier":
                     changePanels(dtcPanel);
-                    selectedOperation = "dtc:";
+                    
+                    getOutCol(dtc_outCBox, dtc_outList);
+                    setFromToList(dtc_fromList, dtc_toList, dtc_targetCBox);
+                    selectedOperation = "dtc";
+
+                    System.out.println(selectedOperation);
                     break;
                 case "Sentiment Analysis":
-                    
+
                     break;
             }
         }
@@ -1402,7 +1417,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             outDatas = readFromCsv(path, false);
         }
         filepathField.setText("");
-        
+
         lf = new LoadingFrame(this, "tableUpload", null);
         lf.setVisible(true);
     }//GEN-LAST:event_uploadButtonActionPerformed
@@ -1430,19 +1445,19 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected void delSessionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delSessionButtonActionPerformed
         outDatas.clear();
         int n = JOptionPane.showConfirmDialog(this, "Biztos törli?", "Munkamenet törlés", JOptionPane.YES_NO_OPTION);
-        if(n==JOptionPane.YES_OPTION){
+        if (n == JOptionPane.YES_OPTION) {
             outDatas.add("dels:");
             outDatas.add(Integer.toString(currentTaskID));
             changeMainPanels(loadPanel, sideLoadPanel);
-        }        
+        }
     }//GEN-LAST:event_delSessionButtonActionPerformed
 
     protected void delTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delTableButtonActionPerformed
         int n = JOptionPane.showConfirmDialog(this, "Biztos törli?", "Törlési megerősítés", JOptionPane.YES_NO_OPTION);
-        if(n==JOptionPane.YES_OPTION){
+        if (n == JOptionPane.YES_OPTION) {
             outDatas.clear();
             outDatas.add("delt:");
-            outDatas.add(Integer.toString(currentTaskID)); 
+            outDatas.add(Integer.toString(currentTaskID));
             outDatas.add(selectedTable);
         }
     }//GEN-LAST:event_delTableButtonActionPerformed
@@ -1464,7 +1479,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 if (n == JOptionPane.YES_OPTION) {
                     outDatas.add("bye:");
                     dispose();
-                } 
+                }
             }
         });
     }
@@ -1503,10 +1518,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             classifierCBox.addItem(str);
         });
     }
-    
-    
-    //</editor-fold>
 
+    //</editor-fold>
     protected void insertIntoBuffer(String identifier, String newtable, String currentTaskID, String selectedTable, String... other) {
         bufferOutput.clear();
         bufferOutput.add(identifier);
@@ -1527,7 +1540,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         for (int i = 0; i < cols.length; i++) {
             csvPrevTable.getColumnModel().getColumn(i).setMinWidth(75);
             columns[i] = cols[i];
-            
+
         }
         csvPrevTable.setDefaultEditor(Object.class, null);
 
@@ -1537,13 +1550,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         colList.setModel(colModel);
         dropColList.setModel(dropColModel);
 
-        ada_targetCBox.removeAllItems();
-        ada_targetCBox.addItem("...");
         for (String c : cols) {
             colModel.addElement(c);
-            ada_targetCBox.addItem(c);
         }
-        
+
     }
 
     protected void setScrollPane() {
@@ -1558,7 +1568,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
     }
-    
+
     protected ArrayList<String> readFromCsv(String path, boolean work) {
         ArrayList<String> csv = new ArrayList<>();
         if (work) {
@@ -1690,7 +1700,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         outDatas.add(Integer.toString(currentTaskID));
                         outDatas.add(selected);
                         selectedTable = selected;
-                        
+
                         delTableButton.setEnabled(true);
                         downloadTableButton.setEnabled(true);
                     } catch (ArrayIndexOutOfBoundsException ex) {
@@ -1700,7 +1710,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
     }
-      
+
     protected String getFilename(String path) {
         String returnvalue;
         String[] spl = path.split(Pattern.quote("\\"));
@@ -1715,8 +1725,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected String getSelectedClassifier() {
         return classifierCBox.getItemAt(classifierCBox.getSelectedIndex());
     }
-    
-    protected void setNanRadioButtons(){
+
+    protected void setNanRadioButtons() {
         nanRadioGroup = new ButtonGroup();
         zeroRButton.setActionCommand("zero");
         nanRadioGroup.add(zeroRButton);
@@ -1730,10 +1740,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         nanRadioGroup.add(modeRButton);
     }
 
-    protected String getSelectedRButton(ButtonGroup bg){
+    protected String getSelectedRButton(ButtonGroup bg) {
         return bg.getSelection().getActionCommand();
     }
-    
+
     protected void changePanels(JPanel visiblePanel) {
         JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, dropcolPanel, nanPanel, dtcPanel};
         for (JPanel p : panels) {
@@ -1756,23 +1766,40 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         }
     }
 
-    protected void setClassifierParameters(String classifier, String[] parameters) {
+    protected void setClassifierParameters(String classifier, String[] parameters, JComboBox<String> target, JList<String> features, JList<String> outcols) {
         bufferOutput.clear();
         bufferOutput.add(classifier);
+        bufferOutput.add(selectedTable);
+        bufferOutput.add(target.getSelectedItem().toString());
+        bufferOutput.add(Integer.toString(parameters.length));
         bufferOutput.addAll(Arrays.asList(parameters));
-    }
-    
-    //ezek valszeg nem is kellenek
-    protected String getTarget(JComboBox<String> cb){
-        return cb.getSelectedItem().toString();
-    }
-    
-    protected void getOutCol(JComboBox<String> cb, JList<String> out){
-                cb.removeAllItems();
-        for(String c: columns){
-            cb.addItem(c);
-        }
+        String[] feat = new String[features.getModel().getSize()];
+                    for (int i = 0; i < features.getModel().getSize(); i++) {
+                        feat[i] = features.getModel().getElementAt(i);
+                    }
+        bufferOutput.add(Integer.toString(feat.length));
+        bufferOutput.addAll(Arrays.asList(feat));
+       
+        String[] out = new String[outcols.getModel().getSize()];
+                    for (int i = 0; i < outcols.getModel().getSize(); i++) {
+                        out[i] = outcols.getModel().getElementAt(i);
+                    }
+        bufferOutput.add(Integer.toString(out.length));
+        bufferOutput.addAll(Arrays.asList(out));
         
+        System.out.println("Buffer: " + bufferOutput);
+    }
+
+     protected void getOutCol(JComboBox<String> cb, JList<String> out) {
+         DefaultComboBoxModel cbModel = new DefaultComboBoxModel();
+         cb.setModel(cbModel);
+        cbModel.removeAllElements();
+        cbModel.addElement(" ");
+        
+        for (String c : columns) {
+            cbModel.addElement(c);
+        }
+
         DefaultListModel outlistModel = new DefaultListModel();
         outlistModel.removeAllElements();
         cb.addActionListener(new ActionListener() {
@@ -1781,48 +1808,61 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 boolean caninsert = true;
 
                 out.setModel(outlistModel);
-                String selected =  cb.getSelectedItem().toString();
-                
-                String[] inlist = outlistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
-                for(String in: inlist){
-                    if(in.equals(selected)){
-                        caninsert = false;
+                String selected = cb.getSelectedItem().toString();
+                if(!" ".equals(selected)){
+
+                    String[] inlist = outlistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
+                    for (String in : inlist) {
+                        if (in.equals(selected)) {
+                            caninsert = false;
+                        }
                     }
-                }
-                if(caninsert){
-                    outlistModel.addElement(selected);
+                    if (caninsert) {
+                        outlistModel.addElement(selected);
+                    }
                 }
             }
         });
     }
-    
-    
-   protected void setFromToList(JList<String> fromlist, JList<String> tolist, JComboBox target){
+
+    protected void setFromToList(JList<String> fromlist, JList<String> tolist, JComboBox<String> target) {
+ 
         DefaultListModel fromlistModel = new DefaultListModel();
         DefaultListModel tolistModel = new DefaultListModel();
+        DefaultComboBoxModel targetModel = new DefaultComboBoxModel();
+
+        fromlistModel.removeAllElements();
+        tolistModel.removeAllElements();
+        targetModel.removeAllElements();
         
-       fromlistModel.removeAllElements();
-       tolistModel.removeAllElements();
-       
-       tolist.setModel(tolistModel);
-       fromlist.setModel(fromlistModel);
-       
-       target.addActionListener(new ActionListener() {
+        for(String c: columns){
+            targetModel.addElement(c);
+        }
+        
+        target.setModel(targetModel);
+        tolist.setModel(tolistModel);
+        fromlist.setModel(fromlistModel);
+
+        target.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selected = target.getSelectedItem().toString();
-                
+                if(selected == null){
+                    
+                }else{
                     fromlistModel.removeAllElements();
-                for(String c: columns){
-                    if(!c.equals(selected)){
-                        fromlistModel.addElement(c);
-                         fromlistModel.removeElement(selected);
+                    tolistModel.removeElement(selected);
+                    for (String c : columns) {
+                        if (!c.equals(selected)) {
+                            fromlistModel.addElement(c);
+                            fromlistModel.removeElement(selected);
+                        }
                     }
                 }
             }
         });
-       
-       fromlist.addMouseListener(new MouseAdapter() {
+
+        fromlist.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
@@ -1837,8 +1877,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 }
             }
         });
-       
-       tolist.addMouseListener(new MouseAdapter() {
+
+        tolist.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
@@ -1852,13 +1892,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 }
             }
         });
-       
-       
     }
-   
-   
-        // </editor-fold>
-    
+
+    // </editor-fold>
     //VARIABLES
     // <editor-fold defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
