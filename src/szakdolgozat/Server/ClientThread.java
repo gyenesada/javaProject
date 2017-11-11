@@ -107,10 +107,7 @@ public class ClientThread implements Runnable {
                 break;
             case "csv:": //csv upload on load page
                 String taskname = in.get(1).replaceAll(":", "");
-                System.out.println("Taskname:: " + taskname);
                 int task = insertTaskIntoDatabase(taskname);
-                System.out.println("Task: " + task);
-              //IsTaskNameValid() értéke kell még ide.
                     currentTaskID = task;
                     filename = in.get(2).replaceAll(":", "");
                     answer = Boolean.toString(insertTableIntoDatabase(filename));
@@ -119,7 +116,6 @@ public class ClientThread implements Runnable {
                     out.add(answer);
                     out.add(Integer.toString(currentTaskID));
                     writeToCsv(filename);
-                
                 break;
             case "wcsv:": //csv upload on work page
                 filename = in.get(2).replaceAll(":", "");
@@ -193,6 +189,19 @@ public class ClientThread implements Runnable {
                 currentTaskID = Integer.parseInt(in.get(1));
                 out = readFromCsv("tdl:", in.get(2), false);
                 break;
+            case "ada:":
+                System.out.println("CurrentTaskID: " + currentTaskID);
+                answer = callingClassifier(in, "ada.py");
+                out = readFromCsv("done:", answer, true);
+                break;
+            case "rfc:":
+                answer = callingClassifier(in, "rfc.py");
+                out  = readFromCsv("done:", answer, true);
+                break;
+            case "dtc:":
+                answer = callingClassifier(in, "dtc.py");
+                out = readFromCsv("done:", answer, true);
+                break;
             case "bye:": //log out
                 setIsOnlineFalse();
                 setLogStatusNormal();
@@ -262,7 +271,6 @@ public class ClientThread implements Runnable {
             fw = new FileWriter(fullFilepath);
             bw = new BufferedWriter(fw);
             
-            //System.out.println("raw: " + rawInput);
             String lines = rawInput.split(":, ")[3];
             
             String line = lines.replaceAll(", >>flag<<, ", "\n").replaceAll(", >>flag<<", "");
@@ -279,6 +287,36 @@ public class ClientThread implements Runnable {
             }
         }
 
+    }
+    
+    private String callingClassifier(ArrayList<String> input, String py){
+      StringBuilder sb = new StringBuilder();
+      
+      String file = input.get(1);
+      String returnvalue = file;
+      String prefix = "python " + PY_PATH + py + " " + PATH+getTaskName()+"\\"+file+" ";
+      sb.append(prefix);
+      for(int i=2; i<input.size(); i++){
+          sb = sb.append(input.get(i));
+          sb.append(" ");
+      }
+      
+        try {
+            Process p = Runtime.getRuntime().exec(sb.toString());
+            int exitVal =p.waitFor();
+            if(exitVal == 0){
+                System.out.println("Classifier completed successfully.");
+                String newtablename = prefixedTableName(py, file);
+                insertTableIntoDatabase(newtablename);
+                returnvalue = newtablename;
+            }else{
+                System.out.println("Classifier finished with an error.");
+            }
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnvalue;
+       
     }
 
     // DATABASE FUNCTIONS

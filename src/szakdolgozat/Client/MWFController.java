@@ -39,7 +39,8 @@ public class MWFController implements Runnable {
 
             communicationWithServer(pw, sc);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(wf, "A szerver kapcsolat nem aktív. Kérjük próbálja később.");
+            Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, e);
+            //JOptionPane.showMessageDialog(wf, "A szerver kapcsolat nem aktív. Kérjük próbálja később.");
         }
     }
 
@@ -80,7 +81,8 @@ public class MWFController implements Runnable {
                         wf.dispose();
                         wwf.run();
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(wf, "A szerver kapcsolat nem aktív. Kérjük próbálja később.");
+                        Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
+                       // JOptionPane.showMessageDialog(wf, "A szerver kapcsolat nem aktív. Kérjük próbálja később.");
                     }
                 } else {
                     wf.setDefaultJTextField(wf.nameField, wf.passField);

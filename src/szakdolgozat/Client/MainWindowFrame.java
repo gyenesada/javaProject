@@ -1,16 +1,18 @@
 package szakdolgozat.Client;
 
+import java.awt.Color;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class MainWindowFrame extends javax.swing.JFrame{
+public final class MainWindowFrame extends javax.swing.JFrame{
 
     protected boolean exit = false;
     
@@ -37,7 +39,7 @@ public class MainWindowFrame extends javax.swing.JFrame{
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    protected void initComponents() {
 
         loginPanel = new javax.swing.JPanel();
         logLabel = new javax.swing.JLabel();
@@ -75,6 +77,12 @@ public class MainWindowFrame extends javax.swing.JFrame{
         });
 
         passLabel.setText("Jelszó");
+
+        passField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passFieldActionPerformed(evt);
+            }
+        });
 
         logButton.setText("Bejelentkezés");
         logButton.addActionListener(new java.awt.event.ActionListener() {
@@ -207,31 +215,33 @@ public class MainWindowFrame extends javax.swing.JFrame{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
-        // TODO add your handling code here:
+    protected void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
     }//GEN-LAST:event_nameFieldActionPerformed
 
-    private void logButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logButtonActionPerformed
+    protected void logButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logButtonActionPerformed
         try {
             outDatas.clear();
             String username = nameField.getText();
             String password = encrypt(passField.getText());
-            outDatas.add("log:");
-            outDatas.add(username);
-            outDatas.add(password);
-
+            if("".equals(username) || "".equals(passField.getText())){
+                JOptionPane.showMessageDialog(null, "Nem hagyható üresen mező!");
+             }else{
+                outDatas.add("log:");
+                outDatas.add(username);
+                outDatas.add(password);
+            }
             System.out.println("outDatas: " + outDatas);
         } catch (Exception ex) {
             System.out.println("Error: logButton");
         }
     }//GEN-LAST:event_logButtonActionPerformed
 
-    private void regButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regButtonActionPerformed
+    protected void regButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regButtonActionPerformed
         regPanel.setVisible(true);
         loginPanel.setVisible(false);
     }//GEN-LAST:event_regButtonActionPerformed
 
-    private void regCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regCancelButtonActionPerformed
+    protected void regCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regCancelButtonActionPerformed
         regNameField.setText("");
         regPassField.setText("");
         regMailField.setText("");
@@ -240,24 +250,31 @@ public class MainWindowFrame extends javax.swing.JFrame{
         loginPanel.setVisible(true);
     }//GEN-LAST:event_regCancelButtonActionPerformed
 
-    private void regDoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regDoButtonActionPerformed
+    protected void regDoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regDoButtonActionPerformed
         try {
             outDatas.clear();
             String username = regNameField.getText();
             String mail = regMailField.getText();
             String password = encrypt(regPassField.getText());
-            outDatas.add("reg:");
-            outDatas.add(username);
-            outDatas.add(mail);
-            outDatas.add(password);
-
+            if("".equals(username) || "".equals(mail) || "".equals(regPassField.getText())){
+                JOptionPane.showMessageDialog(null, "Nem hagyható üresen mező!");
+            }else{
+                outDatas.add("reg:");
+                outDatas.add(username);
+                outDatas.add(mail);
+                outDatas.add(password);
+            }
             System.out.println("outDatas: " + outDatas);
         } catch (Exception ex) {
             System.out.println("Error: regDoButton");
         }
     }//GEN-LAST:event_regDoButtonActionPerformed
 
-    private static String encrypt(String pass) throws Exception {
+    protected void passFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passFieldActionPerformed
+
+    protected static String encrypt(String pass) throws Exception {
         java.security.MessageDigest d = java.security.MessageDigest.getInstance("MD5");
         d.reset();
         d.update(pass.getBytes());

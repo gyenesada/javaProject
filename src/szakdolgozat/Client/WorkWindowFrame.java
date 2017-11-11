@@ -26,6 +26,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
@@ -53,6 +54,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected ButtonGroup nanRadioGroup;
     protected LoadingFrame lf;
+    
+    DefaultListModel colModel;
+    DefaultListModel dropColModel;
 
     //FELÜLET
     // <editor-fold defaultstate="collapsed">
@@ -75,7 +79,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         changePanels(firstPanel);
         fillOperationsList();
         fillClassifierList();
-
+        setTextFieldNames();
         addColToDrop();
         removeColToDrop();
         setScrollPane();
@@ -135,9 +139,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         rfc_njLabel = new javax.swing.JLabel();
         rfc_njField = new javax.swing.JTextField();
         rfc_targetLabel = new javax.swing.JLabel();
-        rfc_modeLabel = new javax.swing.JLabel();
         rfc_targetCBox = new javax.swing.JComboBox<>();
-        rfc_modeCBox = new javax.swing.JComboBox<>();
         rfc_featLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         rfc_fromList = new javax.swing.JList<>();
@@ -165,9 +167,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         ada_rsField = new javax.swing.JTextField();
         ada_algLabel = new javax.swing.JLabel();
         ada_targetLabel = new javax.swing.JLabel();
-        ada_modeLabel = new javax.swing.JLabel();
         ada_targetCBox = new javax.swing.JComboBox<>();
-        ada_modeCBox = new javax.swing.JComboBox<>();
         ada_featLabel = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         ada_fromList = new javax.swing.JList<>();
@@ -240,7 +240,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         fileUploadLabel.setText("Fájl feltöltés");
 
-        choseButton.setText("Kiválaszt");
+                choseButton.setText("Kiválaszt");
         choseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 choseButtonActionPerformed(evt);
@@ -512,11 +512,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_mdLabel.setText("max_depth:");
 
-        rfc_mdField.setText("None");
+        rfc_mdField.setText("0");
 
         rfc_rsLabel.setText("random_state:");
 
-        rfc_rsField.setText("None");
+        rfc_rsField.setText("0");
 
         rfc_njLabel.setText("n_jobs:");
 
@@ -524,11 +524,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_targetLabel.setText("Target:");
 
-        rfc_modeLabel.setText("Mode:");
-
         rfc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        
-        rfc_modeCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         rfc_featLabel.setText("Features:");
 
@@ -554,8 +550,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_outLabel.setText("Kimeneti tábla oszlopai");
 
-        rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        
+        rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+
         rfc_outList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { " " };
             public int getSize() { return strings.length; }
@@ -589,11 +585,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     .addComponent(rfc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rfc_targetLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(rfc_modeLabel)
-                        .addComponent(rfc_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -611,16 +603,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rfcPanelLayout.createSequentialGroup()
-                        .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rfc_modeLabel)
-                            .addComponent(rfc_targetLabel))
+                        .addComponent(rfc_targetLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(rfs_neLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(rfc_neField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(rfc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(rfc_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(rfc_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(rfcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(rfc_mdLabel, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -698,21 +687,17 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         ada_lrLabel.setText("learning_rate:");
 
-        ada_lrField.setText("None");
+        ada_lrField.setText("1.0");
 
         ada_rsLabel.setText("random_state:");
 
-        ada_rsField.setText("None");
+        ada_rsField.setText("0");
 
         ada_algLabel.setText("algorithm:");
 
         ada_targetLabel.setText("Target:");
 
-        ada_modeLabel.setText("Mode:");
-
         ada_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        ada_modeCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         ada_featLabel.setText("Features:");
 
@@ -724,7 +709,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         jScrollPane7.setViewportView(ada_fromList);
 
         ada_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -781,11 +766,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     .addComponent(ada_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ada_targetLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(ada_modeLabel)
-                        .addComponent(ada_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -803,17 +784,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(adaPanelLayout.createSequentialGroup()
-                        .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ada_modeLabel)
-                            .addComponent(ada_targetLabel))
+                        .addComponent(ada_targetLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(ada_neLabel)
                                 .addComponent(ada_neField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(ada_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(ada_modeCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(ada_targetCBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -849,16 +826,17 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         dtc_psLabel.setText("presort:");
 
-        dtc_psField.setText("False");
+        dtc_psField.setText("false");
 
         dtc_mdLabel.setText("max_depth:");
 
-        dtc_mdField.setText("None");
+        dtc_mdField.setText("0");
 
         dtc_rsLabel.setText("random_state:");
 
-        dtc_rsField.setText("None");
+        dtc_rsField.setText("0");
         
+
         dtc_targetLabel.setText("Target:");
 
         dtc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -887,10 +865,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         dtc_outLabel.setText("Kimeneti tábla oszlopai");
 
-        dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
+        dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        
         dtc_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -928,7 +906,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     .addComponent(dtc_outLabel)
                     .addComponent(dtc_outCBox, 0, 140, Short.MAX_VALUE)
                     .addComponent(jScrollPane12))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGap(15, 15, 15))
         );
         dtcPanelLayout.setVerticalGroup(
             dtcPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -968,7 +946,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         .addComponent(dtc_outCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap())))
         );
 
         parameterMainPanel.add(dtcPanel, "card2");
@@ -1247,7 +1225,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addGap(105, 105, 105)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1258,23 +1236,32 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected void doButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doButtonActionPerformed
         outDatas.clear();
+        boolean cansend = false;
 
         if (selectedTable == null) {
             JOptionPane.showMessageDialog(this, "Kérem válasszon ki egy táblát!");
         } else {
             switch (selectedOperation) {
-                case "ada":
-                    String[] ada_parameters = {ada_neField.getText(), ada_lrField.getText(), ada_algCBox.getSelectedItem().toString(), ada_rsField.getText()};
-                    setClassifierParameters(selectedOperation, ada_parameters, ada_targetCBox, ada_toList, ada_outList);
+                case "ada:":
+                    if(checkParameters(ada_neField, "Integer") && checkParameters(ada_lrField, "Float") && checkParameters(ada_rsField, "Integer")){
+                        String[] ada_parameters = {ada_neField.getText(), ada_lrField.getText(), ada_algCBox.getSelectedItem().toString(), ada_rsField.getText()};
+                        setClassifierParameters(selectedOperation, ada_parameters, ada_targetCBox, ada_toList, ada_outList);
+                        cansend = true;
+                    }
                     break;
-                case "rfc":
-                    System.out.println("selected: " + selectedOperation);
-                    String[] rfc_parameters = {rfc_mdField.getText(), rfc_neField.getText(), rfc_rsField.getText(), rfc_njField.getText()};
-//                    setClassifierParameters(selectedOperation, rfc_parameters);
+                case "rfc:":
+                    if(checkParameters(rfc_neField, "Integer") && checkParameters(rfc_mdField, "Ineteger") && checkParameters(rfc_rsField, "Integer") && checkParameters(rfc_njField, "Integer")){
+                        String[] rfc_parameters = {rfc_mdField.getText(), rfc_neField.getText(), rfc_rsField.getText(), rfc_njField.getText()};
+                       setClassifierParameters(selectedOperation, rfc_parameters, rfc_targetCBox, rfc_toList, rfc_outList);
+                       cansend = true;
+                    }
                     break;
-                case "dtc":
-                    String[] dtc_prarameters = {dtc_psField.getText(), dtc_mdField.getText(), dtc_rsField.getText()};
-                    
+                case "dtc:":
+                    if(checkParameters(dtc_psField, "Bool") && checkParameters(dtc_mdField, "Integer") && checkParameters(dtc_rsField, "Integer")){
+                        String[] dtc_parameters = {dtc_psField.getText(), dtc_mdField.getText(), dtc_rsField.getText()};
+                        setClassifierParameters(selectedOperation, dtc_parameters, dtc_targetCBox, dtc_toList, dtc_outList);
+                        cansend = true;
+                    }
                     break;
                 case "delc:":
                     String[] colToDel = new String[dropColList.getModel().getSize()];
@@ -1282,28 +1269,34 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         colToDel[i] = dropColList.getModel().getElementAt(i);
                     }
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable, colToDel);
+                    cansend = true;
                     break;
                 case "nanv:":
                     String mode = getSelectedRButton(nanRadioGroup);
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable, mode);
+                     cansend = true;
                     break;
                 case "fact:":
                     System.out.println(newTableCB.isSelected());
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable);
+                     cansend = true;
                     break;
                 case "norm:":
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable);
+                     cansend = true;
                     break;
                 case "ftsl:":
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable);
+                     cansend = true;
                     break;
                 default:
                     break;
             }
-
-            outDatas = bufferOutput;
-            lf = new LoadingFrame(this, "pythonCall", null);
-            lf.setVisible(true);
+                if( cansend){
+                    outDatas = bufferOutput;
+                    lf = new LoadingFrame(this, "pythonCall", null);
+                    lf.setVisible(true);
+            }
         }
     }//GEN-LAST:event_doButtonActionPerformed
 
@@ -1331,8 +1324,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected void operationCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationCBoxActionPerformed
         String chosen = getSelectedOperation();
 
-        //Hozzon-e létre új táblát a művelet
-        String newtable = Boolean.toString(newTableCB.isSelected());
         if (chosen == null) {
             //  donothing
         } else {
@@ -1367,37 +1358,26 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             //  donothing
         } else {
             switch (chosen) {
-                case "...":
-                    changePanels(firstPanel);
-                    break;
-                case "AdaBoost Classifier":        
+                case "AdaBoost Classifier":
                     changePanels(adaPanel);
-                    
                     getOutCol(ada_outCBox, ada_outList);
                     setFromToList(ada_fromList, ada_toList, ada_targetCBox);
-                    selectedOperation = "ada";
-                    System.out.println(selectedOperation);
+                    selectedOperation = "ada:";
                     break;
                 case "Random Forest Classifier":
                     changePanels(rfcPanel);
-                    
                     getOutCol(rfc_outCBox, rfc_outList);
                     setFromToList(rfc_fromList, rfc_toList, rfc_targetCBox);
-                    selectedOperation = "rfc";
-
-                    System.out.println(selectedOperation);
+                    selectedOperation = "rfc:";
                     break;
                 case "Decision Tree Classifier":
                     changePanels(dtcPanel);
-                    
                     getOutCol(dtc_outCBox, dtc_outList);
                     setFromToList(dtc_fromList, dtc_toList, dtc_targetCBox);
-                    selectedOperation = "dtc";
-
-                    System.out.println(selectedOperation);
+                    selectedOperation = "dtc:";
                     break;
-                case "Sentiment Analysis":
-
+                default:
+                    changePanels(firstPanel);
                     break;
             }
         }
@@ -1478,7 +1458,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         "Kilépés", JOptionPane.YES_NO_OPTION);
                 if (n == JOptionPane.YES_OPTION) {
                     outDatas.add("bye:");
-                    dispose();
                 }
             }
         });
@@ -1740,7 +1719,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         nanRadioGroup.add(modeRButton);
     }
 
-    protected String getSelectedRButton(ButtonGroup bg) {
+    protected String getSelectedRButton(ButtonGroup bg) { 
         return bg.getSelection().getActionCommand();
     }
 
@@ -1802,6 +1781,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         DefaultListModel outlistModel = new DefaultListModel();
         outlistModel.removeAllElements();
+        outlistModel.addElement(" ");
         cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1818,6 +1798,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         }
                     }
                     if (caninsert) {
+                        outlistModel.removeElementAt(0);
                         outlistModel.addElement(selected);
                     }
                 }
@@ -1894,6 +1875,55 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         });
     }
 
+    
+    protected boolean checkParameters(JTextField text, String expectedType){
+        boolean returnvalue=true;
+        if("String".equals(expectedType)){
+            
+        }else if("Integer".equals(expectedType)){
+            try{
+                int temp = Integer.parseInt(text.getText());
+            }catch(NumberFormatException e){
+                returnvalue=false;
+                JOptionPane.showMessageDialog(null, "A(z) " +text.getName()+" típusa nem megfelelő. Kérem ellenőrizze, hogy egész számot adott-e meg.");
+            }
+        }else if("Float".equals(expectedType)){
+            try{
+                float temp = Float.parseFloat(text.getText());
+            }catch(NumberFormatException e){
+                returnvalue=false;
+                JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy számot adott-e meg.");
+            }
+        }else if("Bool".equals(expectedType)){
+            if(text.getText().equals("True") || text.getText().equals("true") || text.getText().equals("False") || text.getText().equals("false")) {
+                returnvalue=true;
+            }else{
+                returnvalue =false;
+                JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy logikai értéket adott-e meg.");
+            }
+        }
+        return returnvalue;
+    }
+    
+    //initcomponenets
+    protected void setTextFieldNames(){
+        ada_neField.setName("n_estimators");
+        ada_lrField.setName("learning_rate");
+        ada_rsField.setName("random_state");
+        
+        rfc_neField.setName("n_estiomators");
+        rfc_mdField.setName("max_depth");
+        rfc_rsField.setName("random_state");
+        rfc_njField.setName("n_jobs");
+        
+        dtc_psField.setName("presort");
+        dtc_mdField.setName("max_depth");
+        dtc_rsField.setName("random_state");        
+    }
+    
+    protected void addClassifierActionListeners(){
+        
+    }
     // </editor-fold>
     //VARIABLES
     // <editor-fold defaultstate="collapsed">
@@ -1905,8 +1935,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JList<String> ada_fromList;
     protected javax.swing.JTextField ada_lrField;
     protected javax.swing.JLabel ada_lrLabel;
-    protected javax.swing.JComboBox<String> ada_modeCBox;
-    protected javax.swing.JLabel ada_modeLabel;
     protected javax.swing.JTextField ada_neField;
     protected javax.swing.JLabel ada_neLabel;
     protected javax.swing.JComboBox<String> ada_outCBox;
@@ -2002,8 +2030,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JList<String> rfc_fromList;
     protected javax.swing.JTextField rfc_mdField;
     protected javax.swing.JLabel rfc_mdLabel;
-    protected javax.swing.JComboBox<String> rfc_modeCBox;
-    protected javax.swing.JLabel rfc_modeLabel;
     protected javax.swing.JTextField rfc_neField;
     protected javax.swing.JTextField rfc_njField;
     protected javax.swing.JLabel rfc_njLabel;
@@ -2035,8 +2061,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JButton workUploadButton;
     protected javax.swing.JLabel workUploadLabel;
     protected javax.swing.JRadioButton zeroRButton;
-	protected DefaultListModel<String> colModel;
-    protected DefaultListModel<String> dropColModel;
     // End of variables declaration//GEN-END:variables
 
     // </editor-fold>

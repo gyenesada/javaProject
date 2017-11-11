@@ -726,13 +726,7 @@
                                       <Component id="rfc_targetLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="16" max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                          <Component id="rfc_modeLabel" min="-2" max="-2" attributes="0"/>
-                                          <Component id="rfc_modeCBox" min="-2" pref="110" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="jScrollPane5" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="jScrollPane5" min="-2" pref="110" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jSeparator2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -753,17 +747,13 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="rfc_modeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="rfc_targetLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
+                                          <Component id="rfc_targetLabel" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="rfs_neLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                                               <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                                                   <Component id="rfc_neField" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   <Component id="rfc_targetCBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="rfc_modeCBox" alignment="3" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -826,7 +816,7 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="rfc_mdField">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="None"/>
+                            <Property name="text" type="java.lang.String" value="0"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="rfc_rsLabel">
@@ -836,7 +826,7 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="rfc_rsField">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="None"/>
+                            <Property name="text" type="java.lang.String" value="0"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="rfc_njLabel">
@@ -854,11 +844,6 @@
                             <Property name="text" type="java.lang.String" value="Target:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="rfc_modeLabel">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Mode:"/>
-                          </Properties>
-                        </Component>
                         <Component class="javax.swing.JComboBox" name="rfc_targetCBox">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -873,21 +858,6 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rfc_targetCBoxActionPerformed"/>
                           </Events>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JComboBox" name="rfc_modeCBox">
-                          <Properties>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                              </StringArray>
-                            </Property>
-                          </Properties>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                           </AuxValues>
@@ -1155,13 +1125,7 @@
                                       <Component id="ada_targetLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="13" max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                          <Component id="ada_modeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="ada_modeCBox" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="jScrollPane8" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="jScrollPane8" min="-2" pref="110" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jSeparator4" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -1182,20 +1146,14 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="ada_modeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="ada_targetLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
+                                          <Component id="ada_targetLabel" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                                                   <Component id="ada_neLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   <Component id="ada_neField" alignment="3" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                                                  <Component id="ada_targetCBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="ada_modeCBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
+                                              <Component id="ada_targetCBox" alignment="1" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -1259,7 +1217,7 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="ada_lrField">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="None"/>
+                            <Property name="text" type="java.lang.String" value="1.0"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="ada_rsLabel">
@@ -1269,7 +1227,7 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="ada_rsField">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="None"/>
+                            <Property name="text" type="java.lang.String" value="0"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="ada_algLabel">
@@ -1282,27 +1240,7 @@
                             <Property name="text" type="java.lang.String" value="Target:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="ada_modeLabel">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Mode:"/>
-                          </Properties>
-                        </Component>
                         <Component class="javax.swing.JComboBox" name="ada_targetCBox">
-                          <Properties>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                              </StringArray>
-                            </Property>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JComboBox" name="ada_modeCBox">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                               <StringArray count="4">
@@ -1490,7 +1428,7 @@
                                       <Component id="dtc_outCBox" alignment="0" pref="140" max="32767" attributes="0"/>
                                       <Component id="jScrollPane12" alignment="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="15" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1541,7 +1479,7 @@
                                           <Component id="dtc_outCBox" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="jScrollPane12" min="-2" pref="112" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -1556,7 +1494,7 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="dtc_psField">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="False"/>
+                            <Property name="text" type="java.lang.String" value="false"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="dtc_mdLabel">
@@ -1566,7 +1504,7 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="dtc_mdField">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="None"/>
+                            <Property name="text" type="java.lang.String" value="0"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="dtc_rsLabel">
@@ -1576,7 +1514,7 @@
                         </Component>
                         <Component class="javax.swing.JTextField" name="dtc_rsField">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="None"/>
+                            <Property name="text" type="java.lang.String" value="0"/>
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dtc_rsFieldActionPerformed"/>

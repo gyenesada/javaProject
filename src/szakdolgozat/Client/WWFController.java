@@ -1,7 +1,6 @@
 package szakdolgozat.Client;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,7 +28,6 @@ public class WWFController implements Runnable{
 
         wwf = new WorkWindowFrame();
         wwf.setVisible(true);
-        
     }
 
     @Override
@@ -76,7 +74,7 @@ public class WWFController implements Runnable{
                     DefaultListModel<String> model = new DefaultListModel<>();
                     wwf.loadedTablesList.setModel(model);
                     model.addElement(wwf.selectedTable);
-                    Thread.sleep(10);
+                    Thread.sleep(50);
                     wwf.lf.dispose();
                     wwf.operationCBox.setEnabled(true); wwf.classifierCBox.setEnabled(true);
                     wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
@@ -127,7 +125,9 @@ public class WWFController implements Runnable{
             case "tdl:":
                 writeToCsv(in.get(1));
                 break;
-            case "bye:":
+            case "bye:": 
+                
+                wwf.dispose();
                 MWFController controller;
                 try {
                     controller = new MWFController();
@@ -136,7 +136,6 @@ public class WWFController implements Runnable{
                     Logger.getLogger(WWFController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-                wwf.dispose();
                 break;
             case "err:":
                 JOptionPane.showMessageDialog(wwf, "A művelet végrehajtása közben probléma lépett fel.");
@@ -155,26 +154,31 @@ public class WWFController implements Runnable{
 
     private void loadedTablePreprocess() {
         ArrayList<String[]> items = new ArrayList<>();
-        String input = wwf.rawInput.split(":, ")[2];
-        String[] splitted = input.split(", >>first_line_end_flag<<, ");
-        String cols = splitted[0];
-        String content = splitted[1];
+        String input="";
+        try{
+            input= wwf.rawInput.split(":, ")[2];
 
-        String[] colnames = cols.split(",");
+           String[] splitted = input.split(", >>first_line_end_flag<<, ");
+           String cols = splitted[0];
+           String content = splitted[1];
 
-        String[] lines = content.split(", >>enter_flag<<, ");
-        for (String str : lines) {
-            String[] temp = str.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-            items.add(temp);
+           String[] colnames = cols.split(",");
+
+           String[] lines = content.split(", >>enter_flag<<, ");
+           for (String str : lines) {
+               String[] temp = str.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+               items.add(temp);
+           }
+           wwf.fillPrevTable(colnames, items);
+        }catch(ArrayIndexOutOfBoundsException ex){
+            JOptionPane.showMessageDialog(wwf, "A kért tábla betöltése nem sikerült!");
         }
-        wwf.fillPrevTable(colnames, items);
     }
      
     private void writeToCsv(String filename) {
         filename = filename.replaceAll(":", "");
          String fs =System.getProperty("file.separator");
         String fullFilepath = System.getProperty("user.home") + fs +"Desktop"+fs+filename;
-        System.out.println("Fullpath: " + fullFilepath);
         
         BufferedWriter bw = null;
         FileWriter fw = null;
@@ -184,7 +188,6 @@ public class WWFController implements Runnable{
             bw = new BufferedWriter(fw);
             
             String lines = wwf.rawInput.split(":, ")[2];
-            
             String line = (lines.replaceAll(", >>first_line_end_flag<<, ", "\n").replaceAll(", >>enter_flag<<, ", "\n")).replaceAll(", >>enter_flag<<]", "");
             
             bw.write(line);
