@@ -1,9 +1,9 @@
 package szakdolgozat.Client;
 
-import java.awt.Color;
 import java.awt.Toolkit;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -274,13 +274,21 @@ public final class MainWindowFrame extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_passFieldActionPerformed
 
-    protected static String encrypt(String pass) throws Exception {
-        java.security.MessageDigest d = java.security.MessageDigest.getInstance("MD5");
-        d.reset();
-        d.update(pass.getBytes());
-        d.digest();
-        return new String(d.digest(), StandardCharsets.UTF_8);
-    }        
+    public static String encrypt(String pass){
+    try {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] passBytes = pass.getBytes();
+        md.reset();
+        byte[] digested = md.digest(passBytes);
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<digested.length;i++){
+            sb.append(Integer.toHexString(0xff & digested[i]));
+        }
+        return sb.toString();
+    } catch (NoSuchAlgorithmException ex) {
+    }
+        return null;
+   }    
         
     protected void setDefaultJTextField(JTextField... textFields){
         for(JTextField jtx: textFields){

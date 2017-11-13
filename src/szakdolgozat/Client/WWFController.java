@@ -17,22 +17,21 @@ public class WWFController implements Runnable{
 
     private final Scanner sc;
     private final PrintWriter pw;
-    private final String loggedUser;
 
     WorkWindowFrame wwf;
 
     public WWFController(PrintWriter pw, Scanner sc, String name) throws Exception {
-        this.loggedUser = name;
+
         this.sc = sc;
         this.pw = pw;
 
-        wwf = new WorkWindowFrame();
+        wwf = new WorkWindowFrame(name);
         wwf.setVisible(true);
     }
 
     @Override
     public void run() {
-        wwf.usernameLabel.setText("Üdvözöljük " + loggedUser + "!");
+        wwf.usernameLabel.setText("Üdvözöljük " + wwf.loggedUser + "!");
         communicateWithServer(pw, sc);
     }
 
@@ -124,6 +123,18 @@ public class WWFController implements Runnable{
                 break;
             case "tdl:":
                 writeToCsv(in.get(1));
+                break;
+            case "mdu:":
+                if(Boolean.valueOf(in.get(1))){
+                    JOptionPane.showMessageDialog(wwf, "A felhasználónév megváltozott.");
+                    wwf.loggedUser = in.get(2);
+                    wwf.usernameLabel.setText("Üdvözöljük " + wwf.loggedUser + "!");
+                }else{
+                    JOptionPane.showMessageDialog(wwf, "Már szerepel ilyen felhasználónév!");
+                }
+            break;
+            case "mdp:":
+                JOptionPane.showMessageDialog(wwf, "A jelszava sikeresen megváltozott.");
                 break;
             case "bye:": 
                 
