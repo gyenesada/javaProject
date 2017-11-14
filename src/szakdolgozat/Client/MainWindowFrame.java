@@ -274,7 +274,7 @@ public final class MainWindowFrame extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_passFieldActionPerformed
 
-    public static String encrypt(String pass){
+    private String encrypt(String pass){
     try {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] passBytes = pass.getBytes();

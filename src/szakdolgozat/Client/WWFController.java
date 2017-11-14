@@ -46,7 +46,6 @@ public class WWFController implements Runnable{
                 }
                 System.out.println("wwf." +  wwf.outDatas);
                 pw.println(wwf.outDatas);
-                System.out.println("out: " + wwf.outDatas);
                 wwf.inDatas.clear();
                 wwf.rawInput = sc.nextLine();
                 inputPreprocess(wwf.rawInput);
@@ -56,7 +55,6 @@ public class WWFController implements Runnable{
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("Input: " + wwf.inDatas);
             index++;
          }
     }
@@ -165,7 +163,7 @@ public class WWFController implements Runnable{
 
     private void loadedTablePreprocess() {
         ArrayList<String[]> items = new ArrayList<>();
-        String input="";
+        String input;
         try{
             input= wwf.rawInput.split(":, ")[2];
 
@@ -204,7 +202,6 @@ public class WWFController implements Runnable{
             bw.write(line);
             JOptionPane.showMessageDialog(wwf, "A kiválasztott tábla lementve: "+fullFilepath+". ");
         } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             try {
                 bw.close();

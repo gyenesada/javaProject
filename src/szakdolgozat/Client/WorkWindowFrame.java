@@ -1,6 +1,6 @@
 package szakdolgozat.Client;
 
-import java.awt.Component;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -1300,6 +1299,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         cansend = true;
                     }
                     break;
+                case "san:":
+                    String target = sa_targetCBox.getSelectedItem().toString();
+                    insertIntoBuffer(selectedOperation, "true", Integer.toString(currentTaskID), selectedTable, target); 
+                    cansend = true;
+                    break;
                 case "delc:":
                     String[] colToDel = new String[dropColList.getModel().getSize()];
                     for (int i = 0; i < dropColList.getModel().getSize(); i++) {
@@ -1350,7 +1354,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         if (path.equals("")) {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
-            System.out.println("Task: " + currentTask + " ID: " + currentTaskID);
             outDatas = readFromCsv(path, true);
         }
         workPathField.setText("");
@@ -1420,7 +1423,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     break;
                 case "Sentiment Analysis":
                     changePanels(saPanel);
-                    selectedOperation = "san";
+                    sa_targetCBox.removeAllItems();
+                    for(String c: columns){
+                        sa_targetCBox.addItem(c);
+                    }
+                    selectedOperation = "san:";
                     break;
                 default:
                     changePanels(firstPanel);
@@ -1731,7 +1738,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         }
                         
                     } catch (ArrayIndexOutOfBoundsException ex) {
-                    } catch (Exception ex) {
+                    } catch (HeadlessException ex) {
                         Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -1992,29 +1999,32 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     
     protected boolean checkParameters(JTextField text, String expectedType){
         boolean returnvalue=true;
-        if("String".equals(expectedType)){
-            
-        }else if("Integer".equals(expectedType)){
-            try{
-                int temp = Integer.parseInt(text.getText());
-            }catch(NumberFormatException e){
-                returnvalue=false;
-                JOptionPane.showMessageDialog(null, "A(z) " +text.getName()+" típusa nem megfelelő. Kérem ellenőrizze, hogy egész számot adott-e meg.");
-            }
-        }else if("Float".equals(expectedType)){
-            try{
-                float temp = Float.parseFloat(text.getText());
-            }catch(NumberFormatException e){
-                returnvalue=false;
-                JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy számot adott-e meg.");
-            }
-        }else if("Bool".equals(expectedType)){
-            if(text.getText().equals("True") || text.getText().equals("true") || text.getText().equals("False") || text.getText().equals("false")) {
-                returnvalue=true;
-            }else{
-                returnvalue =false;
-                JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy logikai értéket adott-e meg.");
-            }
+        if(null != expectedType)switch (expectedType) {
+            case "String":
+                break;
+            case "Integer":
+                try{
+                    int temp = Integer.parseInt(text.getText());
+                }catch(NumberFormatException e){
+                    returnvalue=false;
+                    JOptionPane.showMessageDialog(null, "A(z) " +text.getName()+" típusa nem megfelelő. Kérem ellenőrizze, hogy egész számot adott-e meg.");
+                }   break;
+            case "Float":
+                try{
+                    float temp = Float.parseFloat(text.getText());
+                }catch(NumberFormatException e){
+                    returnvalue=false;
+                    JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy számot adott-e meg.");
+                }   break;
+            case "Bool":
+                if(text.getText().equals("True") || text.getText().equals("true") || text.getText().equals("False") || text.getText().equals("false")) {
+                    returnvalue=true;
+                }else{
+                    returnvalue =false;
+                    JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy logikai értéket adott-e meg.");
+                }   break;
+            default:
+                break;
         }
         return returnvalue;
     }
@@ -2035,7 +2045,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
     
  
-    public static String encrypt(String pass){
+    private String encrypt(String pass){
     try {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] passBytes = pass.getBytes();

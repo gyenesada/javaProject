@@ -70,7 +70,6 @@ public class ClientThread implements Runnable {
             outDatas = controller(inDatas);
             inDatas.clear();
             pw.println(outDatas);
-            System.out.println("Output: " + outDatas);
 
             index++;
             System.out.println("Kérés vége.");
@@ -83,7 +82,7 @@ public class ClientThread implements Runnable {
 
         String[] string = withoutBrackets.split(", ");
         inDatas.addAll(Arrays.asList(string));
-        System.out.println("Input: " + inDatas);
+        System.out.println("IN: " + inDatas);
     }
 
     private ArrayList<String> controller(ArrayList<String> in) {
@@ -111,7 +110,7 @@ public class ClientThread implements Runnable {
                 int task = insertTaskIntoDatabase(taskname);
                 currentTaskID = task;
                 filename = in.get(2).replaceAll(":", "");
-                answer = Boolean.toString(insertTableIntoDatabase(filename));
+                answer = Boolean.toString(insertTableIntoDatabase(filename, filename));
 
                 out.add(identifier);
                 out.add(answer);
@@ -121,7 +120,7 @@ public class ClientThread implements Runnable {
             case "wcsv:": //csv upload on work page
                 filename = in.get(2).replaceAll(":", "");
                 currentTaskID = Integer.parseInt(in.get(1).replaceAll(":", ""));
-                if (insertTableIntoDatabase(filename)) {
+                if (insertTableIntoDatabase(filename, filename)) {
                     out = getTasksTable();
                     writeToCsv(filename);
                 } else {
@@ -201,6 +200,11 @@ public class ClientThread implements Runnable {
                 break;
             case "dtc:":
                 answer = callingClassifier(in, "dtc.py");
+                out = readFromCsv("done:", answer, true);
+                break;
+            case "san:":
+                newtable = Boolean.valueOf(in.get(1));
+                answer = callingPython(newtable, "sentiment.py", in.get(3), in.get(4));
                 out = readFromCsv("done:", answer, true);
                 break;
             case "mdu:":
@@ -305,21 +309,23 @@ public class ClientThread implements Runnable {
         StringBuilder sb = new StringBuilder();
 
         String file = input.get(1);
+        String original = getOriginalTable(file);
         String returnvalue = file;
-        String prefix = "python " + PY_PATH + py + " " + PATH + getTaskName() + "\\" + file + " ";
+        String prefix = "python " + PY_PATH + py + " " + PATH + getTaskName() + "\\" + file + " " + PATH + getTaskName() + "\\"+original + " ";
         sb.append(prefix);
         for (int i = 2; i < input.size(); i++) {
             sb = sb.append(input.get(i));
             sb.append(" ");
         }
 
+         System.out.println("SB: " + sb.toString());
         try {
             Process p = Runtime.getRuntime().exec(sb.toString());
             int exitVal = p.waitFor();
             if (exitVal == 0) {
                 System.out.println("Classifier completed successfully.");
                 String newtablename = prefixedTableName(py, file);
-                insertTableIntoDatabase(newtablename);
+                insertTableIntoDatabase(newtablename, original);
                 returnvalue = newtablename;
             } else {
                 System.out.println("Classifier finished with an error.");
@@ -345,11 +351,8 @@ public class ClientThread implements Runnable {
             rs = stat.executeQuery(query);
             while (rs.next()) {
                 String password = rs.getString("PASSWORD");
-                boolean is_online = rs.getBoolean("IS_ONLINE");
-                String log_status = rs.getString("LOG_STATUS");
 
-                //nem jó.
-                if ((pass.equals(password))) {// && !is_online) || (pass.equals(password) && "null".equals(log_status))) {
+                if ((pass.equals(password))) {
                     threadName = name;
                     threadID = rs.getInt("USER_ID");
 
@@ -503,21 +506,23 @@ public class ClientThread implements Runnable {
         return returnvalue;
     }
 
-    private boolean insertTableIntoDatabase(String filename) {
+    private boolean insertTableIntoDatabase(String filename, String original) {
         boolean returnvalue = false;
         try {
-            String insertQuery = "insert into tables values (?,?,?,?,?,?,?,?,?);";
+            String insertQuery = "insert into tables values (?,?,?,?,?,?,?,?,?,?);";
             PreparedStatement prep = conn.prepareStatement(insertQuery);
             currentTableID = getTableID();
+
             prep.setInt(1, currentTableID);
             prep.setInt(2, threadID);
             prep.setString(3, filename);
-            prep.setBoolean(4, false);
+            prep.setString(4, original);
             prep.setBoolean(5, false);
             prep.setBoolean(6, false);
             prep.setBoolean(7, false);
-            prep.setBoolean(8, true);
-            prep.setInt(9, currentTaskID);
+            prep.setBoolean(8, false);
+            prep.setBoolean(9, true);
+            prep.setInt(10, currentTaskID);
 
             if (!isTableInTask(filename)) {
                 prep.addBatch();
@@ -528,7 +533,7 @@ public class ClientThread implements Runnable {
                 returnvalue = true;
             }
         } catch (SQLException ex) {
-            System.out.println("Error inserting to database");
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         return returnvalue;
     }
@@ -562,7 +567,6 @@ public class ClientThread implements Runnable {
             if (maxIDrs.next()) {
                 returnvalue = maxIDrs.getInt(1);
             }
-            System.out.println("ID: " + returnvalue);
         } catch (SQLException ex) {
             System.out.println("Error: Getting table_id");
         }
@@ -581,7 +585,23 @@ public class ClientThread implements Runnable {
         }
         return returnvalue;
     }
-
+    
+    private String getOriginalTable(String filename){
+        String returnvalue="";
+        try{
+            Statement stat = conn.createStatement();
+            String query = "select original from tables where name = '"+filename+"';";
+            ResultSet rs = stat.executeQuery(query);
+            while(rs.next()){
+                returnvalue = rs.getString("ORIGINAL");
+            }
+         }catch(SQLException ex){
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Original table: "+ returnvalue);
+         return returnvalue;
+    }
+    
     private boolean setTableInactive(String task_id, String table_name) {
         boolean returnvalue = true;
         try {
@@ -748,7 +768,8 @@ public class ClientThread implements Runnable {
 
             if (newtable && exitVal == 0) {
                 String newtablename = prefixedTableName(py, file);
-                insertTableIntoDatabase(newtablename);
+                String original = getOriginalTable(file);
+                insertTableIntoDatabase(newtablename, original);
                 returnvalue = newtablename;
             }
         } catch (IOException | InterruptedException ex) {
