@@ -6,33 +6,20 @@ from sklearn.feature_selection import VarianceThreshold
 program = sys.argv[0]
 tablename = sys.argv[2]
 newtable = sys.argv[1]
+th = float(sys.argv[3])
 df = pd.read_csv(tablename)
 cols = df.columns.values.tolist()
 autoremove=True
 
 def feature_selection(dframe):
-        # get dataframe values
     X = dframe.loc[:, cols].values
-        # instantiate VarianceThreshold object
-    vt = VarianceThreshold(threshold=1.0)
-        # fit vt to data
+    vt = VarianceThreshold(threshold=th)
     vt.fit(X)
-        # get the indices of the features that are being kept
     feature_indices = vt.get_support(indices=True)
-        # remove low-variance columns from index
     feature_names = [cols[idx] for idx, _ in enumerate(cols) if idx in feature_indices]
-     # get the columns to be removed
     removed_features = list(np.setdiff1d(cols, feature_names))
-    print("Found {0} low-variance columns." .format(len(removed_features)))
-
-    print("Removing low-variance features.")
-    # remove the low-variance columns
     X_removed = vt.transform(X)
-    print("Reassembling the dataframe (with low-variance "
-          "features removed).")
-    # re-assemble the dataframe
     dframe = pd.DataFrame(data=X_removed,columns=feature_names)
-    print("Succesfully removed low-variance columns.")
     return dframe
 	
 def get_prefix(program):

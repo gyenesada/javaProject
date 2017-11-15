@@ -9,24 +9,37 @@ original = sys.argv[2]
 params = int(sys.argv[4])
 target = sys.argv[3]
 
-parameters=[]
-i = 1
-while (i <= params):
-	parameters.append(sys.argv[4+i])
-	i+=1
-features = []
+def get_parameters():
+	temps=[]
+	i = 1
+	while (i <= params):
+		temps.append(sys.argv[4+i])
+		i+=1
+	return temps
+
+parameters = get_parameters()
+
 feat = int(sys.argv[5+params])
-j = 1
-while (j<=feat):
-	features.append(sys.argv[5+params+j])
-	j=j+1
-	
-outcols = []
+def get_features():
+	temps=[]
+	i = 1
+	while (i<=feat):
+		temps.append(sys.argv[5+params+i])
+		i=i+1
+	return temps
+
+features = get_features()
+
 out = int(sys.argv[6+params+feat])
-k = 1
-while (k<=out):
-	outcols.append(sys.argv[6+params+feat+k])
-	k=k+1
+def get_outcols():
+	temps=[]
+	i = 1
+	while (i<=out):
+		outcols.append(sys.argv[6+params+feat+i])
+		i=i+1
+	return temps
+
+outcols = get_outcols()
 
 max_depth = int(parameters[0])
 n_estimators = int(parameters[1])

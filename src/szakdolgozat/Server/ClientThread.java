@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -359,7 +360,7 @@ public class ClientThread implements Runnable {
                     String updateQuery = "update users set is_online='" + true + "', log_status = '" + "null" + "' where user_id='" + threadID + "';";
                     Statement updateStat = conn.createStatement();
                     updateStat.executeUpdate(updateQuery);
-                    PATH = PATH + threadName + "\\";
+                    PATH = PATH + threadID + "\\";
                     System.out.println("Path: " + PATH);
                     return true;
                 } else {
@@ -400,7 +401,7 @@ public class ClientThread implements Runnable {
                 try {
                     threadName = name;
                     PreparedStatement prepstat = conn.prepareStatement(insertquery);
-                    prepstat.setInt(1, id++);
+                    prepstat.setInt(1, id);
                     prepstat.setString(2, name);
                     prepstat.setString(3, mail);
                     prepstat.setString(4, pass);
@@ -415,8 +416,8 @@ public class ClientThread implements Runnable {
                 } catch (SQLException ex) {
                     System.out.println("Nem sikerült felvinni az adatokat.");
                 }
-                new File(PATH + threadName).mkdir();
-                System.out.println(threadName + " nevű mappa elkészítve.");
+                new File(PATH + id).mkdir();
+                System.out.println(id + " nevű mappa elkészítve.");
                 return true;
             }
         } catch (SQLException ex) {
@@ -742,8 +743,8 @@ public class ClientThread implements Runnable {
                 Statement updateName = conn.createStatement();
                 String updateQuery = "update users set username = '"+newusername+"' where user_id = '"+threadID+"';";
                 updateName.executeUpdate(updateQuery);
-                threadName = newusername;
                 
+                threadName = newusername;
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
