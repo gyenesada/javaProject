@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 import numpy as np
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 program =  sys.argv[0]
 tablename = sys.argv[1]
@@ -28,14 +28,11 @@ while (k<=out):
 	outcols.append(sys.argv[6+params+feat+k])
 	k=k+1
 
-if parameters[0]=="false":
-	presort = False
-else:
-	presort = True
-	
-max_depth = int(parameters[1])
+max_depth = int(parameters[0])
+n_estimators = int(parameters[1])
 random_state = int(parameters[2])
-	
+n_jobs = int(parameters[3])
+
 df = pd.read_csv(tablename)
 dfo = pd.read_csv(original)
 
@@ -44,11 +41,10 @@ train = df[generated]
 test = df[~generated]
 or_test = dfo[~generated]
 
-clf = DecisionTreeClassifier(max_depth = max_depth, random_state = random_state, presort = presort) 
+clf = RandomForestClassifier(max_depth = max_depth, random_state = random_state, n_jobs =n_jobs, n_estimators=n_estimators) 
 clf.fit(train[features].values, train[target].values)
 
 predictions = clf.predict(test[features].values)
-
 def get_prefix(program):
 	splitted = program.split("\\")
 	py = splitted[len(splitted)-1].split(".py");

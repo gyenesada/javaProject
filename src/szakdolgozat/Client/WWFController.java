@@ -226,6 +226,7 @@ public class WWFController implements Runnable{
     private void addTableToList(ArrayList<String> in){
         DefaultListModel dlm = (DefaultListModel) wwf.loadedTablesList.getModel();
         String newTable = in.get(1).replaceAll(":", "");
+        wwf.selectedTable = newTable;
         boolean canInsert=true;
         String[] oldTables = dlm.toString().replaceAll("[\\[\\]]", "").split(", ");
         

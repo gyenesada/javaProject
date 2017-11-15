@@ -1,9 +1,9 @@
 import sys
 import pandas as pd
 import numpy as np
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import AdaBoostClassifier
 
-program =  sys.argv[0]
+program = sys.argv[0]
 tablename = sys.argv[1]
 original = sys.argv[2]
 params = int(sys.argv[4])
@@ -27,14 +27,11 @@ k = 1
 while (k<=out):
 	outcols.append(sys.argv[6+params+feat+k])
 	k=k+1
-
-if parameters[0]=="false":
-	presort = False
-else:
-	presort = True
 	
-max_depth = int(parameters[1])
-random_state = int(parameters[2])
+n_estimators = int(parameters[0])
+learning_rate = float(parameters[1])
+algorithm = parameters[2]
+random_state = int(parameters[3])
 	
 df = pd.read_csv(tablename)
 dfo = pd.read_csv(original)
@@ -44,7 +41,7 @@ train = df[generated]
 test = df[~generated]
 or_test = dfo[~generated]
 
-clf = DecisionTreeClassifier(max_depth = max_depth, random_state = random_state, presort = presort) 
+clf = AdaBoostClassifier(n_estimators = n_estimators, algorithm=algorithm, learning_rate=learning_rate, random_state=random_state) 
 clf.fit(train[features].values, train[target].values)
 
 predictions = clf.predict(test[features].values)

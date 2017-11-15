@@ -56,7 +56,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected ButtonGroup nanRadioGroup;
     protected LoadingFrame lf;
-    
+
     DefaultListModel colModel;
     DefaultListModel dropColModel;
     String loggedUser;
@@ -1279,26 +1279,26 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         } else {
             switch (selectedOperation) {
                 case "ada:":
-                    if(checkParameters(ada_neField, "Integer") && checkParameters(ada_lrField, "Float") && checkParameters(ada_rsField, "Integer")){
+                    if (checkParameters(ada_neField, "Integer") && checkParameters(ada_lrField, "Float") && checkParameters(ada_rsField, "Integer")) {
                         String[] ada_parameters = {ada_neField.getText(), ada_lrField.getText(), ada_algCBox.getSelectedItem().toString(), ada_rsField.getText()};
                         cansend = setClassifierParameters(selectedOperation, ada_parameters, ada_targetCBox, ada_toList, ada_outList);
                     }
                     break;
                 case "rfc:":
-                    if(checkParameters(rfc_neField, "Integer") && checkParameters(rfc_mdField, "Integer") && checkParameters(rfc_rsField, "Integer") && checkParameters(rfc_njField, "Integer")){
+                    if (checkParameters(rfc_neField, "Integer") && checkParameters(rfc_mdField, "Integer") && checkParameters(rfc_rsField, "Integer") && checkParameters(rfc_njField, "Integer")) {
                         String[] rfc_parameters = {rfc_mdField.getText(), rfc_neField.getText(), rfc_rsField.getText(), rfc_njField.getText()};
-                       cansend =  setClassifierParameters(selectedOperation, rfc_parameters, rfc_targetCBox, rfc_toList, rfc_outList);
+                        cansend = setClassifierParameters(selectedOperation, rfc_parameters, rfc_targetCBox, rfc_toList, rfc_outList);
                     }
                     break;
                 case "dtc:":
-                    if(checkParameters(dtc_psField, "Bool") && checkParameters(dtc_mdField, "Integer") && checkParameters(dtc_rsField, "Integer")){
+                    if (checkParameters(dtc_psField, "Bool") && checkParameters(dtc_mdField, "Integer") && checkParameters(dtc_rsField, "Integer")) {
                         String[] dtc_parameters = {dtc_psField.getText(), dtc_mdField.getText(), dtc_rsField.getText()};
-                        cansend= setClassifierParameters(selectedOperation, dtc_parameters, dtc_targetCBox, dtc_toList, dtc_outList);
+                        cansend = setClassifierParameters(selectedOperation, dtc_parameters, dtc_targetCBox, dtc_toList, dtc_outList);
                     }
                     break;
                 case "san:":
                     String target = sa_targetCBox.getSelectedItem().toString();
-                    insertIntoBuffer(selectedOperation, "true", Integer.toString(currentTaskID), selectedTable, target); 
+                    insertIntoBuffer(selectedOperation, "true", Integer.toString(currentTaskID), selectedTable, target);
                     cansend = true;
                     break;
                 case "delc:":
@@ -1312,34 +1312,34 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 case "nanv:":
                     String mode = getSelectedRButton(nanRadioGroup);
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable, mode);
-                     cansend = true;
+                    cansend = true;
                     break;
                 case "fact:":
                     System.out.println(newTableCB.isSelected());
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable);
-                     cansend = true;
+                    cansend = true;
                     break;
                 case "norm:":
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable);
-                     cansend = true;
+                    cansend = true;
                     break;
                 case "ftsl:":
                     String treshold = JOptionPane.showInputDialog(this, "Küszöbérték: ");
-                     try{
+                    try {
                         float temp = Float.parseFloat(treshold);
                         insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable, treshold);
-                         cansend = true;
-                    }catch(NumberFormatException e){
+                        cansend = true;
+                    } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "A(z) küszöbérték típusa nem megfelelő. Kérem ellenőrizze, hogy számot adott-e meg.");
                     }
                     break;
                 default:
                     break;
             }
-                if( cansend){
-                    outDatas = bufferOutput;
-                    lf = new LoadingFrame(this, "pythonCall", null);
-                    lf.setVisible(true);
+            if (cansend) {
+                outDatas = bufferOutput;
+                lf = new LoadingFrame(this, "pythonCall", null);
+                lf.setVisible(true);
             }
         }
     }//GEN-LAST:event_doButtonActionPerformed
@@ -1418,7 +1418,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 case "Sentiment Analysis":
                     changePanels(saPanel);
                     sa_targetCBox.removeAllItems();
-                    for(String c: columns){
+                    for (String c : columns) {
                         sa_targetCBox.addItem(c);
                     }
                     selectedOperation = "san:";
@@ -1437,7 +1437,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         if (path.equals("")) {
             JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
         } else {
-            currentTask = JOptionPane.showInputDialog(this, "Munkafolyamat neve: ");
+            currentTask = (JOptionPane.showInputDialog(this, "Munkafolyamat neve: ")).replaceAll(" ", "_");
             if (currentTask.equals("")) {
                 JOptionPane.showMessageDialog(this, "Adjon meg nevet!");
             }
@@ -1525,7 +1525,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
     }
-  
+
     // </editor-fold>
     //Combo-box feltöltő fv-ek
     // <editor-fold defaultstate="collapsed">
@@ -1687,50 +1687,48 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
     }
-    
-    
-    protected void editProfil(){
-           modifyprofilList.addMouseListener(new MouseAdapter() {
+
+    protected void editProfil() {
+        modifyprofilList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     try {
                         Object value = modifyprofilList.getModel().getElementAt(modifyprofilList.locationToIndex(e.getPoint()));
-                        System.out.println("value: " + value);
-                        
-                        if("Felhasználónév módosítása".equals(value)){
-                            String newusername = JOptionPane.showInputDialog(null, "Új felhasználónév: " );
-                            if(newusername.length()<3){
+
+                        if ("Felhasználónév módosítása".equals(value)) {
+                            String newusername = JOptionPane.showInputDialog(null, "Új felhasználónév: ");
+                            if (newusername.length() < 3) {
                                 JOptionPane.showMessageDialog(null, "Felhasználónév hossza nem megfelelő.(min. 3 karakter)");
-                            }else{
-                                if(!newusername.equals(loggedUser)){
+                            } else {
+                                if (!newusername.equals(loggedUser)) {
                                     outDatas.clear();
                                     outDatas.add("mdu:");
                                     outDatas.add(newusername);
                                 }
                             }
-                        }else{
+                        } else {
                             String temp = JOptionPane.showInputDialog(null, "Új jelszó: ");
                             String passFirst = "", passSecond = "";
-                            if(temp!=null){
+                            if (temp != null) {
                                 passFirst = encrypt(temp);
-                                
+
                                 temp = JOptionPane.showInputDialog(null, "Jelszó újra: ");
-                                if(temp!=null){
+                                if (temp != null) {
                                     passSecond = encrypt(temp);
                                 }
                             }
-                            if(!passFirst.equals(passSecond)){
+                            if (!passFirst.equals(passSecond)) {
                                 JOptionPane.showMessageDialog(null, "A két jelszó nem egyezik!");
-                            }else if(passFirst.equals(encrypt(""))){
+                            } else if (passFirst.equals(encrypt(""))) {
                                 JOptionPane.showMessageDialog(null, "A jelszó nem lehet üres karakter!");
-                            }else{
+                            } else {
                                 outDatas.clear();
                                 outDatas.add("mdp:");
                                 outDatas.add(passFirst);
                             }
                         }
-                        
+
                     } catch (ArrayIndexOutOfBoundsException ex) {
                     } catch (HeadlessException ex) {
                         Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -1747,7 +1745,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
                     try {
-                        System.out.println("Clicked.");
                         String selected = ((String) colList.getModel().getElementAt(colList.locationToIndex(e.getPoint())));
 
                         dropColModel.addElement(selected);
@@ -1766,7 +1763,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
                     try {
-                        System.out.println("Clicked.");
                         String selected = ((String) dropColList.getModel().getElementAt(dropColList.locationToIndex(e.getPoint())));
 
                         colModel.addElement(selected);
@@ -1833,7 +1829,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         nanRadioGroup.add(modeRButton);
     }
 
-    protected String getSelectedRButton(ButtonGroup bg) { 
+    protected String getSelectedRButton(ButtonGroup bg) {
         return bg.getSelection().getActionCommand();
     }
 
@@ -1869,10 +1865,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         for (int i = 0; i < outcols.getModel().getSize(); i++) {
             out[i] = outcols.getModel().getElementAt(i);
         }
-        if(out.length == 0 || feat.length == 0){
+        if (out.length == 0 || feat.length == 0) {
             JOptionPane.showMessageDialog(null, "A features set vagy a kimeneti tábla oszlopai üresek. Kérjük ellenőrizze.");
             return false;
-        }else{
+        } else {
             bufferOutput.clear();
             bufferOutput.add(classifier);
             bufferOutput.add(selectedTable);
@@ -1884,43 +1880,40 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             bufferOutput.addAll(Arrays.asList(feat));
             bufferOutput.add(Integer.toString(out.length));
             bufferOutput.addAll(Arrays.asList(out));
-            
-            
-        System.out.println("Buffer: " + bufferOutput);
             return true;
         }
     }
 
-     protected void getOutCol(JComboBox<String> cb, JList<String> out) {
-         DefaultComboBoxModel cbModel = new DefaultComboBoxModel();
-         cb.setModel(cbModel);
+    protected void getOutCol(JComboBox<String> cb, JList<String> out) {
+        DefaultComboBoxModel cbModel = new DefaultComboBoxModel();
+        cb.setModel(cbModel);
         cbModel.removeAllElements();
         cbModel.addElement(" ");
-        
+
         for (String c : columns) {
             cbModel.addElement(c);
         }
 
         DefaultListModel outlistModel = new DefaultListModel();
         outlistModel.removeAllElements();
+        outlistModel.addElement(" ");
         cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean caninsert = true;
-
                 out.setModel(outlistModel);
                 String selected = cb.getSelectedItem().toString();
-                if(!" ".equals(selected)){
-                    System.out.println("Selected: " + selected);
+                if (!" ".equals(selected)) {
                     String[] inlist = outlistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
                     for (String in : inlist) {
-                        
-                    System.out.println("Inlist: " + in);
                         if (in.equals(selected)) {
                             caninsert = false;
                         }
                     }
                     if (caninsert) {
+                        if(outlistModel.getElementAt(0).toString() == " "){
+                            outlistModel.removeElementAt(0);
+                        }
                         outlistModel.addElement(selected);
                     }
                 }
@@ -1929,7 +1922,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
 
     protected void setFromToList(JList<String> fromlist, JList<String> tolist, JComboBox<String> target) {
- 
+
         DefaultListModel fromlistModel = new DefaultListModel();
         DefaultListModel tolistModel = new DefaultListModel();
         DefaultComboBoxModel targetModel = new DefaultComboBoxModel();
@@ -1937,11 +1930,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         fromlistModel.removeAllElements();
         tolistModel.removeAllElements();
         targetModel.removeAllElements();
-        
-        for(String c: columns){
+
+        for (String c : columns) {
             targetModel.addElement(c);
         }
-        
+
         target.setModel(targetModel);
         tolist.setModel(tolistModel);
         fromlist.setModel(fromlistModel);
@@ -1950,7 +1943,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selected = target.getSelectedItem().toString();
-                if(selected != null){
+                if (selected != null) {
                     fromlistModel.removeAllElements();
                     tolistModel.removeElement(selected);
                     for (String c : columns) {
@@ -1966,23 +1959,22 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         fromlist.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                boolean caninsert=true;
+                boolean caninsert = true;
                 if (e.getClickCount() == 1) {
                     try {
                         String selected = ((String) fromlist.getModel().getElementAt(fromlist.locationToIndex(e.getPoint())));
 
                         String[] inlist = tolistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
-                    for (String in : inlist) {
-                        if (in.equals(selected)) {
-                            caninsert = false;
-                            System.out.println("Caninsert from: " + caninsert + " : in: " + in + "selected: " + selected);
+                        for (String in : inlist) {
+                            if (in.equals(selected)) {
+                                caninsert = false;
+                            }
                         }
-                    }
-                    if (caninsert) {
-                        tolistModel.addElement(selected);
-                    }
+                        if (caninsert) {
+                            tolistModel.addElement(selected);
+                        }
                         fromlistModel.removeElement(selected);
-                    
+
                     } catch (ArrayIndexOutOfBoundsException ex) {
 
                     }
@@ -1993,21 +1985,20 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         tolist.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                boolean caninsert=true;
+                boolean caninsert = true;
                 if (e.getClickCount() == 1) {
                     try {
                         String selected = ((String) tolist.getModel().getElementAt(tolist.locationToIndex(e.getPoint())));
-                    String[] inlist = fromlistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
-                    for (String in : inlist) {
-                        if (in.equals(selected)) {
-                            caninsert = false;
-                            System.out.println("False");
+                        String[] inlist = fromlistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
+                        for (String in : inlist) {
+                            if (in.equals(selected)) {
+                                caninsert = false;
+                            }
                         }
-                    }
-                    if (caninsert) {
-                        fromlistModel.addElement(selected);
-                    }
-                    tolistModel.removeElement(selected);
+                        if (caninsert) {
+                            fromlistModel.addElement(selected);
+                        }
+                        tolistModel.removeElement(selected);
                     } catch (ArrayIndexOutOfBoundsException ex) {
                     }
                 }
@@ -2015,70 +2006,73 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         });
     }
 
-    
-    protected boolean checkParameters(JTextField text, String expectedType){
-        boolean returnvalue=true;
-        if(null != expectedType)switch (expectedType) {
-            case "String":
-                break;
-            case "Integer":
-                try{
-                    int temp = Integer.parseInt(text.getText());
-                }catch(NumberFormatException e){
-                    returnvalue=false;
-                    JOptionPane.showMessageDialog(null, "A(z) " +text.getName()+" típusa nem megfelelő. Kérem ellenőrizze, hogy egész számot adott-e meg.");
-                }   break;
-            case "Float":
-                try{
-                    float temp = Float.parseFloat(text.getText());
-                }catch(NumberFormatException e){
-                    returnvalue=false;
-                    JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy számot adott-e meg.");
-                }   break;
-            case "Bool":
-                if(text.getText().equals("True") || text.getText().equals("true") || text.getText().equals("False") || text.getText().equals("false")) {
-                    returnvalue=true;
-                }else{
-                    returnvalue =false;
-                    JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy logikai értéket adott-e meg.");
-                }   break;
-            default:
-                break;
+    protected boolean checkParameters(JTextField text, String expectedType) {
+        boolean returnvalue = true;
+        if (null != expectedType) {
+            switch (expectedType) {
+                case "String":
+                    break;
+                case "Integer":
+                    try {
+                        int temp = Integer.parseInt(text.getText());
+                    } catch (NumberFormatException e) {
+                        returnvalue = false;
+                        JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy egész számot adott-e meg.");
+                    }
+                    break;
+                case "Float":
+                    try {
+                        float temp = Float.parseFloat(text.getText());
+                    } catch (NumberFormatException e) {
+                        returnvalue = false;
+                        JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy számot adott-e meg.");
+                    }
+                    break;
+                case "Bool":
+                    if (text.getText().equals("True") || text.getText().equals("true") || text.getText().equals("False") || text.getText().equals("false")) {
+                        returnvalue = true;
+                    } else {
+                        returnvalue = false;
+                        JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy logikai értéket adott-e meg.");
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
         return returnvalue;
     }
-    
-    protected void setTextFieldNames(){
+
+    protected void setTextFieldNames() {
         ada_neField.setName("n_estimators");
         ada_lrField.setName("learning_rate");
         ada_rsField.setName("random_state");
-        
+
         rfc_neField.setName("n_estiomators");
         rfc_mdField.setName("max_depth");
         rfc_rsField.setName("random_state");
         rfc_njField.setName("n_jobs");
-        
+
         dtc_psField.setName("presort");
         dtc_mdField.setName("max_depth");
-        dtc_rsField.setName("random_state");        
+        dtc_rsField.setName("random_state");
     }
-    
- 
-    private String encrypt(String pass){
-    try {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] passBytes = pass.getBytes();
-        md.reset();
-        byte[] digested = md.digest(passBytes);
-        StringBuilder sb = new StringBuilder();
-        for(int i=0;i<digested.length;i++){
-            sb.append(Integer.toHexString(0xff & digested[i]));
+
+    private String encrypt(String pass) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] passBytes = pass.getBytes();
+            md.reset();
+            byte[] digested = md.digest(passBytes);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < digested.length; i++) {
+                sb.append(Integer.toHexString(0xff & digested[i]));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
         }
-        return sb.toString();
-    } catch (NoSuchAlgorithmException ex) {
-    }
         return null;
-   }    
+    }
     // </editor-fold>
     //VARIABLES
     // <editor-fold defaultstate="collapsed">

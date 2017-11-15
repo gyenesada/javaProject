@@ -742,6 +742,8 @@ public class ClientThread implements Runnable {
                 Statement updateName = conn.createStatement();
                 String updateQuery = "update users set username = '"+newusername+"' where user_id = '"+threadID+"';";
                 updateName.executeUpdate(updateQuery);
+                threadName = newusername;
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
