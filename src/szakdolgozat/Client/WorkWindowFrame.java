@@ -414,7 +414,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
 
-        operationCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        operationCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         operationCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 operationCBoxActionPerformed(evt);
@@ -529,19 +529,19 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_targetLabel.setText("Target:");
 
-        rfc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        rfc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         rfc_featLabel.setText("Features:");
 
         rfc_fromList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane2.setViewportView(rfc_fromList);
 
         rfc_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -555,9 +555,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_outLabel.setText("Kimeneti tábla oszlopai");
 
-        rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         rfc_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -701,19 +701,19 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         ada_targetLabel.setText("Target:");
 
-        ada_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ada_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         ada_featLabel.setText("Features:");
 
         ada_fromList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane7.setViewportView(ada_fromList);
 
         ada_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -727,10 +727,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         ada_outLabel.setText("Kimeneti tábla oszlopai");
 
-        ada_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ada_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         ada_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -841,19 +841,19 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         dtc_rsField.setText("0");
         dtc_targetLabel.setText("Target:");
 
-        dtc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dtc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         dtc_featLabel.setText("Features:");
 
         dtc_fromList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane10.setViewportView(dtc_fromList);
 
         dtc_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -867,10 +867,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         dtc_outLabel.setText("Kimeneti tábla oszlopai");
 
-        dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         dtc_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -953,7 +953,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         parameterMainPanel.add(dtcPanel, "card2");
 
-        sa_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sa_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         sa_targetCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sa_targetCBoxActionPerformed(evt);
@@ -1126,7 +1126,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         loadedTablesList.setBackground(new java.awt.Color(240, 240, 240));
         loadedTablesList.setBorder(javax.swing.BorderFactory.createTitledBorder("Betöltött táblák"));
         loadedTablesList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -1281,22 +1281,19 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 case "ada:":
                     if(checkParameters(ada_neField, "Integer") && checkParameters(ada_lrField, "Float") && checkParameters(ada_rsField, "Integer")){
                         String[] ada_parameters = {ada_neField.getText(), ada_lrField.getText(), ada_algCBox.getSelectedItem().toString(), ada_rsField.getText()};
-                        setClassifierParameters(selectedOperation, ada_parameters, ada_targetCBox, ada_toList, ada_outList);
-                        cansend = true;
+                        cansend = setClassifierParameters(selectedOperation, ada_parameters, ada_targetCBox, ada_toList, ada_outList);
                     }
                     break;
                 case "rfc:":
                     if(checkParameters(rfc_neField, "Integer") && checkParameters(rfc_mdField, "Integer") && checkParameters(rfc_rsField, "Integer") && checkParameters(rfc_njField, "Integer")){
                         String[] rfc_parameters = {rfc_mdField.getText(), rfc_neField.getText(), rfc_rsField.getText(), rfc_njField.getText()};
-                       setClassifierParameters(selectedOperation, rfc_parameters, rfc_targetCBox, rfc_toList, rfc_outList);
-                       cansend = true;
+                       cansend =  setClassifierParameters(selectedOperation, rfc_parameters, rfc_targetCBox, rfc_toList, rfc_outList);
                     }
                     break;
                 case "dtc:":
                     if(checkParameters(dtc_psField, "Bool") && checkParameters(dtc_mdField, "Integer") && checkParameters(dtc_rsField, "Integer")){
                         String[] dtc_parameters = {dtc_psField.getText(), dtc_mdField.getText(), dtc_rsField.getText()};
-                        setClassifierParameters(selectedOperation, dtc_parameters, dtc_targetCBox, dtc_toList, dtc_outList);
-                        cansend = true;
+                        cansend= setClassifierParameters(selectedOperation, dtc_parameters, dtc_targetCBox, dtc_toList, dtc_outList);
                     }
                     break;
                 case "san:":
@@ -1368,10 +1365,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected void operationCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationCBoxActionPerformed
         String chosen = getSelectedOperation();
-
-        if (chosen == null) {
-            //  donothing
-        } else {
+        if (chosen != null) {
             switch (chosen) {
                 case "Faktorizálás":
                     changePanels(firstPanel);
@@ -1791,7 +1785,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 if (e.getClickCount() == 1) {
                     try {
                         String selected = ((String) loadedTablesList.getModel().getElementAt(loadedTablesList.locationToIndex(e.getPoint())));
-                        System.out.println("Selected: " + selected);
 
                         classifierCBox.setEnabled(true);
                         operationCBox.setEnabled(true);
@@ -1866,28 +1859,36 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         }
     }
 
-    protected void setClassifierParameters(String classifier, String[] parameters, JComboBox<String> target, JList<String> features, JList<String> outcols) {
-        bufferOutput.clear();
-        bufferOutput.add(classifier);
-        bufferOutput.add(selectedTable);
-        bufferOutput.add(target.getSelectedItem().toString());
-        bufferOutput.add(Integer.toString(parameters.length));
-        bufferOutput.addAll(Arrays.asList(parameters));
+    protected boolean setClassifierParameters(String classifier, String[] parameters, JComboBox<String> target, JList<String> features, JList<String> outcols) {
         String[] feat = new String[features.getModel().getSize()];
-                    for (int i = 0; i < features.getModel().getSize(); i++) {
-                        feat[i] = features.getModel().getElementAt(i);
-                    }
-        bufferOutput.add(Integer.toString(feat.length));
-        bufferOutput.addAll(Arrays.asList(feat));
-       
+        for (int i = 0; i < features.getModel().getSize(); i++) {
+            feat[i] = features.getModel().getElementAt(i);
+        }
+
         String[] out = new String[outcols.getModel().getSize()];
-                    for (int i = 0; i < outcols.getModel().getSize(); i++) {
-                        out[i] = outcols.getModel().getElementAt(i);
-                    }
-        bufferOutput.add(Integer.toString(out.length));
-        bufferOutput.addAll(Arrays.asList(out));
-        
+        for (int i = 0; i < outcols.getModel().getSize(); i++) {
+            out[i] = outcols.getModel().getElementAt(i);
+        }
+        if(out.length == 0 || feat.length == 0){
+            JOptionPane.showMessageDialog(null, "A features set vagy a kimeneti tábla oszlopai üresek. Kérjük ellenőrizze.");
+            return false;
+        }else{
+            bufferOutput.clear();
+            bufferOutput.add(classifier);
+            bufferOutput.add(selectedTable);
+            bufferOutput.add(target.getSelectedItem().toString());
+            bufferOutput.add(Integer.toString(parameters.length));
+            bufferOutput.addAll(Arrays.asList(parameters));
+
+            bufferOutput.add(Integer.toString(feat.length));
+            bufferOutput.addAll(Arrays.asList(feat));
+            bufferOutput.add(Integer.toString(out.length));
+            bufferOutput.addAll(Arrays.asList(out));
+            
+            
         System.out.println("Buffer: " + bufferOutput);
+            return true;
+        }
     }
 
      protected void getOutCol(JComboBox<String> cb, JList<String> out) {
@@ -1902,7 +1903,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         DefaultListModel outlistModel = new DefaultListModel();
         outlistModel.removeAllElements();
-        outlistModel.addElement(" ");
         cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1911,15 +1911,16 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 out.setModel(outlistModel);
                 String selected = cb.getSelectedItem().toString();
                 if(!" ".equals(selected)){
-
+                    System.out.println("Selected: " + selected);
                     String[] inlist = outlistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
                     for (String in : inlist) {
+                        
+                    System.out.println("Inlist: " + in);
                         if (in.equals(selected)) {
                             caninsert = false;
                         }
                     }
                     if (caninsert) {
-                        outlistModel.removeElementAt(0);
                         outlistModel.addElement(selected);
                     }
                 }
@@ -1949,9 +1950,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selected = target.getSelectedItem().toString();
-                if(selected == null){
-                    
-                }else{
+                if(selected != null){
                     fromlistModel.removeAllElements();
                     tolistModel.removeElement(selected);
                     for (String c : columns) {
@@ -1967,12 +1966,23 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         fromlist.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                boolean caninsert=true;
                 if (e.getClickCount() == 1) {
                     try {
                         String selected = ((String) fromlist.getModel().getElementAt(fromlist.locationToIndex(e.getPoint())));
 
+                        String[] inlist = tolistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
+                    for (String in : inlist) {
+                        if (in.equals(selected)) {
+                            caninsert = false;
+                            System.out.println("Caninsert from: " + caninsert + " : in: " + in + "selected: " + selected);
+                        }
+                    }
+                    if (caninsert) {
                         tolistModel.addElement(selected);
+                    }
                         fromlistModel.removeElement(selected);
+                    
                     } catch (ArrayIndexOutOfBoundsException ex) {
 
                     }
@@ -1983,12 +1993,21 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         tolist.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                boolean caninsert=true;
                 if (e.getClickCount() == 1) {
                     try {
                         String selected = ((String) tolist.getModel().getElementAt(tolist.locationToIndex(e.getPoint())));
-
+                    String[] inlist = fromlistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
+                    for (String in : inlist) {
+                        if (in.equals(selected)) {
+                            caninsert = false;
+                            System.out.println("False");
+                        }
+                    }
+                    if (caninsert) {
                         fromlistModel.addElement(selected);
-                        tolistModel.removeElement(selected);
+                    }
+                    tolistModel.removeElement(selected);
                     } catch (ArrayIndexOutOfBoundsException ex) {
                     }
                 }

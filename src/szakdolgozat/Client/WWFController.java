@@ -103,6 +103,9 @@ public class WWFController implements Runnable{
                 break;
             case "ldt:":
                 loadedTablePreprocess();
+                wwf.changePanels(wwf.firstPanel);
+                wwf.classifierCBox.setSelectedIndex(0);
+                wwf.operationCBox.setSelectedIndex(0);
                 break;
             case "done:":
                 loadedTablePreprocess();
