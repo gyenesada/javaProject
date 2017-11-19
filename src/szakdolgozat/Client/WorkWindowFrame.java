@@ -216,11 +216,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         sideLoadPanel = new javax.swing.JPanel();
         modifyprofilList = new javax.swing.JList<>();
         sideWorkPanel = new javax.swing.JPanel();
-        loadedTablesList = new javax.swing.JList<>();
         delSessionButton = new javax.swing.JButton();
         delTableButton = new javax.swing.JButton();
         downloadTableButton = new javax.swing.JButton();
         selectedTableLabel = new javax.swing.JLabel();
+        loadedTablesListSPane = new javax.swing.JScrollPane();
+        loadedTablesList = new javax.swing.JList<>();
         separator = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -230,7 +231,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         preMenuItem = new javax.swing.JMenuItem();
         classifMenuItem = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
-        informMenuItem = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setFocusTraversalPolicyProvider(true);
@@ -293,6 +294,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         list.setBackground(new java.awt.Color(255, 255, 255));
         list.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+ 
         oldWorkSPane.setViewportView(list);
 
         javax.swing.GroupLayout loadOldWorkPanelLayout = new javax.swing.GroupLayout(loadOldWorkPanel);
@@ -414,7 +416,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
 
-        operationCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        operationCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         operationCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 operationCBoxActionPerformed(evt);
@@ -529,19 +531,19 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_targetLabel.setText("Target:");
 
-        rfc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        rfc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         rfc_featLabel.setText("Features:");
 
         rfc_fromList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
+            String[] strings = { " "};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane2.setViewportView(rfc_fromList);
 
         rfc_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
+            String[] strings = { " "};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -555,9 +557,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_outLabel.setText("Kimeneti tábla oszlopai");
 
-        rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         rfc_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
+            String[] strings = { " "};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -701,19 +704,19 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         ada_targetLabel.setText("Target:");
 
-        ada_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        ada_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         ada_featLabel.setText("Features:");
 
         ada_fromList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
+            String[] strings = { " "};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane7.setViewportView(ada_fromList);
 
         ada_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
+            String[] strings = { " "};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -727,10 +730,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         ada_outLabel.setText("Kimeneti tábla oszlopai");
 
-        ada_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        ada_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         ada_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
+            String[] strings = { " "};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -839,21 +842,22 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         dtc_rsLabel.setText("random_state:");
 
         dtc_rsField.setText("0");
+
         dtc_targetLabel.setText("Target:");
 
-        dtc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        dtc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         dtc_featLabel.setText("Features:");
 
         dtc_fromList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
+            String[] strings = { " "};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane10.setViewportView(dtc_fromList);
 
         dtc_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
+            String[] strings = { " "};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -867,10 +871,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         dtc_outLabel.setText("Kimeneti tábla oszlopai");
 
-        dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
-
+        dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         dtc_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
+            String[] strings = { " "};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -953,7 +956,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         parameterMainPanel.add(dtcPanel, "card2");
 
-        sa_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        sa_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         sa_targetCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sa_targetCBoxActionPerformed(evt);
@@ -1123,14 +1126,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         sidePanel.add(sideLoadPanel, "card2");
 
-        loadedTablesList.setBackground(new java.awt.Color(240, 240, 240));
-        loadedTablesList.setBorder(javax.swing.BorderFactory.createTitledBorder("Betöltött táblák"));
-        loadedTablesList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-
         delSessionButton.setText("Törlés");
         delSessionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1154,11 +1149,21 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         selectedTableLabel.setText("Kijelölt tábla:");
 
+        loadedTablesListSPane.setBorder(null);
+
+        loadedTablesList.setBackground(new java.awt.Color(240, 240, 240));
+        loadedTablesList.setBorder(javax.swing.BorderFactory.createTitledBorder("Betöltött táblák"));
+        loadedTablesList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { " "};
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        loadedTablesListSPane.setViewportView(loadedTablesList);
+
         javax.swing.GroupLayout sideWorkPanelLayout = new javax.swing.GroupLayout(sideWorkPanel);
         sideWorkPanel.setLayout(sideWorkPanelLayout);
         sideWorkPanelLayout.setHorizontalGroup(
             sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(loadedTablesList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(sideWorkPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1172,12 +1177,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                             .addComponent(selectedTableLabel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(loadedTablesListSPane)
         );
         sideWorkPanelLayout.setVerticalGroup(
             sideWorkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideWorkPanelLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(loadedTablesList, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                .addComponent(loadedTablesListSPane, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(selectedTableLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1230,13 +1235,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         helpMenu.add(classifMenuItem);
         helpMenu.add(jSeparator9);
 
-        informMenuItem.setText("Névjegy");
-        informMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                informMenuItemActionPerformed(evt);
-            }
-        });
-        helpMenu.add(informMenuItem);
+        jMenuItem1.setText("Névjegy");
+
+        helpMenu.add(jMenuItem1);
 
         jMenuBar1.add(helpMenu);
 
@@ -1261,7 +1262,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 .addGap(105, 105, 105)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1348,18 +1349,24 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         path = workPathField.getText();
 
         selectedTable = getFilename(path);
-        if (path.equals("")) {
-            JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
-        } else {
-            outDatas = readFromCsv(path, true);
+        String extension = getExtension(selectedTable);
+        if(extension.equals("csv")){
+            if (selectedTable.equals("-1")) {
+                JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
+            } else {
+                outDatas = readFromCsv(path, true);
+            }
+        }else{
+            workPathField.setText("");
+            JOptionPane.showMessageDialog(this, "Adjon meg egy csv file-t!");
         }
-        workPathField.setText("");
     }//GEN-LAST:event_workUploadButtonActionPerformed
 
     protected void showLoadPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLoadPanelActionPerformed
         operationCBox.setSelectedItem("...");
         classifierCBox.setSelectedItem("...");
         outDatas.add("wrk:");
+        //outcolsList kiürítése
         changeMainPanels(loadPanel, sideLoadPanel);
     }//GEN-LAST:event_showLoadPanelActionPerformed
 
@@ -1433,20 +1440,27 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
         path = filepathField.getText();
         selectedTable = getFilename(path);
-        System.out.println("selected: " + selectedTable);
-        if (path.equals("")) {
-            JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
-        } else {
-            currentTask = (JOptionPane.showInputDialog(this, "Munkafolyamat neve: ")).replaceAll(" ", "_");
-            if (currentTask.equals("")) {
-                JOptionPane.showMessageDialog(this, "Adjon meg nevet!");
+        String extension = getExtension(selectedTable);
+        if(extension.equals("csv")){
+            System.out.println("selected: " + selectedTable);
+            if (selectedTable.equals("-1")) {
+                JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
+            } else {
+                currentTask = (JOptionPane.showInputDialog(this, "Munkafolyamat neve: ")).replaceAll(" ", "_");
+                if (currentTask.equals("")) {
+                    JOptionPane.showMessageDialog(this, "Adjon meg nevet!");
+                } else if(currentTask == null){
+                    //do nothing
+                }
+                outDatas = readFromCsv(path, false);
             }
-            outDatas = readFromCsv(path, false);
-        }
-        filepathField.setText("");
+            filepathField.setText("");
 
-        lf = new LoadingFrame(this, "tableUpload", null);
-        lf.setVisible(true);
+            lf = new LoadingFrame(this, "tableUpload", null);
+            lf.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this, "Adjon meg egy .csv file-t!");
+        }
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     protected void choseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choseButtonActionPerformed
@@ -1487,6 +1501,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             outDatas.add(Integer.toString(currentTaskID));
             outDatas.add(selectedTable);
         }
+        changePanels(firstPanel);
     }//GEN-LAST:event_delTableButtonActionPerformed
 
     protected void downloadTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadTableButtonActionPerformed
@@ -1613,13 +1628,14 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected ArrayList<String> readFromCsv(String path, boolean work) {
         ArrayList<String> csv = new ArrayList<>();
-        if (work) {
-            csv.add("wcsv:");
-            csv.add(Integer.toString(currentTaskID) + ":");
-        } else {
-            csv.add("csv:");
-            csv.add(currentTask + ":");
-        }
+            if (work) {
+                csv.add("wcsv:");
+                csv.add(Integer.toString(currentTaskID) + ":");
+            } else {
+                csv.add("csv:");
+                csv.add(currentTask + ":");
+            }
+               
         String filename;
 
         BufferedReader br = null;
@@ -1629,9 +1645,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             filename = getFilename(path);
             csv.add(filename + ":");
             String line = br.readLine();
+            line = line.replaceAll("\"", "");
             csv.add(line);
             csv.add(">>flag<<");
-
             String[] cols = line.split(",");
             ArrayList<String[]> items = new ArrayList<>();
             int index = 0;
@@ -1803,10 +1819,25 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected String getFilename(String path) {
         String returnvalue;
         String[] spl = path.split(Pattern.quote("\\"));
-        returnvalue = spl[spl.length - 1].replaceAll(" ", "_");
+        if(spl.length==0){
+            returnvalue = "-1";
+        }else{
+            returnvalue = spl[spl.length - 1].replaceAll(" ", "_");
+        }
         return returnvalue;
     }
-
+    
+    protected String getExtension(String filename){
+        String returnvalue;
+        String[] spl = filename.split(Pattern.quote("."));
+        if(spl.length ==0){
+            returnvalue = "-1";
+        }else{
+            returnvalue =  spl[spl.length -1];
+        }
+        return returnvalue;
+    }
+  
     protected String getSelectedOperation() {
         return operationCBox.getItemAt(operationCBox.getSelectedIndex());
     }
@@ -1875,7 +1906,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             bufferOutput.add(target.getSelectedItem().toString());
             bufferOutput.add(Integer.toString(parameters.length));
             bufferOutput.addAll(Arrays.asList(parameters));
-
             bufferOutput.add(Integer.toString(feat.length));
             bufferOutput.addAll(Arrays.asList(feat));
             bufferOutput.add(Integer.toString(out.length));
@@ -1911,7 +1941,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         }
                     }
                     if (caninsert) {
-                        if(outlistModel.getElementAt(0).toString() == " "){
+                        if (" ".equals(outlistModel.getElementAt(0).toString())) {
                             outlistModel.removeElementAt(0);
                         }
                         outlistModel.addElement(selected);
@@ -2014,7 +2044,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     break;
                 case "Integer":
                     try {
-                        int temp = Integer.parseInt(text.getText());
+                        Integer.parseInt(text.getText());
                     } catch (NumberFormatException e) {
                         returnvalue = false;
                         JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy egész számot adott-e meg.");
@@ -2022,7 +2052,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     break;
                 case "Float":
                     try {
-                        float temp = Float.parseFloat(text.getText());
+                        Float.parseFloat(text.getText());
                     } catch (NumberFormatException e) {
                         returnvalue = false;
                         JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy számot adott-e meg.");
@@ -2058,7 +2088,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         dtc_rsField.setName("random_state");
     }
 
-    private String encrypt(String pass) {
+    protected String encrypt(String pass) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] passBytes = pass.getBytes();
@@ -2131,7 +2161,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JMenu helpMenu;
     protected javax.swing.JLabel jLabel2;
     protected javax.swing.JMenuBar jMenuBar1;
-    protected javax.swing.JMenuItem informMenuItem;
+    protected javax.swing.JMenuItem jMenuItem1;
     protected javax.swing.JScrollPane jScrollPane1;
     protected javax.swing.JScrollPane jScrollPane10;
     protected javax.swing.JScrollPane jScrollPane11;
@@ -2158,6 +2188,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JPanel loadOldWorkPanel;
     protected javax.swing.JPanel loadPanel;
     protected javax.swing.JList<String> loadedTablesList;
+    protected javax.swing.JScrollPane loadedTablesListSPane;
     protected javax.swing.JMenuItem logOut;
     protected javax.swing.JPanel mainPanel;
     protected javax.swing.JRadioButton meanRButton;

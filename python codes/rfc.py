@@ -35,7 +35,7 @@ def get_outcols():
 	temps=[]
 	i = 1
 	while (i<=out):
-		outcols.append(sys.argv[6+params+feat+i])
+		temps.append(sys.argv[6+params+feat+i])
 		i=i+1
 	return temps
 
@@ -54,12 +54,19 @@ train = df[generated]
 test = df[~generated]
 or_test = dfo[~generated]
 
+trainvalues = train[target].values.tolist()
+for i in range(len(trainvalues)):
+	trainvalues[i] = trainvalues[i]*100.0
+	
+train[target] = trainvalues
+train[target] = train[target].apply(np.int64)	
+
 clf = RandomForestClassifier(max_depth = max_depth, random_state = random_state, n_jobs =n_jobs, n_estimators=n_estimators) 
 clf.fit(train[features].values, train[target].values)
 
 predictions = clf.predict(test[features].values)
 def get_prefix(program):
-	splitted = program.split("\\")
+	splitted = program.split("/")
 	py = splitted[len(splitted)-1].split(".py");
 	prefix = py[0]+"_"
 	return prefix
@@ -73,13 +80,16 @@ def get_newfile_path(tablename):
 	return path
 	
 def get_tablename(tablename):
-	splitted = tablename.split("\\")
+	splitted = tablename.split("/")
 	return splitted[len(splitted)-1]
 	
 newtablename = get_newfile_path(tablename) + get_newfile_name(tablename)
 
 df_out = pd.DataFrame(columns=outcols)
 df_out[outcols] = or_test[outcols]
-df_out[target] = predictions
 
+for i in range(len(predictions)):
+	predictions[i] = predictions/100.0
+
+df_out[target] = predictions
 df_out.to_csv(newtablename, index=False)

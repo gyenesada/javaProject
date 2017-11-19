@@ -39,12 +39,11 @@ public class WWFController implements Runnable{
         int index = 0;
         
          while(!wwf.exit){
-            System.out.println("---------------" + index + "--------------");
+            System.out.println(index + ".kérés indítása");
             try {
                 while (wwf.outDatas.isEmpty()) {
                     Thread.sleep(10);
                 }
-                System.out.println("wwf." +  wwf.outDatas);
                 pw.println(wwf.outDatas);
                 wwf.inDatas.clear();
                 wwf.rawInput = sc.nextLine();
@@ -54,6 +53,8 @@ public class WWFController implements Runnable{
                 }
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "A szerver kapcsolat megszakadt.");
+                wwf.dispose();
             }
             index++;
          }
@@ -71,7 +72,7 @@ public class WWFController implements Runnable{
                     DefaultListModel<String> model = new DefaultListModel<>();
                     wwf.loadedTablesList.setModel(model);
                     model.addElement(wwf.selectedTable);
-                    Thread.sleep(50);
+                    Thread.sleep(100);
                     wwf.lf.dispose();
                     wwf.operationCBox.setEnabled(true); wwf.classifierCBox.setEnabled(true);
                     wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
@@ -201,7 +202,7 @@ public class WWFController implements Runnable{
             
             String lines = wwf.rawInput.split(":, ")[2];
             String line = (lines.replaceAll(", >>first_line_end_flag<<, ", "\n").replaceAll(", >>enter_flag<<, ", "\n")).replaceAll(", >>enter_flag<<]", "");
-            
+                       
             bw.write(line);
             JOptionPane.showMessageDialog(wwf, "A kiválasztott tábla lementve: "+fullFilepath+". ");
         } catch (IOException e) {
@@ -221,6 +222,7 @@ public class WWFController implements Runnable{
 
         String[] string = withoutBrackets.split(", ");
         wwf.inDatas.addAll(Arrays.asList(string));
+        System.out.println("[in]: " + wwf.inDatas);
     }
     
     private void addTableToList(ArrayList<String> in){

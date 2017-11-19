@@ -16,7 +16,7 @@ def dropout_cols(table):
 	return table
 	
 def get_prefix(program):
-	splitted = program.split("\\")
+	splitted = program.split("/")
 	py = splitted[len(splitted)-1].split(".py");
 	prefix = py[0]+"_"
 	return prefix
@@ -30,7 +30,7 @@ def get_newfile_path(tablename):
 	return path
 	
 def get_tablename(tablename):
-	splitted = tablename.split("\\")
+	splitted = tablename.split("/")
 	return splitted[len(splitted)-1]
 	
 newtablename = get_newfile_path(tablename) + get_newfile_name(tablename)

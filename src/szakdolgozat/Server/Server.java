@@ -1,5 +1,3 @@
-
-
 package szakdolgozat.Server;
 
 import java.net.ServerSocket;
