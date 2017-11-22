@@ -23,9 +23,8 @@ public class MWFController implements Runnable {
     private static MainWindowFrame wf;
 
     public MWFController() throws IOException {
-//        this.host = "localhost";
         this.host = "157.181.176.130";
-        this.port = 1973;
+        this.port = 1221;
         
         wf = new MainWindowFrame();
         wf.setVisible(true);

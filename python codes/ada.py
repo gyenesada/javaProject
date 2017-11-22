@@ -1,6 +1,8 @@
 import sys
 import pandas as pd
 import numpy as np
+
+from sklearn import metrics as ms
 from sklearn.ensemble import AdaBoostClassifier
 
 program = sys.argv[0]
@@ -43,16 +45,28 @@ or_test = dfo[~generated]
 
 
 trainvalues = train[target].values.tolist()
+testvalues = test[target].values.tolist()
 for i in range(len(trainvalues)):
 	trainvalues[i] = trainvalues[i]*100.0
+	
+for i in range(len(testvalues)):
+	testvalues[i] = testvalues[i]*100.0
 
 train[target] = trainvalues
 train[target] = train[target].apply(np.int64)	
+
+test[target] = testvalues
+test[target] = test[target].apply(np.int64)
+
+print test[target]
 
 clf = AdaBoostClassifier(n_estimators = n_estimators, algorithm=algorithm, learning_rate=learning_rate, random_state=random_state) 
 clf.fit(train[features].values, train[target].values)
 
 predictions = clf.predict(test[features].values)
+
+print predictions
+print ms.accuracy_score(test[target].values,predictions)
 
 def get_prefix(program):
 	splitted = program.split("/")
@@ -77,9 +91,12 @@ newtablename = get_newfile_path(tablename) + get_newfile_name(tablename)
 df_out = pd.DataFrame(columns=outcols)
 df_out[outcols] = or_test[outcols]
 
+float_pred = []
 for i in range(len(predictions)):
-	predictions[i] = predictions/100.0
+	float_pred.append(predictions[i]/100.0)
 	
-df_out[target] = predictions
+df_out[target] = float_pred
+
+print float_pred
 
 df_out.to_csv(newtablename, index=False)

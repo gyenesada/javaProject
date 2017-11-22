@@ -1,6 +1,8 @@
 import sys
 import pandas as pd
 import numpy as np
+
+from sklearn import metrics as ms
 from sklearn.tree import DecisionTreeClassifier
 
 program =  sys.argv[0]
@@ -57,6 +59,8 @@ clf.fit(train[features].values, train[target].values)
 
 predictions = clf.predict(test[features].values)
 
+print ms.accuracy_score(test[target].values,predictions)
+
 def get_prefix(program):
 	splitted = program.split("/")
 	py = splitted[len(splitted)-1].split(".py");
@@ -81,7 +85,7 @@ df_out = pd.DataFrame(columns=outcols)
 df_out[outcols] = or_test[outcols]
 
 for i in range(len(predictions)):
-	predictions[i] = predictions/100.0
+	predictions[i] = predictions[i]/100.0
 df_out[target] = predictions
 
 df_out.to_csv(newtablename, index=False)

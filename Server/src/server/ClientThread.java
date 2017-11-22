@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class ClientThread implements Runnable {
 
     //String PATH = "C:\\Users\\Adrienn\\Desktop\\szerver\\csv\\";
-   // String PY_PATH = "C:\\Users\\Adrienn\\Desktop\\szerver\\python\\";
+    // String PY_PATH = "C:\\Users\\Adrienn\\Desktop\\szerver\\python\\";
     String PATH = "/mnt/disk4/gyenesadrienn/csv/";
     String PY_PATH = "/mnt/disk4/gyenesadrienn/python/";
 
@@ -32,12 +32,8 @@ public class ClientThread implements Runnable {
     private PrintWriter pw;
     private final Connection conn;
 
-    private String threadName;
-    private int threadID;
-    private int currentTableID;
-    private int currentTaskID;
-
-    private String rawInput;
+    private int threadID, currentTableID, currentTaskID, accuracyScore;
+    private String rawInput, threadName;
 
     private ArrayList<String> inDatas = new ArrayList<>();
     private ArrayList<String> outDatas = new ArrayList<>();
@@ -83,7 +79,6 @@ public class ClientThread implements Runnable {
 
         String[] string = withoutBrackets.split(", ");
         inDatas.addAll(Arrays.asList(string));
-        System.out.println("IN: " + inDatas);
     }
 
     private ArrayList<String> controller(ArrayList<String> in) {
@@ -138,7 +133,7 @@ public class ClientThread implements Runnable {
                 break;
             case "ldt:": //chosen table loading
                 currentTaskID = Integer.parseInt(in.get(1));
-                out = readFromCsv("ldt:", in.get(2), true);
+                out = readFromCsv("ldt:", in.get(2), true, false);
                 break;
             case "fact:": //factorize
                 currentTaskID = Integer.parseInt(in.get(2));
@@ -146,7 +141,7 @@ public class ClientThread implements Runnable {
 
                 answer = callingPython(newtable, "factorize.py", in.get(3));
                 modifyIsFactorizedInTables(in.get(3));
-                out = readFromCsv("done:", answer, true);
+                out = readFromCsv("done:", answer, true, false);
                 break;
             case "norm:": //normalize
                 currentTaskID = Integer.parseInt(in.get(2));
@@ -154,7 +149,7 @@ public class ClientThread implements Runnable {
 
                 answer = callingPython(newtable, "normalize.py", in.get(3));
                 modifyIsNormalisedInTables(in.get(3));
-                out = readFromCsv("done:", answer, true);
+                out = readFromCsv("done:", answer, true, false);
                 break;
             case "ftsl:": //feature selection
                 currentTaskID = Integer.parseInt(in.get(2));
@@ -162,21 +157,21 @@ public class ClientThread implements Runnable {
 
                 answer = callingPython(newtable, "variance.py", in.get(3), in.get(4));
                 modifyIsFeatureSelectedInTables(in.get(3));
-                out = readFromCsv("done:", answer, true);
+                out = readFromCsv("done:", answer, true, false);
                 break;
             case "delc:": //delete columns
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "dropout.py", in.get(3), parametersToString(in));
-                out = readFromCsv("done:", answer, true);
+                out = readFromCsv("done:", answer, true, false);
                 break;
             case "nanv:": //handle nan values
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "nanvalues.py", in.get(3), in.get(4));
-                out = readFromCsv("done:", answer, true);
+                out = readFromCsv("done:", answer, true, false);
                 break;
             case "dels:": //delete sessions
                 setTaskInactive(in.get(1));
@@ -188,25 +183,25 @@ public class ClientThread implements Runnable {
                 break;
             case "tdl:": //table download
                 currentTaskID = Integer.parseInt(in.get(1));
-                out = readFromCsv("tdl:", in.get(2), false);
+                out = readFromCsv("tdl:", in.get(2), false, false);
                 break;
             case "ada:":
                 System.out.println("CurrentTaskID: " + currentTaskID);
                 answer = callingClassifier(in, "ada.py");
-                out = readFromCsv("done:", answer, true);
+                out = readFromCsv("done:", answer, true, true);
                 break;
             case "rfc:":
                 answer = callingClassifier(in, "rfc.py");
-                out = readFromCsv("done:", answer, true);
+                out = readFromCsv("done:", answer, true, true);
                 break;
             case "dtc:":
                 answer = callingClassifier(in, "dtc.py");
-                out = readFromCsv("done:", answer, true);
+                out = readFromCsv("done:", answer, true, true);
                 break;
             case "san:":
                 newtable = Boolean.valueOf(in.get(1));
                 answer = callingPython(newtable, "sentiment.py", in.get(3), in.get(4));
-                out = readFromCsv("done:", answer, true);
+                out = readFromCsv("done:", answer, true, false);
                 break;
             case "mdu:":
                 answer = Boolean.toString(modifyUsername(in.get(1)));
@@ -240,47 +235,63 @@ public class ClientThread implements Runnable {
         return sb.toString();
     }
 
-    private ArrayList<String> readFromCsv(String identifier, String filename, boolean preview) {
+    private ArrayList<String> readFromCsv(String identifier, String filename, boolean preview, boolean classifier) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add(identifier);
         csv.add(filename + ":");
         System.out.println("Loading chosen table: " + filename);
-        String fs =System.getProperty("file.separator");
-        File file = new File(PATH + getTaskName() +"_" + getTaskID()+ fs + filename);
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line = br.readLine();
-            csv.add(line);
-            csv.add(">>first_line_end_flag<<");
-            int index = 0;
-            boolean loopcond;
-            if (preview) {
-                loopcond = index < 500 / 2;
-            } else {
-                loopcond = line != null;
-            }
+        String path = PATH + getTaskName() + "_" + currentTaskID+ "/" + filename;
 
-            while (loopcond) {
-                line = br.readLine();
-                index++;
-                if (line == null) {
-                    break;
+        File file = new File(path);
+        try {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line = br.readLine();
+                csv.add(line);
+                csv.add(">>flag<<");
+                if (preview) {
+                    System.out.println("Preview.");
+                int index = 0;
+                    while ((line != null && index < 250)) {
+                        line = br.readLine();
+                        if (line == null) {
+                            break;
+                        } else {
+                            csv.add(line);
+                            csv.add(">>flag<<");
+                        }
+                        index += 1;
+                    }
+                    System.out.println("index: " + index);
                 } else {
-                    csv.add(line);
-                    csv.add(">>enter_flag<<");
+                    while (line != null) {
+                        line = br.readLine();
+                        if (line == null) {
+                            break;
+                        } else {
+                            csv.add(line);
+                            csv.add(">>flag<<");
+                        }
+                    }
                 }
+
+//            if(classifier){
+//                csv.add(Integer.toString(accuracyScore));
+//            }
             }
         } catch (IOException ex) {
+            System.out.println("PATH: " + path);
             System.out.println("File not found.");
+            
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         return csv;
     }
 
     private void writeToCsv(String filename) {
-        new File(PATH + getTaskName()+"_"+getTaskID()).mkdir();
+        new File(PATH + getTaskName() + "_" + currentTaskID).mkdir();
 
-        String fs =System.getProperty("file.separator");
-        String fullFilepath = PATH + getTaskName() +"_"+getTaskID()+ fs + filename;
+        String fs = System.getProperty("file.separator");
+        String fullFilepath = PATH + getTaskName() + "_" + currentTaskID + fs + filename;
         System.out.println("Fullpath: " + fullFilepath);
 
         BufferedWriter bw = null;
@@ -292,7 +303,7 @@ public class ClientThread implements Runnable {
 
             String lines = rawInput.split(":, ")[3];
             String line = lines.replaceAll(", >>flag<<, ", "\n").replaceAll(", >>flag<<", "");
-            
+
             bw.write(line);
             System.out.println("Done with file writing");
         } catch (IOException e) {
@@ -314,19 +325,27 @@ public class ClientThread implements Runnable {
         String file = input.get(1);
         String original = getOriginalTable(file);
         String returnvalue = file;
-        
-        String fs =System.getProperty("file.separator");
-        String prefix = "python " + PY_PATH + py + " " + PATH + getTaskName() +"_"+getTaskID()+ fs + file + " " + PATH + getTaskName() +"_" + getTaskID()+ fs +original + " ";
+
+        String fs = System.getProperty("file.separator");
+        String prefix = "python " + PY_PATH + py + " " + PATH + getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + getTaskName() + "_" + currentTaskID + fs + original + " ";
         sb.append(prefix);
         for (int i = 2; i < input.size(); i++) {
             sb = sb.append(input.get(i));
             sb.append(" ");
         }
 
-         System.out.println("SB: " + sb.toString());
+        System.out.println("SB: " + sb.toString());
         try {
             Process p = Runtime.getRuntime().exec(sb.toString());
             int exitVal = p.waitFor();
+            BufferedReader pythonOutput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String pot;
+
+            while ((pot = pythonOutput.readLine()) != null) {
+                System.out.println(pot);
+                accuracyScore = Integer.parseInt(pot);
+            }
+
             if (exitVal == 0) {
                 System.out.println("Classifier completed successfully.");
                 String newtablename = prefixedTableName(py, file);
@@ -364,8 +383,8 @@ public class ClientThread implements Runnable {
                     String updateQuery = "update users set is_online='" + true + "', log_status = '" + "null" + "' where user_id='" + threadID + "';";
                     Statement updateStat = conn.createStatement();
                     updateStat.executeUpdate(updateQuery);
-                    
-        String fs =System.getProperty("file.separator");
+
+                    String fs = System.getProperty("file.separator");
                     PATH = PATH + threadID + fs;
                     System.out.println("Path: " + PATH);
                     return true;
@@ -427,7 +446,7 @@ public class ClientThread implements Runnable {
                 return true;
             }
         } catch (SQLException ex) {
-             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -489,7 +508,7 @@ public class ClientThread implements Runnable {
             maxIDrs = maxID.executeQuery(maxIDquery);
 
             if (maxIDrs.next()) {
-                returnvalue = maxIDrs.getInt(1);
+                returnvalue = maxIDrs.getInt(1)+1;
             }
         } catch (SQLException ex) {
             System.out.println("Error: Getting task_id");
@@ -585,30 +604,30 @@ public class ClientThread implements Runnable {
         try {
             int id = Integer.parseInt(taskID);
             Statement stat = conn.createStatement();
-            String query = "update tasks set is_active = false, name = '"+"CB_deleted_task"+"' where task_id = '" + id + "';";
+            String query = "update tasks set is_active = false, name = '" + "CB_deleted_task" + "' where task_id = '" + id + "';";
             stat.executeUpdate(query);
         } catch (SQLException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         return returnvalue;
     }
-    
-    private String getOriginalTable(String filename){
-        String returnvalue="";
-        try{
+
+    private String getOriginalTable(String filename) {
+        String returnvalue = "";
+        try {
             Statement stat = conn.createStatement();
-            String query = "select original from tables where name = '"+filename+"';";
+            String query = "select original from tables where name = '" + filename + "';";
             ResultSet rs = stat.executeQuery(query);
-            while(rs.next()){
+            while (rs.next()) {
                 returnvalue = rs.getString("ORIGINAL");
             }
-         }catch(SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Original table: "+ returnvalue);
-         return returnvalue;
+        System.out.println("Original table: " + returnvalue);
+        return returnvalue;
     }
-    
+
     private boolean setTableInactive(String task_id, String table_name) {
         boolean returnvalue = true;
         try {
@@ -744,12 +763,12 @@ public class ClientThread implements Runnable {
             String query = "select user_id from users where username = '" + newusername + "';";
             ResultSet rs = stat.executeQuery(query);
             if (rs.next()) {
-                returnvalue=false;
-            }else{
+                returnvalue = false;
+            } else {
                 Statement updateName = conn.createStatement();
-                String updateQuery = "update users set username = '"+newusername+"' where user_id = '"+threadID+"';";
+                String updateQuery = "update users set username = '" + newusername + "' where user_id = '" + threadID + "';";
                 updateName.executeUpdate(updateQuery);
-                
+
                 threadName = newusername;
             }
         } catch (SQLException ex) {
@@ -763,18 +782,12 @@ public class ClientThread implements Runnable {
         System.out.println("Python file: " + file);
         String returnvalue = file;
         String string = Arrays.toString(other).replaceAll("[\\[\\]]", "").replaceAll("\\t", " ");
-        
-        String fs =System.getProperty("file.separator");
-        String cmd = "python " + PY_PATH + py + " " + newtable + " " + PATH + getTaskName() + "_" + getTaskID()+ fs + file + " " + string + "";
+
+        String fs = System.getProperty("file.separator");
+        String cmd = "python " + PY_PATH + py + " " + newtable + " " + PATH + getTaskName() + "_" + currentTaskID + fs + file + " " + string + "";
         System.out.println("cmdl: " + cmd);
         try {
             Process p = Runtime.getRuntime().exec(cmd);
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String in;
-            System.out.println("Std input of python: ");
-            while ((in = input.readLine()) != null) {
-                System.out.println(in);
-            }
             int exitVal = p.waitFor();
             if (exitVal == 0) {
                 System.out.println("Python script completed successfully.");
@@ -797,7 +810,6 @@ public class ClientThread implements Runnable {
     private String prefixedTableName(String python, String file) {
         String prefix = python.replaceAll(".py", "_");
         String fullfilename = prefix + file;
-        System.out.println("Full: " + fullfilename);
         return fullfilename;
     }
 }

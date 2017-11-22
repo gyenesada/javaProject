@@ -1580,7 +1580,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected void insertIntoBuffer(String identifier, String newtable, String currentTaskID, String selectedTable, String... other) {
         bufferOutput.clear();
         bufferOutput.add(identifier);
-        bufferOutput.add(newtable);
+        bufferOutput.add(newtable); 
         bufferOutput.add(currentTaskID);
         bufferOutput.add(selectedTable);
         bufferOutput.addAll(Arrays.asList(other));
@@ -1588,7 +1588,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected void fillPrevTable(String[] cols, ArrayList<String[]> items) {
         DefaultTableModel model = new DefaultTableModel(cols, 0);
-
         items.forEach((str) -> {
             model.addRow(str);
         });
@@ -1596,8 +1595,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         columns = new String[cols.length];
         for (int i = 0; i < cols.length; i++) {
             csvPrevTable.getColumnModel().getColumn(i).setMinWidth(75);
-            columns[i] = cols[i];
-
+            columns[i] = cols[i].replaceAll("\"", "");
         }
         csvPrevTable.setDefaultEditor(Object.class, null);
 

@@ -40,6 +40,6 @@ public class Server implements Runnable {
     }
 
     public static void main(String[] args) {
-        new Server(1973).run();
+        new Server(1221).run();
     }
 }

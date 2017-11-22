@@ -171,18 +171,23 @@ public class WWFController implements Runnable{
         try{
             input= wwf.rawInput.split(":, ")[2];
 
-           String[] splitted = input.split(", >>first_line_end_flag<<, ");
-           String cols = splitted[0];
-           String content = splitted[1];
-
-           String[] colnames = cols.split(",");
-
-           String[] lines = content.split(", >>enter_flag<<, ");
-           for (String str : lines) {
-               String[] temp = str.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-               items.add(temp);
+           String[] splitted = input.split(", >>flag<<, ");
+           String[] cols = splitted[0].split(",");
+           for(int i=1; i<splitted.length; i++){
+               String[] tmp = splitted[i].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+               items.add(tmp);
            }
-           wwf.fillPrevTable(colnames, items);
+//           String cols = splitted[0];
+//           String content = splitted[1];
+//
+//           String[] colnames = cols.split(",");
+//
+//           String[] lines = content.split(", >>enter_flag<<, ");
+//           for (String str : lines) {
+//               String[] temp = str.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+//               items.add(temp);
+//           }
+           wwf.fillPrevTable(cols, items);
         }catch(ArrayIndexOutOfBoundsException ex){
             JOptionPane.showMessageDialog(wwf, "A kért tábla betöltése nem sikerült!");
         }
@@ -201,7 +206,7 @@ public class WWFController implements Runnable{
             bw = new BufferedWriter(fw);
             
             String lines = wwf.rawInput.split(":, ")[2];
-            String line = (lines.replaceAll(", >>first_line_end_flag<<, ", "\n").replaceAll(", >>enter_flag<<, ", "\n")).replaceAll(", >>enter_flag<<]", "");
+            String line = (lines.replaceAll(", >>flag<<, ", "\n")).replaceAll(", >>flag<<]", "");
                        
             bw.write(line);
             JOptionPane.showMessageDialog(wwf, "A kiválasztott tábla lementve: "+fullFilepath+". ");
@@ -222,7 +227,6 @@ public class WWFController implements Runnable{
 
         String[] string = withoutBrackets.split(", ");
         wwf.inDatas.addAll(Arrays.asList(string));
-        System.out.println("[in]: " + wwf.inDatas);
     }
     
     private void addTableToList(ArrayList<String> in){
@@ -241,5 +245,6 @@ public class WWFController implements Runnable{
         if(canInsert){
             dlm.addElement(in.get(1).replaceAll(":", ""));
         }
+        
     }
 }
