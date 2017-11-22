@@ -20,12 +20,11 @@ public class Server implements Runnable {
         try {
             final ExecutorService service = Executors.newCachedThreadPool();
             ServerSocket ss = new ServerSocket(port);
-
+            System.out.println("The server is up..");
             while (true) {
                 Socket socket = ss.accept();
                 Connection conn = connectToDatabase();
                 service.submit(new ClientThread(socket, conn));
-                System.out.println("The server is up..");
             }
         } catch (Exception ex) {
         }

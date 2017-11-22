@@ -46,7 +46,6 @@ public class MWFController implements Runnable {
     }
 
     private void communicationWithServer(PrintWriter pw, Scanner sc) { 
-        int index = 0;
         while (!wf.exit) {
 
             while (wf.outDatas.isEmpty()) {
@@ -63,8 +62,6 @@ public class MWFController implements Runnable {
             if (!wf.inDatas.isEmpty()) {
                 wf.outDatas = controller(wf.inDatas);
             }
-            index++;
-
         }
     }
 

@@ -138,6 +138,9 @@ public class WWFController implements Runnable{
             case "mdp:":
                 JOptionPane.showMessageDialog(wwf, "A jelszava sikeresen megváltozott.");
                 break;
+            case "nok:":
+                JOptionPane.showMessageDialog(wwf, "A tábla nem megfelelő formátomú az osztályozó algoritmus lefuttatására. Kérjük ellenőrizze!");
+                break;
             case "bye:": 
                 
                 wwf.dispose();
@@ -148,7 +151,6 @@ public class WWFController implements Runnable{
                 } catch (IOException ex) {
                     Logger.getLogger(WWFController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
                 break;
             case "err:":
                 JOptionPane.showMessageDialog(wwf, "A művelet végrehajtása közben probléma lépett fel.");
@@ -177,16 +179,6 @@ public class WWFController implements Runnable{
                String[] tmp = splitted[i].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                items.add(tmp);
            }
-//           String cols = splitted[0];
-//           String content = splitted[1];
-//
-//           String[] colnames = cols.split(",");
-//
-//           String[] lines = content.split(", >>enter_flag<<, ");
-//           for (String str : lines) {
-//               String[] temp = str.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-//               items.add(temp);
-//           }
            wwf.fillPrevTable(cols, items);
         }catch(ArrayIndexOutOfBoundsException ex){
             JOptionPane.showMessageDialog(wwf, "A kért tábla betöltése nem sikerült!");

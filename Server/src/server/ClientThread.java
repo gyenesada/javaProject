@@ -21,9 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClientThread implements Runnable {
-
-    //String PATH = "C:\\Users\\Adrienn\\Desktop\\szerver\\csv\\";
-    // String PY_PATH = "C:\\Users\\Adrienn\\Desktop\\szerver\\python\\";
     String PATH = "/mnt/disk4/gyenesadrienn/csv/";
     String PY_PATH = "/mnt/disk4/gyenesadrienn/python/";
 
@@ -41,7 +38,6 @@ public class ClientThread implements Runnable {
     public ClientThread(Socket s, Connection conn) {
         this.s = s;
         this.conn = conn;
-
         System.out.println("A new thread has started..");
     }
 
@@ -52,6 +48,7 @@ public class ClientThread implements Runnable {
             pw = new PrintWriter(s.getOutputStream(), true);
 
             communicationWithClients(pw, sc);
+            System.out.println(threadName + " logged out. Thread has stopped.");
         } catch (IOException e) {
             System.out.println("Error: ClientThread run");
         }
@@ -188,15 +185,27 @@ public class ClientThread implements Runnable {
             case "ada:":
                 System.out.println("CurrentTaskID: " + currentTaskID);
                 answer = callingClassifier(in, "ada.py");
-                out = readFromCsv("done:", answer, true, true);
+                if(answer.equals("notokay")){
+                    out.add("nok:");
+                }else{
+                    out = readFromCsv("done:", answer, true, true);
+                }
                 break;
             case "rfc:":
                 answer = callingClassifier(in, "rfc.py");
-                out = readFromCsv("done:", answer, true, true);
+                if(answer.equals("notokay")){
+                    out.add("nok:");
+                }else{
+                    out = readFromCsv("done:", answer, true, true);
+                }
                 break;
             case "dtc:":
                 answer = callingClassifier(in, "dtc.py");
-                out = readFromCsv("done:", answer, true, true);
+                if(answer.equals("notokay")){
+                    out.add("nok:");
+                }else{
+                    out = readFromCsv("done:", answer, true, true);
+                }
                 break;
             case "san:":
                 newtable = Boolean.valueOf(in.get(1));
@@ -318,10 +327,22 @@ public class ClientThread implements Runnable {
         }
 
     }
+    
+    private boolean checkIsOkay(String command) throws IOException, InterruptedException{
+        boolean returnvalue=true;
+        
+        Process p = Runtime.getRuntime().exec(command);
+         BufferedReader pythonOutput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String isokay;
+            while ((isokay = pythonOutput.readLine()) != null) {
+                System.out.println(isokay);
+                returnvalue = Boolean.valueOf(isokay);
+            }
+        return returnvalue;
+    }
 
     private String callingClassifier(ArrayList<String> input, String py) {
         StringBuilder sb = new StringBuilder();
-
         String file = input.get(1);
         String original = getOriginalTable(file);
         String returnvalue = file;
@@ -333,26 +354,30 @@ public class ClientThread implements Runnable {
             sb = sb.append(input.get(i));
             sb.append(" ");
         }
-
-        System.out.println("SB: " + sb.toString());
         try {
-            Process p = Runtime.getRuntime().exec(sb.toString());
-            int exitVal = p.waitFor();
-            BufferedReader pythonOutput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String pot;
+                if(checkIsOkay(sb.toString())){
 
-            while ((pot = pythonOutput.readLine()) != null) {
-                System.out.println(pot);
-                accuracyScore = Integer.parseInt(pot);
+                Process p = Runtime.getRuntime().exec(sb.toString());
+                int exitVal = p.waitFor();
+                BufferedReader pythonOutput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String pot;
+
+                while ((pot = pythonOutput.readLine()) != null) {
+                    System.out.println(pot);
+                    accuracyScore = Integer.parseInt(pot);
+                }
+
+                if (exitVal == 0) {
+                    System.out.println("Classifier completed successfully.");
+                    String newtablename = prefixedTableName(py, file);
+                    insertTableIntoDatabase(newtablename, original);
+                    returnvalue = newtablename;
+                } else {
+                    System.out.println("Classifier finished with an error.");
+                }
             }
-
-            if (exitVal == 0) {
-                System.out.println("Classifier completed successfully.");
-                String newtablename = prefixedTableName(py, file);
-                insertTableIntoDatabase(newtablename, original);
-                returnvalue = newtablename;
-            } else {
-                System.out.println("Classifier finished with an error.");
+            else{
+                returnvalue = "notokay";
             }
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -363,7 +388,7 @@ public class ClientThread implements Runnable {
 
     // DATABASE FUNCTIONS
     // <editor-fold defaultstate="collapsed">
-    private boolean validateClient(ArrayList<String> acceptedDatas) { //unknown helyette false kell.
+    private boolean validateClient(ArrayList<String> acceptedDatas) {
         String name = acceptedDatas.get(1);
         String pass = acceptedDatas.get(2);
         Statement stat;
