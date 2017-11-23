@@ -58,14 +58,11 @@ train[target] = train[target].apply(np.int64)
 test[target] = testvalues
 test[target] = test[target].apply(np.int64)
 
-print test[target]
-
 clf = AdaBoostClassifier(n_estimators = n_estimators, algorithm=algorithm, learning_rate=learning_rate, random_state=random_state) 
 clf.fit(train[features].values, train[target].values)
 
 predictions = clf.predict(test[features].values)
 
-print predictions
 print ms.accuracy_score(test[target].values,predictions)
 
 def get_prefix(program):
@@ -96,7 +93,5 @@ for i in range(len(predictions)):
 	float_pred.append(predictions[i]/100.0)
 	
 df_out[target] = float_pred
-
-print float_pred
 
 df_out.to_csv(newtablename, index=False)

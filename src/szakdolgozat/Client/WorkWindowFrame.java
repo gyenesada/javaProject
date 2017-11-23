@@ -45,12 +45,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected int currentTaskID;
 
-    protected ArrayList<String> loadedTables = new ArrayList<>();
-    protected ArrayList<String> csvToTable = new ArrayList<>();
-
     //buffered output datas.
     protected ArrayList<String> bufferOutput = new ArrayList<>();
-
     protected ArrayList<String> outDatas = new ArrayList<>();
     protected ArrayList<String> inDatas = new ArrayList();
 
@@ -416,7 +412,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             }
         });
 
-        operationCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        operationCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         operationCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 operationCBoxActionPerformed(evt);
@@ -519,7 +515,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_mdLabel.setText("max_depth:");
 
-        rfc_mdField.setText("0");
+        rfc_mdField.setText("1");
 
         rfc_rsLabel.setText("random_state:");
 
@@ -531,7 +527,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_targetLabel.setText("Target:");
 
-        rfc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        rfc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         rfc_featLabel.setText("Features:");
 
@@ -557,7 +553,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         rfc_outLabel.setText("Kimeneti tábla oszlopai");
 
-        rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         rfc_outList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { " "};
@@ -704,7 +700,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         ada_targetLabel.setText("Target:");
 
-        ada_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ada_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         ada_featLabel.setText("Features:");
 
@@ -730,7 +726,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         ada_outLabel.setText("Kimeneti tábla oszlopai");
 
-        ada_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ada_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         ada_outList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { " "};
@@ -837,7 +833,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         dtc_mdLabel.setText("max_depth:");
 
-        dtc_mdField.setText("0");
+        dtc_mdField.setText("1");
 
         dtc_rsLabel.setText("random_state:");
 
@@ -845,7 +841,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         dtc_targetLabel.setText("Target:");
 
-        dtc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dtc_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         dtc_featLabel.setText("Features:");
 
@@ -871,7 +867,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         dtc_outLabel.setText("Kimeneti tábla oszlopai");
 
-        dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         dtc_outList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { " "};
             public int getSize() { return strings.length; }
@@ -956,7 +952,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         parameterMainPanel.add(dtcPanel, "card2");
 
-        sa_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sa_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         sa_targetCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sa_targetCBoxActionPerformed(evt);
@@ -1360,6 +1356,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             workPathField.setText("");
             JOptionPane.showMessageDialog(this, "Adjon meg egy csv file-t!");
         }
+        
+            lf = new LoadingFrame(this, "tableUpload", null);
+            lf.setVisible(true);
     }//GEN-LAST:event_workUploadButtonActionPerformed
 
     protected void showLoadPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLoadPanelActionPerformed
@@ -1914,9 +1913,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
     protected void getOutCol(JComboBox<String> cb, JList<String> out) {
         DefaultComboBoxModel cbModel = new DefaultComboBoxModel();
-        cb.setModel(cbModel);
         cbModel.removeAllElements();
         cbModel.addElement(" ");
+        cb.setModel(cbModel);
 
         for (String c : columns) {
             cbModel.addElement(c);
@@ -1925,11 +1924,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         DefaultListModel outlistModel = new DefaultListModel();
         outlistModel.removeAllElements();
         outlistModel.addElement(" ");
+        out.setModel(outlistModel);
         cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean caninsert = true;
-                out.setModel(outlistModel);
                 String selected = cb.getSelectedItem().toString();
                 if (!" ".equals(selected)) {
                     String[] inlist = outlistModel.toString().replaceAll("[\\[\\]]", "").split(", ");
@@ -1950,7 +1949,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
 
     protected void setFromToList(JList<String> fromlist, JList<String> tolist, JComboBox<String> target) {
-
         DefaultListModel fromlistModel = new DefaultListModel();
         DefaultListModel tolistModel = new DefaultListModel();
         DefaultComboBoxModel targetModel = new DefaultComboBoxModel();

@@ -32,7 +32,6 @@ while (k<=out):
 df = pd.read_csv(tablename)
 
 nullvalues = not(df.isnull().values.any())
-print nullvalues
 
 isnumerictype=[]
 for i in range(len(features)):

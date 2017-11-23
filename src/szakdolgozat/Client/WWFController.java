@@ -83,6 +83,7 @@ public class WWFController implements Runnable{
             case "wcsv:":
                 wwf.selectedTable = in.get(1);
                 fillLoadedTablesList(in);
+                wwf.changePanels(wwf.firstPanel);
                 break;
             case "wrk:":
                 wwf.list.removeAll();
@@ -139,7 +140,8 @@ public class WWFController implements Runnable{
                 JOptionPane.showMessageDialog(wwf, "A jelszava sikeresen megváltozott.");
                 break;
             case "nok:":
-                JOptionPane.showMessageDialog(wwf, "A tábla nem megfelelő formátomú az osztályozó algoritmus lefuttatására. Kérjük ellenőrizze!");
+                JOptionPane.showMessageDialog(wwf, "A tábla nem megfelelő formátumú az osztályozó algoritmus lefuttatására. Kérjük ellenőrizze!");
+                wwf.lf.dispose();
                 break;
             case "bye:": 
                 

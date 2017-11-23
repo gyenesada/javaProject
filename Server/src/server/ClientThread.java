@@ -29,7 +29,8 @@ public class ClientThread implements Runnable {
     private PrintWriter pw;
     private final Connection conn;
 
-    private int threadID, currentTableID, currentTaskID, accuracyScore;
+    private int threadID, currentTableID, currentTaskID;
+    private float accuracyScore;
     private String rawInput, threadName;
 
     private ArrayList<String> inDatas = new ArrayList<>();
@@ -330,6 +331,7 @@ public class ClientThread implements Runnable {
     
     private boolean checkIsOkay(String command) throws IOException, InterruptedException{
         boolean returnvalue=true;
+        System.out.println("Isokay.py: " + command);
         
         Process p = Runtime.getRuntime().exec(command);
          BufferedReader pythonOutput = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -338,11 +340,13 @@ public class ClientThread implements Runnable {
                 System.out.println(isokay);
                 returnvalue = Boolean.valueOf(isokay);
             }
+            System.out.println("Isokay? " + returnvalue);
         return returnvalue;
     }
 
     private String callingClassifier(ArrayList<String> input, String py) {
         StringBuilder sb = new StringBuilder();
+        StringBuilder pre_sb = new StringBuilder();
         String file = input.get(1);
         String original = getOriginalTable(file);
         String returnvalue = file;
@@ -350,34 +354,39 @@ public class ClientThread implements Runnable {
         String fs = System.getProperty("file.separator");
         String prefix = "python " + PY_PATH + py + " " + PATH + getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + getTaskName() + "_" + currentTaskID + fs + original + " ";
         sb.append(prefix);
+        
+        String isokay = "python " + PY_PATH + "isokay.py " + PATH + getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + getTaskName() + "_" + currentTaskID + fs + original + " ";
+        pre_sb.append(isokay);
         for (int i = 2; i < input.size(); i++) {
             sb = sb.append(input.get(i));
             sb.append(" ");
+            pre_sb = pre_sb.append(input.get(i));
+            pre_sb.append(" ");
         }
         try {
-                if(checkIsOkay(sb.toString())){
-
-                Process p = Runtime.getRuntime().exec(sb.toString());
-                int exitVal = p.waitFor();
-                BufferedReader pythonOutput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                String pot;
-
-                while ((pot = pythonOutput.readLine()) != null) {
-                    System.out.println(pot);
-                    accuracyScore = Integer.parseInt(pot);
+                if(checkIsOkay(pre_sb.toString())){
+                    System.out.println("Classifier can start..");
+                    Process p = Runtime.getRuntime().exec(sb.toString());
+                    
+                    int exitVal = p.waitFor();
+                    if (exitVal == 0) {
+                        
+                    BufferedReader pythonOutput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    String pot = pythonOutput.readLine();
+                    System.out.println("accuracy: " + pot);
+                    accuracyScore = Float.parseFloat(pot);
+                    
+                        System.out.println("Classifier completed successfully.");
+                        String newtablename = prefixedTableName(py, file);
+                        insertTableIntoDatabase(newtablename, original);
+                        returnvalue = newtablename;
+                    } else {
+                        System.out.println("Classifier finished with an error.");
+                    }
                 }
-
-                if (exitVal == 0) {
-                    System.out.println("Classifier completed successfully.");
-                    String newtablename = prefixedTableName(py, file);
-                    insertTableIntoDatabase(newtablename, original);
-                    returnvalue = newtablename;
-                } else {
-                    System.out.println("Classifier finished with an error.");
-                }
-            }
             else{
-                returnvalue = "notokay";
+                    System.out.println("Classifier can't start..");
+                    returnvalue = "notokay";
             }
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
