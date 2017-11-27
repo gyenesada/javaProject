@@ -84,6 +84,7 @@ public class WWFController implements Runnable{
                 wwf.selectedTable = in.get(1);
                 fillLoadedTablesList(in);
                 wwf.changePanels(wwf.firstPanel);
+                wwf.lf.dispose();
                 break;
             case "wrk:":
                 wwf.list.removeAll();

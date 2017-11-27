@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class MWFController implements Runnable {
+    //This class is the controller side of the project. It contains the main settings of the server connections, and the communication and controlling methods.
 
     private Socket socket;
     private Scanner sc;
@@ -46,23 +47,21 @@ public class MWFController implements Runnable {
     }
 
     private void communicationWithServer(PrintWriter pw, Scanner sc) { 
-        while (!wf.exit) {
-
-            while (wf.outDatas.isEmpty()) {
+            while (wf.model.outDatas.isEmpty()) {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(WorkWindowFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            pw.println(wf.outDatas);
-            wf.inDatas.clear();
+            pw.println(wf.model.outDatas);
+            wf.model.inDatas.clear();
             rawInput = sc.nextLine();
             inputPreprocess(rawInput);
-            if (!wf.inDatas.isEmpty()) {
-                wf.outDatas = controller(wf.inDatas);
+            if (!wf.model.inDatas.isEmpty()) {
+                wf.model.outDatas = controller(wf.model.inDatas);
             }
-        }
+        
     }
 
     private ArrayList<String> controller(ArrayList<String> in) { 
@@ -85,7 +84,7 @@ public class MWFController implements Runnable {
                        wf.dispose();
                     }
                 } else {
-                    wf.setDefaultJTextField(wf.nameField, wf.passField);
+                    wf.model.setDefaultJTextField(wf.nameField, wf.passField);
                     JOptionPane.showMessageDialog(wf, "A bejelentkezés sikertelen. Ellenőrizze helyes adatokat adott-e meg.");
                 }
                 break;
@@ -96,7 +95,7 @@ public class MWFController implements Runnable {
                     wf.regPanel.setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(wf, "Sikertelen regisztráció. A felhasználónév/email már foglalt.");
-                    wf.setDefaultJTextField(wf.regNameField, wf.regPassField, wf.regMailField);
+                    wf.model.setDefaultJTextField(wf.regNameField, wf.regPassField, wf.regMailField);
                 }
                 break;
         }
@@ -107,7 +106,7 @@ public class MWFController implements Runnable {
         String withoutBrackets = input.replaceAll("[\\[\\]]", "");
 
         String[] string = withoutBrackets.split(", ");
-        wf.inDatas.addAll(Arrays.asList(string));
+        wf.model.inDatas.addAll(Arrays.asList(string));
     }
     
 }
