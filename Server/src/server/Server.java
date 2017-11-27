@@ -21,6 +21,7 @@ public class Server implements Runnable {
             final ExecutorService service = Executors.newCachedThreadPool();
             ServerSocket ss = new ServerSocket(port);
             System.out.println("The server is up..");
+            System.out.println("To shut down, use [CRTL] + [C].");
             while (true) {
                 Socket socket = ss.accept();
                 Connection conn = connectToDatabase();

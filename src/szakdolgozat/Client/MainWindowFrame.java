@@ -18,6 +18,8 @@ public final class MainWindowFrame extends javax.swing.JFrame {
     protected MWFModel model = new MWFModel();
     public MainWindowFrame() throws IOException {
         initComponents();
+        
+        setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
     }
 
     private void initComponents() //This method contains the initiations of the components that can be find on the GUI. The default view of this method is collapsed due to the clear code conventions. 
@@ -26,8 +28,6 @@ public final class MainWindowFrame extends javax.swing.JFrame {
         setTitle("CloudBased classifier - Login");
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
-        setTitle("CloudBased classifier - Login");
         setResizable(false);
 
         for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

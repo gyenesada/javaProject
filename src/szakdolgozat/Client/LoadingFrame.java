@@ -26,7 +26,8 @@ public class LoadingFrame extends javax.swing.JFrame {
             case "pythonCall":
                 informLabel.setText("A kiválasztott művelet végrehajtása folyamatban van.");
                 break;
-            default:
+            case "download":
+                informLabel.setText("A kiválasztott tábla letöltése folyamatban van.");
                 break;
         }
         

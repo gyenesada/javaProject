@@ -35,12 +35,12 @@ public class ClientThread implements Runnable {
 
     private ArrayList<String> inDatas = new ArrayList<>();
     private ArrayList<String> outDatas = new ArrayList<>();
+    private DBHandler db;
     
-    DBHandler db = new DBHandler();
-
     public ClientThread(Socket s, Connection conn) {
         this.s = s;
         this.conn = conn;
+        this.db = new DBHandler();
         System.out.println("A new thread has started..");
     }
 
@@ -178,7 +178,7 @@ public class ClientThread implements Runnable {
                 break;
             case "delt:": //delete tables
                 db.setTableInactive(in.get(1), in.get(2));
-                out =db. getTasksTable("delt:");
+                out =db.getTasksTable("delt:");
                 break;
             case "tdl:": //table download
                 currentTaskID = Integer.parseInt(in.get(1));
@@ -353,7 +353,7 @@ public class ClientThread implements Runnable {
         String returnvalue = file;
 
         String fs = System.getProperty("file.separator");
-        String prefix = "python " + PY_PATH + py + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + original + " ";
+        String prefix = "python " + PY_PATH + py + " " + PATH +db.getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + original + " ";
         sb.append(prefix);
         
         String isokay = "python " + PY_PATH + "isokay.py " + PATH + db.getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + original + " ";
@@ -379,7 +379,7 @@ public class ClientThread implements Runnable {
                     
                         System.out.println("Classifier completed successfully.");
                         String newtablename = prefixedTableName(py, file);
-                        db.insertTableIntoDatabase(newtablename, original);
+                       db.insertTableIntoDatabase(newtablename, original);
                         returnvalue = newtablename;
                     } else {
                         System.out.println("Classifier finished with an error.");
@@ -431,11 +431,13 @@ public class ClientThread implements Runnable {
         return fullfilename;
     }
     
-    class DBHandler{
-    //This innerclass contains the database functions that used in the ClientThread class.
-        public DBHandler(){  
-        }
+         
+    public class DBHandler{
         
+        public DBHandler(){
+            
+        }
+    
         private boolean validateClient(ArrayList<String> acceptedDatas) {
         String name = acceptedDatas.get(1);
         String pass = acceptedDatas.get(2);
@@ -586,7 +588,7 @@ public class ClientThread implements Runnable {
         } catch (SQLException ex) {
             System.out.println("Error: Getting task_id");
         }
-        return ++returnvalue;
+        return returnvalue;
     }
 
     private String getTaskName() {
@@ -849,5 +851,5 @@ public class ClientThread implements Runnable {
         }
         return returnvalue;
     }
-    }
+}
 }

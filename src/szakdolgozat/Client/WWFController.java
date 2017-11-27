@@ -76,6 +76,8 @@ public class WWFController implements Runnable{
                     wwf.lf.dispose();
                     wwf.operationCBox.setEnabled(true); wwf.classifierCBox.setEnabled(true);
                     wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
+                    wwf.downloadTableButton.setEnabled(true);
+                    wwf.delTableButton.setEnabled(true);
                 } else {
                     JOptionPane.showMessageDialog(wwf, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
                 }
@@ -85,6 +87,9 @@ public class WWFController implements Runnable{
                 fillLoadedTablesList(in);
                 wwf.changePanels(wwf.firstPanel);
                 wwf.lf.dispose();
+                
+                    wwf.downloadTableButton.setEnabled(true);
+                    wwf.delTableButton.setEnabled(true);
                 break;
             case "wrk:":
                 wwf.list.removeAll();
@@ -204,8 +209,12 @@ public class WWFController implements Runnable{
             String line = (lines.replaceAll(", >>flag<<, ", "\n")).replaceAll(", >>flag<<]", "");
                        
             bw.write(line);
+            Thread.sleep(500);
+            wwf.lf.dispose();
             JOptionPane.showMessageDialog(wwf, "A kiválasztott tábla lementve: "+fullFilepath+". ");
         } catch (IOException e) {
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WWFController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 bw.close();

@@ -1508,6 +1508,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         outDatas.add("tdl:");
         outDatas.add(Integer.toString(currentTaskID));
         outDatas.add(selectedTable);
+         lf = new LoadingFrame(this, "download", null);
+         lf.setVisible(true);
     }//GEN-LAST:event_downloadTableButtonActionPerformed
 
     protected void sa_targetCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sa_targetCBoxActionPerformed
@@ -1803,7 +1805,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         outDatas.add(selected);
                         selectedTable = selected;
 
-                        delTableButton.setEnabled(true);
+                      delTableButton.setEnabled(true);
                         downloadTableButton.setEnabled(true);
                     } catch (ArrayIndexOutOfBoundsException ex) {
 
