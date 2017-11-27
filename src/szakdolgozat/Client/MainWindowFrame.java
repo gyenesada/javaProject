@@ -14,13 +14,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public final class MainWindowFrame extends javax.swing.JFrame {
     //MainWindowFrame: this class is the view side of the project. This class has an innerclass, that implements the model side. This class can be used with the .form file only.
-
+    
     protected MWFModel model = new MWFModel();
     public MainWindowFrame() throws IOException {
         initComponents();
     }
 
-    private void initComponents() //this method contains the initiations of the components that can be find on the GUI. The default view of this method is collapsed, for the easier 
+    private void initComponents() //This method contains the initiations of the components that can be find on the GUI. The default view of this method is collapsed due to the clear code conventions. 
 // <editor-fold defaultstate="collapsed">
         {
         setTitle("CloudBased classifier - Login");
@@ -203,7 +203,6 @@ public final class MainWindowFrame extends javax.swing.JFrame {
 
     public class MWFModel {
         // This innerclass contains the model side of the project. You can find here the actionlistener functions, and the other surface-handling methods.
-       
         protected ArrayList<String> inDatas = new ArrayList<>();
         protected ArrayList<String> outDatas = new ArrayList<>();
 
@@ -245,7 +244,6 @@ public final class MainWindowFrame extends javax.swing.JFrame {
                     outDatas.add(mail);
                     outDatas.add(password);
                 }
-                System.out.println("outDatas: " + outDatas);
             } catch (Exception ex) {
                 System.out.println("Error: regDoButton");
             }
@@ -277,7 +275,6 @@ public final class MainWindowFrame extends javax.swing.JFrame {
                     outDatas.add(username);
                     outDatas.add(password);
                 }
-                System.out.println("outDatas: " + outDatas);
             } catch (Exception ex) {
                 System.out.println("Error: logButton");
             }

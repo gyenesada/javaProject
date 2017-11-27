@@ -35,6 +35,8 @@ public class ClientThread implements Runnable {
 
     private ArrayList<String> inDatas = new ArrayList<>();
     private ArrayList<String> outDatas = new ArrayList<>();
+    
+    DBHandler db = new DBHandler();
 
     public ClientThread(Socket s, Connection conn) {
         this.s = s;
@@ -79,32 +81,31 @@ public class ClientThread implements Runnable {
         inDatas.addAll(Arrays.asList(string));
     }
 
-    private ArrayList<String> controller(ArrayList<String> in) {
+    private ArrayList<String> controller(ArrayList<String> in) { //This method is handling the input datas, and divides the tasks depending the identifier (first member of incoming data)
         ArrayList<String> out = new ArrayList<>();
         String identifier = in.get(0);
         String filename, taskname, answer;
         int task;
         boolean newtable;
-        //feladatok elosztása
         switch (identifier) {
             case "log:": //log in
-                answer = Boolean.toString(validateClient(in));
+                answer = Boolean.toString(db.validateClient(in));
 
                 out.add(identifier);
                 out.add(answer);
                 break;
             case "reg:": //registration
-                answer = Boolean.toString(regClient(in));
+                answer = Boolean.toString(db.regClient(in));
 
                 out.add(identifier);
                 out.add(answer);
                 break;
             case "csv:": //csv upload on load page
                 taskname = in.get(1).replaceAll(":", "");
-                task = insertTaskIntoDatabase(taskname);
+                task = db.insertTaskIntoDatabase(taskname);
                 currentTaskID = task;
                 filename = in.get(2).replaceAll(":", "");
-                answer = Boolean.toString(insertTableIntoDatabase(filename, filename));
+                answer = Boolean.toString(db.insertTableIntoDatabase(filename, filename));
 
                 out.add(identifier);
                 out.add(answer);
@@ -114,19 +115,19 @@ public class ClientThread implements Runnable {
             case "wcsv:": //csv upload on work page
                 filename = in.get(2).replaceAll(":", "");
                 currentTaskID = Integer.parseInt(in.get(1).replaceAll(":", ""));
-                if (insertTableIntoDatabase(filename, filename)) {
-                    out = getTasksTable();
+                if (db.insertTableIntoDatabase(filename, filename)) {
+                    out = db.getTasksTable();
                     writeToCsv(filename);
                 } else {
                     out.add("err:");
                 }
                 break;
             case "wrk:": //old task loading 
-                out = getTasks();
+                out = db.getTasks();
                 break;
             case "old:": //old tables loading
                 currentTaskID = Integer.parseInt(in.get(1));
-                out = getTasksTable();
+                out = db.getTasksTable();
                 System.out.println("OLD: " + out);
                 break;
             case "ldt:": //chosen table loading
@@ -138,7 +139,7 @@ public class ClientThread implements Runnable {
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "factorize.py", in.get(3));
-                modifyIsFactorizedInTables(in.get(3));
+                db.modifyIsFactorizedInTables(in.get(3));
                 out = readFromCsv("done:", answer, true, false);
                 break;
             case "norm:": //normalize
@@ -146,7 +147,7 @@ public class ClientThread implements Runnable {
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "normalize.py", in.get(3));
-                modifyIsNormalisedInTables(in.get(3));
+                db.modifyIsNormalisedInTables(in.get(3));
                 out = readFromCsv("done:", answer, true, false);
                 break;
             case "ftsl:": //feature selection
@@ -154,7 +155,7 @@ public class ClientThread implements Runnable {
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "variance.py", in.get(3), in.get(4));
-                modifyIsFeatureSelectedInTables(in.get(3));
+                db.modifyIsFeatureSelectedInTables(in.get(3));
                 out = readFromCsv("done:", answer, true, false);
                 break;
             case "delc:": //delete columns
@@ -172,12 +173,12 @@ public class ClientThread implements Runnable {
                 out = readFromCsv("done:", answer, true, false);
                 break;
             case "dels:": //delete sessions
-                setTaskInactive(in.get(1));
-                out = getTasks();
+                db.setTaskInactive(in.get(1));
+                out = db.getTasks();
                 break;
             case "delt:": //delete tables
-                setTableInactive(in.get(1), in.get(2));
-                out = getTasksTable("delt:");
+                db.setTableInactive(in.get(1), in.get(2));
+                out =db. getTasksTable("delt:");
                 break;
             case "tdl:": //table download
                 currentTaskID = Integer.parseInt(in.get(1));
@@ -214,19 +215,19 @@ public class ClientThread implements Runnable {
                 out = readFromCsv("done:", answer, true, false);
                 break;
             case "mdu:":
-                answer = Boolean.toString(modifyUsername(in.get(1)));
+                answer = Boolean.toString(db.modifyUsername(in.get(1)));
                 out.add(identifier);
                 out.add(answer);
                 out.add(in.get(1));
                 System.out.println("out: " + out);
                 break;
             case "mdp:":
-                modifyPass(in.get(1));
+                db.modifyPass(in.get(1));
                 out.add(identifier);
                 break;
             case "bye:": //log out
-                setIsOnlineFalse();
-                setLogStatusNormal();
+                db.setIsOnlineFalse();
+                db.setLogStatusNormal();
                 out.add("bye:");
                 break;
             default:
@@ -250,7 +251,7 @@ public class ClientThread implements Runnable {
         csv.add(identifier);
         csv.add(filename + ":");
         System.out.println("Loading chosen table: " + filename);
-        String path = PATH + getTaskName() + "_" + currentTaskID+ "/" + filename;
+        String path = PATH + db.getTaskName() + "_" + currentTaskID+ "/" + filename;
 
         File file = new File(path);
         try {
@@ -298,10 +299,10 @@ public class ClientThread implements Runnable {
     }
 
     private void writeToCsv(String filename) {
-        new File(PATH + getTaskName() + "_" + currentTaskID).mkdir();
+        new File(PATH + db.getTaskName() + "_" + currentTaskID).mkdir();
 
         String fs = System.getProperty("file.separator");
-        String fullFilepath = PATH + getTaskName() + "_" + currentTaskID + fs + filename;
+        String fullFilepath = PATH +db.getTaskName() + "_" + currentTaskID + fs + filename;
         System.out.println("Fullpath: " + fullFilepath);
 
         BufferedWriter bw = null;
@@ -348,14 +349,14 @@ public class ClientThread implements Runnable {
         StringBuilder sb = new StringBuilder();
         StringBuilder pre_sb = new StringBuilder();
         String file = input.get(1);
-        String original = getOriginalTable(file);
+        String original = db.getOriginalTable(file);
         String returnvalue = file;
 
         String fs = System.getProperty("file.separator");
-        String prefix = "python " + PY_PATH + py + " " + PATH + getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + getTaskName() + "_" + currentTaskID + fs + original + " ";
+        String prefix = "python " + PY_PATH + py + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + original + " ";
         sb.append(prefix);
         
-        String isokay = "python " + PY_PATH + "isokay.py " + PATH + getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + getTaskName() + "_" + currentTaskID + fs + original + " ";
+        String isokay = "python " + PY_PATH + "isokay.py " + PATH + db.getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + original + " ";
         pre_sb.append(isokay);
         for (int i = 2; i < input.size(); i++) {
             sb = sb.append(input.get(i));
@@ -378,7 +379,7 @@ public class ClientThread implements Runnable {
                     
                         System.out.println("Classifier completed successfully.");
                         String newtablename = prefixedTableName(py, file);
-                        insertTableIntoDatabase(newtablename, original);
+                        db.insertTableIntoDatabase(newtablename, original);
                         returnvalue = newtablename;
                     } else {
                         System.out.println("Classifier finished with an error.");
@@ -395,9 +396,47 @@ public class ClientThread implements Runnable {
 
     }
 
-    // DATABASE FUNCTIONS
-    // <editor-fold defaultstate="collapsed">
-    private boolean validateClient(ArrayList<String> acceptedDatas) {
+    private String callingPython(Boolean newtable, String py, String file, String... other) {
+        System.out.println("Python file: " + file);
+        String returnvalue = file;
+        String string = Arrays.toString(other).replaceAll("[\\[\\]]", "").replaceAll("\\t", " ");
+
+        String fs = System.getProperty("file.separator");
+        String cmd = "python " + PY_PATH + py + " " + newtable + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + file + " " + string + "";
+        System.out.println("cmdl: " + cmd);
+        try {
+            Process p = Runtime.getRuntime().exec(cmd);
+            int exitVal = p.waitFor();
+            if (exitVal == 0) {
+                System.out.println("Python script completed successfully.");
+            } else {
+                System.out.println("Python script finished with an error.");
+            }
+
+            if (newtable && exitVal == 0) {
+                String newtablename = prefixedTableName(py, file);
+                String original = db.getOriginalTable(file);
+                db.insertTableIntoDatabase(newtablename, original);
+                returnvalue = newtablename;
+            }
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnvalue;
+    }
+
+    private String prefixedTableName(String python, String file) {
+        String prefix = python.replaceAll(".py", "_");
+        String fullfilename = prefix + file;
+        return fullfilename;
+    }
+    
+    class DBHandler{
+    //This innerclass contains the database functions that used in the ClientThread class.
+        public DBHandler(){  
+        }
+        
+        private boolean validateClient(ArrayList<String> acceptedDatas) {
         String name = acceptedDatas.get(1);
         String pass = acceptedDatas.get(2);
         Statement stat;
@@ -810,40 +849,5 @@ public class ClientThread implements Runnable {
         }
         return returnvalue;
     }
-    // </editor-fold>
-
-    private String callingPython(Boolean newtable, String py, String file, String... other) {
-        System.out.println("Python file: " + file);
-        String returnvalue = file;
-        String string = Arrays.toString(other).replaceAll("[\\[\\]]", "").replaceAll("\\t", " ");
-
-        String fs = System.getProperty("file.separator");
-        String cmd = "python " + PY_PATH + py + " " + newtable + " " + PATH + getTaskName() + "_" + currentTaskID + fs + file + " " + string + "";
-        System.out.println("cmdl: " + cmd);
-        try {
-            Process p = Runtime.getRuntime().exec(cmd);
-            int exitVal = p.waitFor();
-            if (exitVal == 0) {
-                System.out.println("Python script completed successfully.");
-            } else {
-                System.out.println("Python script finished with an error.");
-            }
-
-            if (newtable && exitVal == 0) {
-                String newtablename = prefixedTableName(py, file);
-                String original = getOriginalTable(file);
-                insertTableIntoDatabase(newtablename, original);
-                returnvalue = newtablename;
-            }
-        } catch (IOException | InterruptedException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return returnvalue;
-    }
-
-    private String prefixedTableName(String python, String file) {
-        String prefix = python.replaceAll(".py", "_");
-        String fullfilename = prefix + file;
-        return fullfilename;
     }
 }
