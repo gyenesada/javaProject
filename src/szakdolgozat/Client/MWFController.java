@@ -25,7 +25,7 @@ public class MWFController implements Runnable {
 
     public MWFController() throws IOException {
         this.host = "157.181.176.130";
-        this.port = 1221;
+        this.port = 2222;
         
         wf = new MainWindowFrame();
         wf.setVisible(true);
@@ -47,6 +47,7 @@ public class MWFController implements Runnable {
     }
 
     private void communicationWithServer(PrintWriter pw, Scanner sc) { 
+        while(true){
             while (wf.model.outDatas.isEmpty()) {
                 try {
                     Thread.sleep(10);
@@ -61,7 +62,7 @@ public class MWFController implements Runnable {
             if (!wf.model.inDatas.isEmpty()) {
                 wf.model.outDatas = controller(wf.model.inDatas);
             }
-        
+        }
     }
 
     private ArrayList<String> controller(ArrayList<String> in) { 

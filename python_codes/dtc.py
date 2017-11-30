@@ -63,9 +63,14 @@ test[target] = test[target].apply(np.int64)
 train[target] = trainvalues
 train[target] = train[target].apply(np.int64)	
 	
-clf = DecisionTreeClassifier(max_depth = max_depth, random_state = random_state, presort = presort) 
-clf.fit(train[features].values, train[target].values)
+if random_state==0:
+	clf = DecisionTreeClassifier(presort = presort, max_depth=max_depth)  
+elif max_depth==0:
+	clf = DecisionTreeClassifier(presort = presort, random_state=random_state) 
+else:
+	clf = DecisionTreeClassifier(max_depth = max_depth, random_state = random_state, presort = presort) 
 
+clf.fit(train[features].values, train[target].values)
 predictions = clf.predict(test[features].values)
 
 print ms.accuracy_score(test[target].values,predictions)

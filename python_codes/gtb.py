@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn import metrics as ms
-from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 program = sys.argv[0]
 tablename = sys.argv[1]
@@ -31,10 +31,10 @@ while (k<=out):
 	k=k+1
 	
 n_estimators = int(parameters[0])
-learning_rate = float(parameters[1])
-algorithm = parameters[2]
-random_state = int(parameters[3])
-	
+learning_rate = float(parameters[3])
+random_state = int(parameters[2])
+max_depth = int(parameters[1])
+
 df = pd.read_csv(tablename)
 dfo = pd.read_csv(original)
 
@@ -42,7 +42,6 @@ generated = np.random.rand(len(df))<0.8
 train = df[generated]
 test = df[~generated]
 or_test = dfo[~generated]
-
 
 trainvalues = train[target].values.tolist()
 testvalues = test[target].values.tolist()
@@ -58,10 +57,11 @@ train[target] = train[target].apply(np.int64)
 test[target] = testvalues
 test[target] = test[target].apply(np.int64)
 
-if random_state==0:
-	clf = AdaBoostClassifier(n_estimators = n_estimators, algorithm=algorithm, learning_rate=learning_rate) 
+if random_state == 0:
+	clf = GradientBoostingClassifier(n_estimators = n_estimators, max_depth = max_depth, learning_rate=learning_rate) 
 else:
-	clf = AdaBoostClassifier(n_estimators = n_estimators, algorithm=algorithm, learning_rate=learning_rate, random_state=random_state) 
+	clf = GradientBoostingClassifier(n_estimators = n_estimators, max_depth = max_depth, learning_rate=learning_rate, random_state=random_state) 
+
 clf.fit(train[features].values, train[target].values)
 
 predictions = clf.predict(test[features].values)
@@ -96,5 +96,4 @@ for i in range(len(predictions)):
 	float_pred.append(predictions[i]/100.0)
 	
 df_out[target] = float_pred
-
 df_out.to_csv(newtablename, index=False)

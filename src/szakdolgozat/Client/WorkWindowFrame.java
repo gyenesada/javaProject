@@ -84,7 +84,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         setScrollPane();
         setNanRadioButtons();
         editProfil();
-
         outDatas.add("wrk:");
     }
 
@@ -203,7 +202,30 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         saPanel = new javax.swing.JPanel();
         sa_targetCBox = new javax.swing.JComboBox<>();
         sa_targetLabel = new javax.swing.JLabel();
+        gtbPanel = new javax.swing.JPanel();
+        gtb_lrLabel = new javax.swing.JLabel();
+        gtb_lrField = new javax.swing.JTextField();
+        gtb_mdLabel = new javax.swing.JLabel();
+        gtb_mdField = new javax.swing.JTextField();
+        gtb_rsLabel = new javax.swing.JLabel();
+        gtb_rsField = new javax.swing.JTextField();
+        gtb_targetLabel = new javax.swing.JLabel();
+        gtb_targetCBox = new javax.swing.JComboBox<>();
+        gtb_featLabel = new javax.swing.JLabel();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        gtb_fromList = new javax.swing.JList<>();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        gtb_toList = new javax.swing.JList<>();
+        jSeparator8 = new javax.swing.JSeparator();
+        jSeparator10 = new javax.swing.JSeparator();
+        gtb_outLabel = new javax.swing.JLabel();
+        gtb_outCBox = new javax.swing.JComboBox<>();
+        jScrollPane15 = new javax.swing.JScrollPane();
+        gtb_outList = new javax.swing.JList<>();
+        gtb_neLabel = new javax.swing.JLabel();
+        gtb_neField = new javax.swing.JTextField();
         newTableCB = new javax.swing.JCheckBox();
+        accuracyLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         profilePanel = new javax.swing.JPanel();
@@ -219,6 +241,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         loadedTablesListSPane = new javax.swing.JScrollPane();
         loadedTablesList = new javax.swing.JList<>();
         separator = new javax.swing.JSeparator();
+        taskLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         showLoadPanel = new javax.swing.JMenuItem();
@@ -290,8 +313,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         list.setBackground(new java.awt.Color(255, 255, 255));
         list.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
- 
-        oldWorkSPane.setViewportView(list);
+         oldWorkSPane.setViewportView(list);
 
         javax.swing.GroupLayout loadOldWorkPanelLayout = new javax.swing.GroupLayout(loadOldWorkPanel);
         loadOldWorkPanel.setLayout(loadOldWorkPanelLayout);
@@ -532,14 +554,14 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         rfc_featLabel.setText("Features:");
 
         rfc_fromList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane2.setViewportView(rfc_fromList);
 
         rfc_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -556,7 +578,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         rfc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         rfc_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -705,14 +727,14 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         ada_featLabel.setText("Features:");
 
         ada_fromList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane7.setViewportView(ada_fromList);
 
         ada_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -729,7 +751,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         ada_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         ada_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -846,14 +868,14 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         dtc_featLabel.setText("Features:");
 
         dtc_fromList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane10.setViewportView(dtc_fromList);
 
         dtc_toList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -868,8 +890,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         dtc_outLabel.setText("Kimeneti tábla oszlopai");
 
         dtc_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+
         dtc_outList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -953,11 +976,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         parameterMainPanel.add(dtcPanel, "card2");
 
         sa_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
-        sa_targetCBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sa_targetCBoxActionPerformed(evt);
-            }
-        });
 
         sa_targetLabel.setText("Elemezni kívánt szöveget tartalmazó oszlop:");
 
@@ -984,7 +1002,148 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         parameterMainPanel.add(saPanel, "card2");
 
+        gtb_lrLabel.setText("learning_rate:");
+
+        gtb_lrField.setText("1.0");
+
+        gtb_mdLabel.setText("max_depth:");
+
+        gtb_mdField.setText("3");
+
+        gtb_rsLabel.setText("random_state:");
+
+        gtb_rsField.setText("0");
+
+        gtb_targetLabel.setText("Target:");
+
+        gtb_targetCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+
+        gtb_featLabel.setText("Features:");
+
+        gtb_fromList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { " " };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane13.setViewportView(gtb_fromList);
+
+        gtb_toList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { " " };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane14.setViewportView(gtb_toList);
+
+        jSeparator8.setForeground(new java.awt.Color(204, 204, 204));
+        jSeparator8.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jSeparator10.setForeground(new java.awt.Color(204, 204, 204));
+        jSeparator10.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        gtb_outLabel.setText("Kimeneti tábla oszlopai");
+
+        gtb_outCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+
+        gtb_outList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { " " };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane15.setViewportView(gtb_outList);
+
+        gtb_neLabel.setText("n_estimators:");
+
+        gtb_neField.setText("100");
+
+        javax.swing.GroupLayout gtbPanelLayout = new javax.swing.GroupLayout(gtbPanel);
+        gtbPanel.setLayout(gtbPanelLayout);
+        gtbPanelLayout.setHorizontalGroup(
+            gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gtbPanelLayout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(gtb_mdLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(gtb_lrLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(gtb_rsLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(gtb_neLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(31, 31, 31)
+                .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(gtb_lrField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(gtb_mdField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(gtb_rsField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(gtb_neField, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(gtb_featLabel)
+                    .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(gtb_targetLabel)
+                    .addComponent(gtb_targetCBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(gtb_outLabel)
+                    .addComponent(gtb_outCBox, 0, 140, Short.MAX_VALUE)
+                    .addComponent(jScrollPane15))
+                .addGap(15, 15, 15))
+        );
+        gtbPanelLayout.setVerticalGroup(
+            gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator8)
+            .addComponent(jSeparator10)
+            .addGroup(gtbPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(gtbPanelLayout.createSequentialGroup()
+                        .addComponent(gtb_targetLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(gtb_lrLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(gtb_lrField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(gtb_targetCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(gtb_featLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                            .addGroup(gtbPanelLayout.createSequentialGroup()
+                                .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(gtb_mdLabel)
+                                    .addComponent(gtb_mdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(gtbPanelLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(gtbPanelLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(gtb_rsLabel)
+                                    .addComponent(gtb_rsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(gtbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(gtb_neLabel)
+                                    .addComponent(gtb_neField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(20, 20, 20))
+                    .addGroup(gtbPanelLayout.createSequentialGroup()
+                        .addComponent(gtb_outLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gtb_outCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
+        );
+
+        parameterMainPanel.add(gtbPanel, "card2");
+
         newTableCB.setText("Új tábla generálás");
+
+        accuracyLabel.setText("Accuracy: -");
 
         javax.swing.GroupLayout tablesPanelLayout = new javax.swing.GroupLayout(tablesPanel);
         tablesPanel.setLayout(tablesPanelLayout);
@@ -992,16 +1151,18 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tablesPanelLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(classifierLabel)
-                    .addComponent(classifierCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(operationCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(operationLabel)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tablesPanelLayout.createSequentialGroup()
-                        .addComponent(newTableCB)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(doButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addGroup(tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(classifierLabel)
+                        .addComponent(classifierCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(operationCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(operationLabel)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tablesPanelLayout.createSequentialGroup()
+                            .addComponent(newTableCB)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(doButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(accuracyLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(parameterMainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34))
         );
@@ -1023,6 +1184,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         .addComponent(classifierLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(classifierCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(accuracyLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(doButton)))
                 .addGap(26, 26, 26))
@@ -1150,7 +1313,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         loadedTablesList.setBackground(new java.awt.Color(240, 240, 240));
         loadedTablesList.setBorder(javax.swing.BorderFactory.createTitledBorder("Betöltött táblák"));
         loadedTablesList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " "};
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -1192,6 +1355,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
 
         sidePanel.add(sideWorkPanel, "card2");
 
+        taskLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         fileMenu.setText("Fájl");
 
         showLoadPanel.setText("Főoldal");
@@ -1232,9 +1397,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         helpMenu.add(jSeparator9);
 
         jMenuItem1.setText("Névjegy");
-
         helpMenu.add(jMenuItem1);
-
+ 
         jMenuBar1.add(helpMenu);
 
         setJMenuBar(jMenuBar1);
@@ -1245,20 +1409,25 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(profilePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(separator)))
+                    .addComponent(separator)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(taskLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(profilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(105, 105, 105)
+                .addGap(63, 63, 63)
+                .addComponent(taskLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1291,6 +1460,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     if (checkParameters(dtc_psField, "Bool") && checkParameters(dtc_mdField, "Integer") && checkParameters(dtc_rsField, "Integer")) {
                         String[] dtc_parameters = {dtc_psField.getText(), dtc_mdField.getText(), dtc_rsField.getText()};
                         cansend = setClassifierParameters(selectedOperation, dtc_parameters, dtc_targetCBox, dtc_toList, dtc_outList);
+                    }
+                    break;
+                case "gtb:":
+                    if(checkParameters(gtb_neField, "Integer") && checkParameters(gtb_mdField, "Integer") && checkParameters(gtb_rsField, "Integer") && checkParameters(gtb_lrField, "Float")){
+                        String[] gtb_parameters = {gtb_neField.getText(), gtb_mdField.getText(), gtb_rsField.getText(), gtb_lrField.getText()};
+                        cansend = setClassifierParameters(selectedOperation, gtb_parameters, gtb_targetCBox, gtb_toList, gtb_outList);
                     }
                     break;
                 case "san:":
@@ -1365,8 +1540,8 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         operationCBox.setSelectedItem("...");
         classifierCBox.setSelectedItem("...");
         outDatas.add("wrk:");
-        //outcolsList kiürítése
         changeMainPanels(loadPanel, sideLoadPanel);
+        setTitle("CloudBased classifier");
     }//GEN-LAST:event_showLoadPanelActionPerformed
 
     protected void operationCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationCBoxActionPerformed
@@ -1420,6 +1595,12 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     getOutCol(dtc_outCBox, dtc_outList);
                     setFromToList(dtc_fromList, dtc_toList, dtc_targetCBox);
                     selectedOperation = "dtc:";
+                    break;
+                case "Gradient Tree Boost":
+                    changePanels(gtbPanel);
+                    getOutCol(gtb_outCBox, gtb_outList);
+                    setFromToList(gtb_fromList, gtb_toList, gtb_targetCBox);
+                    selectedOperation = "gtb:";
                     break;
                 case "Sentiment Analysis":
                     changePanels(saPanel);
@@ -1511,10 +1692,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
          lf = new LoadingFrame(this, "download", null);
          lf.setVisible(true);
     }//GEN-LAST:event_downloadTableButtonActionPerformed
-
-    protected void sa_targetCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sa_targetCBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sa_targetCBoxActionPerformed
 
     protected void preMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preMenuItemActionPerformed
 
@@ -1652,7 +1829,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             int index = 0;
             while (line != null) {
                 line = br.readLine();
-
                 if (line == null) {
                     break;
                 } else {
@@ -1693,9 +1869,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                         outDatas.add("old:");
                         outDatas.add(Integer.toString(currentTaskID));
                         outDatas.add(selected);
-
+                        
                         DefaultTableModel model = new DefaultTableModel(0, 0);
                         csvPrevTable.setModel(model);
+                        setTitle("CloudBased classifier - " + selected.replaceAll("]", ""));
                     } catch (ArrayIndexOutOfBoundsException ex) {
                     }
                 }
@@ -1864,7 +2041,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
 
     protected void changePanels(JPanel visiblePanel) {
-        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, dropcolPanel, nanPanel, dtcPanel, saPanel};
+        JPanel[] panels = {firstPanel, adaPanel, sentimentPanel, rfcPanel, dropcolPanel, nanPanel, dtcPanel, saPanel, gtbPanel};
         for (JPanel p : panels) {
             if (visiblePanel == p) {
                 p.setVisible(true);
@@ -1872,6 +2049,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 p.setVisible(false);
             }
         }
+        accuracyLabel.setText("Accuracy: -");
     }
 
     protected void changeMainPanels(JPanel visiblePanel, JPanel visibleSidePanel) {
@@ -2042,7 +2220,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     break;
                 case "Integer":
                     try {
-                        Integer.parseInt(text.getText());
+                        int value = Integer.parseInt(text.getText());
+                        if(value<0){
+                            returnvalue=false;
+                        }
                     } catch (NumberFormatException e) {
                         returnvalue = false;
                         JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy egész számot adott-e meg.");
@@ -2050,7 +2231,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     break;
                 case "Float":
                     try {
-                        Float.parseFloat(text.getText());
+                        float value = Float.parseFloat(text.getText());
+                        if(value<0){
+                            returnvalue=false;
+                        }
                     } catch (NumberFormatException e) {
                         returnvalue = false;
                         JOptionPane.showMessageDialog(null, "A(z) " + text.getName() + " típusa nem megfelelő. Kérem ellenőrizze, hogy számot adott-e meg.");
@@ -2076,7 +2260,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         ada_lrField.setName("learning_rate");
         ada_rsField.setName("random_state");
 
-        rfc_neField.setName("n_estiomators");
+        rfc_neField.setName("n_estimators");
         rfc_mdField.setName("max_depth");
         rfc_rsField.setName("random_state");
         rfc_njField.setName("n_jobs");
@@ -2084,6 +2268,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         dtc_psField.setName("presort");
         dtc_mdField.setName("max_depth");
         dtc_rsField.setName("random_state");
+        
+        gtb_neField.setName("n_estimators");
+        gtb_lrField.setName("learning_rate");
+        gtb_mdField.setName("max_depth");
+        gtb_rsField.setName("random_state");
     }
 
     protected String encrypt(String pass) {
@@ -2105,6 +2294,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     //VARIABLES
     // <editor-fold defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    protected javax.swing.JLabel accuracyLabel;
     protected javax.swing.JPanel adaPanel;
     protected javax.swing.JComboBox<String> ada_algCBox;
     protected javax.swing.JLabel ada_algLabel;
@@ -2156,6 +2346,23 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JLabel fileUploadLabel;
     protected javax.swing.JTextField filepathField;
     protected javax.swing.JPanel firstPanel;
+    protected javax.swing.JPanel gtbPanel;
+    protected javax.swing.JLabel gtb_featLabel;
+    protected javax.swing.JList<String> gtb_fromList;
+    protected javax.swing.JTextField gtb_lrField;
+    protected javax.swing.JLabel gtb_lrLabel;
+    protected javax.swing.JTextField gtb_mdField;
+    protected javax.swing.JLabel gtb_mdLabel;
+    protected javax.swing.JTextField gtb_neField;
+    protected javax.swing.JLabel gtb_neLabel;
+    protected javax.swing.JComboBox<String> gtb_outCBox;
+    protected javax.swing.JLabel gtb_outLabel;
+    protected javax.swing.JList<String> gtb_outList;
+    protected javax.swing.JTextField gtb_rsField;
+    protected javax.swing.JLabel gtb_rsLabel;
+    protected javax.swing.JComboBox<String> gtb_targetCBox;
+    protected javax.swing.JLabel gtb_targetLabel;
+    protected javax.swing.JList<String> gtb_toList;
     protected javax.swing.JMenu helpMenu;
     protected javax.swing.JLabel jLabel2;
     protected javax.swing.JMenuBar jMenuBar1;
@@ -2164,6 +2371,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JScrollPane jScrollPane10;
     protected javax.swing.JScrollPane jScrollPane11;
     protected javax.swing.JScrollPane jScrollPane12;
+    protected javax.swing.JScrollPane jScrollPane13;
+    protected javax.swing.JScrollPane jScrollPane14;
+    protected javax.swing.JScrollPane jScrollPane15;
     protected javax.swing.JScrollPane jScrollPane2;
     protected javax.swing.JScrollPane jScrollPane3;
     protected javax.swing.JScrollPane jScrollPane4;
@@ -2173,12 +2383,14 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JScrollPane jScrollPane8;
     protected javax.swing.JScrollPane jScrollPane9;
     protected javax.swing.JSeparator jSeparator1;
+    protected javax.swing.JSeparator jSeparator10;
     protected javax.swing.JSeparator jSeparator2;
     protected javax.swing.JSeparator jSeparator3;
     protected javax.swing.JSeparator jSeparator4;
     protected javax.swing.JSeparator jSeparator5;
     protected javax.swing.JSeparator jSeparator6;
     protected javax.swing.JSeparator jSeparator7;
+    protected javax.swing.JSeparator jSeparator8;
     protected javax.swing.JPopupMenu.Separator jSeparator9;
     protected javax.swing.JTable jTable1;
     protected java.awt.List list;
@@ -2233,6 +2445,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JPanel sidePanel;
     protected javax.swing.JPanel sideWorkPanel;
     protected javax.swing.JPanel tablesPanel;
+    protected javax.swing.JLabel taskLabel;
     protected javax.swing.JButton uploadButton;
     protected javax.swing.JLabel usernameLabel;
     protected javax.swing.JButton workChoseButton;

@@ -56,7 +56,6 @@ train = df[generated]
 test = df[~generated]
 or_test = dfo[~generated]
 
-
 trainvalues = train[target].values.tolist()
 testvalues = test[target].values.tolist()
 for i in range(len(trainvalues)):
@@ -71,9 +70,13 @@ train[target] = train[target].apply(np.int64)
 test[target] = testvalues
 test[target] = test[target].apply(np.int64)
 
-print test[target]
+if max_depth==0:
+	clf = RandomForestClassifier(random_state = random_state, n_jobs =n_jobs, n_estimators=n_estimators) 
+elif random_state==0:
+	clf = RandomForestClassifier(max_depth = max_depth,n_jobs =n_jobs, n_estimators=n_estimators) 
+else:
+	clf = RandomForestClassifier(max_depth = max_depth, random_state = random_state, n_jobs =n_jobs, n_estimators=n_estimators) 
 
-clf = RandomForestClassifier(max_depth = max_depth, random_state = random_state, n_jobs =n_jobs, n_estimators=n_estimators) 
 clf.fit(train[features].values, train[target].values)
 
 predictions = clf.predict(test[features].values)
@@ -106,5 +109,4 @@ for i in range(len(predictions)):
 	float_pred.append(predictions[i]/100.0)
 	
 df_out[target] = float_pred
-df_out[target] = predictions
 df_out.to_csv(newtablename, index=False)

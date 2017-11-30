@@ -30,7 +30,7 @@ public class ClientThread implements Runnable {
     private final Connection conn;
 
     private int threadID, currentTableID, currentTaskID;
-    private float accuracyScore;
+    private float accuracyScore = Float.valueOf("-1.0");
     private String rawInput, threadName;
 
     private ArrayList<String> inDatas = new ArrayList<>();
@@ -70,6 +70,7 @@ public class ClientThread implements Runnable {
 
             index++;
             System.out.println("Kérés vége.");
+            accuracyScore = Float.valueOf("-1.0");
         }
     }
 
@@ -79,6 +80,7 @@ public class ClientThread implements Runnable {
 
         String[] string = withoutBrackets.split(", ");
         inDatas.addAll(Arrays.asList(string));
+        System.out.println("IN: " + inDatas);
     }
 
     private ArrayList<String> controller(ArrayList<String> in) { //This method is handling the input datas, and divides the tasks depending the identifier (first member of incoming data)
@@ -128,7 +130,6 @@ public class ClientThread implements Runnable {
             case "old:": //old tables loading
                 currentTaskID = Integer.parseInt(in.get(1));
                 out = db.getTasksTable();
-                System.out.println("OLD: " + out);
                 break;
             case "ldt:": //chosen table loading
                 currentTaskID = Integer.parseInt(in.get(1));
@@ -139,7 +140,6 @@ public class ClientThread implements Runnable {
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "factorize.py", in.get(3));
-                db.modifyIsFactorizedInTables(in.get(3));
                 out = readFromCsv("done:", answer, true, false);
                 break;
             case "norm:": //normalize
@@ -147,7 +147,6 @@ public class ClientThread implements Runnable {
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "normalize.py", in.get(3));
-                db.modifyIsNormalisedInTables(in.get(3));
                 out = readFromCsv("done:", answer, true, false);
                 break;
             case "ftsl:": //feature selection
@@ -155,7 +154,6 @@ public class ClientThread implements Runnable {
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "variance.py", in.get(3), in.get(4));
-                db.modifyIsFeatureSelectedInTables(in.get(3));
                 out = readFromCsv("done:", answer, true, false);
                 break;
             case "delc:": //delete columns
@@ -209,6 +207,14 @@ public class ClientThread implements Runnable {
                     out = readFromCsv("done:", answer, true, true);
                 }
                 break;
+            case "gtb:":
+                answer = callingClassifier(in, "gtb.py");
+                if(answer.equals("notokay")){
+                    out.add("nok:");
+                }else{
+                    out = readFromCsv("done:", answer, true, true);
+                }
+                break;
             case "san:":
                 newtable = Boolean.valueOf(in.get(1));
                 answer = callingPython(newtable, "sentiment.py", in.get(3), in.get(4));
@@ -252,7 +258,7 @@ public class ClientThread implements Runnable {
         csv.add(filename + ":");
         System.out.println("Loading chosen table: " + filename);
         String path = PATH + db.getTaskName() + "_" + currentTaskID+ "/" + filename;
-
+        csv.add(Float.toString(accuracyScore) + ":");
         File file = new File(path);
         try {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -284,10 +290,6 @@ public class ClientThread implements Runnable {
                         }
                     }
                 }
-
-//            if(classifier){
-//                csv.add(Integer.toString(accuracyScore));
-//            }
             }
         } catch (IOException ex) {
             System.out.println("PATH: " + path);
@@ -450,7 +452,6 @@ public class ClientThread implements Runnable {
             rs = stat.executeQuery(query);
             while (rs.next()) {
                 String password = rs.getString("PASSWORD");
-
                 if ((pass.equals(password))) {
                     threadName = name;
                     threadID = rs.getInt("USER_ID");
@@ -458,7 +459,7 @@ public class ClientThread implements Runnable {
                     String updateQuery = "update users set is_online='" + true + "', log_status = '" + "null" + "' where user_id='" + threadID + "';";
                     Statement updateStat = conn.createStatement();
                     updateStat.executeUpdate(updateQuery);
-
+                    
                     String fs = System.getProperty("file.separator");
                     PATH = PATH + threadID + fs;
                     System.out.println("Path: " + PATH);
@@ -500,8 +501,9 @@ public class ClientThread implements Runnable {
                 String insertquery = "insert into users values (?,?,?,?,?,?);";
                 try {
                     threadName = name;
+                    threadID = id;
                     PreparedStatement prepstat = conn.prepareStatement(insertquery);
-                    prepstat.setInt(1, id);
+                    prepstat.setInt(1, threadID);
                     prepstat.setString(2, name);
                     prepstat.setString(3, mail);
                     prepstat.setString(4, pass);
@@ -610,7 +612,7 @@ public class ClientThread implements Runnable {
     private boolean insertTableIntoDatabase(String filename, String original) {
         boolean returnvalue = false;
         try {
-            String insertQuery = "insert into tables values (?,?,?,?,?,?,?,?,?,?);";
+            String insertQuery = "insert into tables values (?,?,?,?,?,?);";
             PreparedStatement prep = conn.prepareStatement(insertQuery);
             currentTableID = getTableID();
 
@@ -618,12 +620,8 @@ public class ClientThread implements Runnable {
             prep.setInt(2, threadID);
             prep.setString(3, filename);
             prep.setString(4, original);
-            prep.setBoolean(5, false);
-            prep.setBoolean(6, false);
-            prep.setBoolean(7, false);
-            prep.setBoolean(8, false);
-            prep.setBoolean(9, true);
-            prep.setInt(10, currentTaskID);
+            prep.setBoolean(5, true);
+            prep.setInt(6, currentTaskID);
 
             if (!isTableInTask(filename)) {
                 prep.addBatch();
@@ -679,7 +677,7 @@ public class ClientThread implements Runnable {
         try {
             int id = Integer.parseInt(taskID);
             Statement stat = conn.createStatement();
-            String query = "update tasks set is_active = false, name = '" + "CB_deleted_task" + "' where task_id = '" + id + "';";
+            String query = "update tasks set is_active = false, task_name = '" + "CB_deleted_task" + "' where task_id = '" + id + "';";
             stat.executeUpdate(query);
         } catch (SQLException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -722,6 +720,7 @@ public class ClientThread implements Runnable {
         if (other.length == 0) {
             returnvalue.add("old:");
         } else {
+            //nem kell .add(old:)?
             returnvalue.add(Arrays.toString(other));
         }
 
@@ -781,47 +780,7 @@ public class ClientThread implements Runnable {
         }
     }
 
-    private void modifyIsClassifiedInTables(String tablename) {
-        try {
-            Statement updateStat = conn.createStatement();
-            String updateQuery = "update tables set is_classified = true where name ='" + tablename + "' and task_id = '" + currentTaskID + "'; ";
-            updateStat.executeUpdate(updateQuery);
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void modifyIsFactorizedInTables(String tablename) {
-        try {
-            Statement updateStat = conn.createStatement();
-            String updateQuery = "update tables set is_factorized = true where name ='" + tablename + "' and task_id = '" + currentTaskID + "'; ";
-            updateStat.executeUpdate(updateQuery);
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void modifyIsNormalisedInTables(String tablename) {
-        try {
-            Statement updateStat = conn.createStatement();
-            String updateQuery = "update tables set is_normalized = true where name ='" + tablename + "' and task_id = '" + currentTaskID + "';";
-            updateStat.executeUpdate(updateQuery);
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void modifyIsFeatureSelectedInTables(String tablename) {
-        try {
-            Statement updateStat = conn.createStatement();
-            String updateQuery = "update tables set is_feautre_selected = true where name = '" + tablename + "' and task_id = '" + currentTaskID + "';";
-            updateStat.executeUpdate(updateQuery);
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void modifyPass(String newpass) {
+     private void modifyPass(String newpass) {
         try {
             Statement updatePass = conn.createStatement();
             String updateQuery = "update users set password = '" + newpass + "' where user_id = '" + threadID + "';";

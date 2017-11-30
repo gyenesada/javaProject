@@ -13,7 +13,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class WWFController implements Runnable{ 
+public class WWFController implements Runnable {
 
     private final Scanner sc;
     private final PrintWriter pw;
@@ -21,7 +21,6 @@ public class WWFController implements Runnable{
     WorkWindowFrame wwf;
 
     public WWFController(PrintWriter pw, Scanner sc, String name) throws Exception {
-
         this.sc = sc;
         this.pw = pw;
 
@@ -37,8 +36,8 @@ public class WWFController implements Runnable{
 
     private void communicateWithServer(PrintWriter pw, Scanner sc) {
         int index = 0;
-        
-         while(!wwf.exit){
+
+        while (!wwf.exit) {
             System.out.println(index + ".kérés indítása");
             try {
                 while (wwf.outDatas.isEmpty()) {
@@ -57,7 +56,7 @@ public class WWFController implements Runnable{
                 wwf.dispose();
             }
             index++;
-         }
+        }
     }
 
     private ArrayList<String> controller(ArrayList<String> in) throws InterruptedException {
@@ -74,7 +73,8 @@ public class WWFController implements Runnable{
                     model.addElement(wwf.selectedTable);
                     Thread.sleep(100);
                     wwf.lf.dispose();
-                    wwf.operationCBox.setEnabled(true); wwf.classifierCBox.setEnabled(true);
+                    wwf.operationCBox.setEnabled(true);
+                    wwf.classifierCBox.setEnabled(true);
                     wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
                     wwf.downloadTableButton.setEnabled(true);
                     wwf.delTableButton.setEnabled(true);
@@ -87,9 +87,9 @@ public class WWFController implements Runnable{
                 fillLoadedTablesList(in);
                 wwf.changePanels(wwf.firstPanel);
                 wwf.lf.dispose();
-                
-                    wwf.downloadTableButton.setEnabled(true);
-                    wwf.delTableButton.setEnabled(true);
+
+                wwf.downloadTableButton.setEnabled(true);
+                wwf.delTableButton.setEnabled(true);
                 break;
             case "wrk:":
                 wwf.list.removeAll();
@@ -104,7 +104,7 @@ public class WWFController implements Runnable{
                 fillLoadedTablesList(in);
                 Thread.sleep(10);
                 wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
-                
+
                 wwf.delTableButton.setEnabled(false);
                 wwf.downloadTableButton.setEnabled(false);
                 wwf.getSelectedTable();
@@ -123,9 +123,9 @@ public class WWFController implements Runnable{
             case "delt:":
                 fillLoadedTablesList(in);
                 wwf.selectedTable = null;
-                  DefaultTableModel model = new DefaultTableModel(0, 0);
-                  wwf.csvPrevTable.setModel(model);
-                  
+                DefaultTableModel model = new DefaultTableModel(0, 0);
+                wwf.csvPrevTable.setModel(model);
+
                 wwf.delTableButton.setEnabled(false);
                 wwf.downloadTableButton.setEnabled(false);
                 wwf.getSelectedTable();
@@ -134,14 +134,14 @@ public class WWFController implements Runnable{
                 writeToCsv(in.get(1));
                 break;
             case "mdu:":
-                if(Boolean.valueOf(in.get(1))){
+                if (Boolean.valueOf(in.get(1))) {
                     JOptionPane.showMessageDialog(wwf, "A felhasználónév megváltozott.");
                     wwf.loggedUser = in.get(2);
                     wwf.usernameLabel.setText("Üdvözöljük " + wwf.loggedUser + "!");
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(wwf, "Már szerepel ilyen felhasználónév!");
                 }
-            break;
+                break;
             case "mdp:":
                 JOptionPane.showMessageDialog(wwf, "A jelszava sikeresen megváltozott.");
                 break;
@@ -149,8 +149,8 @@ public class WWFController implements Runnable{
                 JOptionPane.showMessageDialog(wwf, "A tábla nem megfelelő formátumú az osztályozó algoritmus lefuttatására. Kérjük ellenőrizze!");
                 wwf.lf.dispose();
                 break;
-            case "bye:": 
-                
+            case "bye:":
+
                 wwf.dispose();
                 MWFController controller;
                 try {
@@ -169,49 +169,53 @@ public class WWFController implements Runnable{
 
     protected void fillLoadedTablesList(ArrayList<String> in) {
         DefaultListModel<String> model = new DefaultListModel<>();
-            wwf.loadedTablesList.setModel(model);
-            for (int i = 1; i < in.size(); i++) {
-                model.addElement(in.get(i));
-            }
+        wwf.loadedTablesList.setModel(model);
+        for (int i = 1; i < in.size(); i++) {
+            model.addElement(in.get(i));
+        }
     }
 
     private void loadedTablePreprocess() {
         ArrayList<String[]> items = new ArrayList<>();
         String input;
-        try{
-            input= wwf.rawInput.split(":, ")[2];
-
-           String[] splitted = input.split(", >>flag<<, ");
-           String[] cols = splitted[0].split(",");
-           for(int i=1; i<splitted.length; i++){
-               String[] tmp = splitted[i].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-               items.add(tmp);
-           }
-           wwf.fillPrevTable(cols, items);
-        }catch(ArrayIndexOutOfBoundsException ex){
+        try {
+            String[] temp = wwf.rawInput.split(":, ");
+            input = temp[3];
+            String accuracy = temp[2];
+            if(!accuracy.equals("-1.0")){
+                wwf.accuracyLabel.setText("Accuracy: " + temp[2] );
+            }
+            String[] splitted = input.split(", >>flag<<, ");
+            String[] cols = splitted[0].split(",");
+            for (int i = 1; i < splitted.length; i++) {
+                String[] tmp = splitted[i].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                items.add(tmp);
+            }
+            wwf.fillPrevTable(cols, items);
+        } catch (ArrayIndexOutOfBoundsException ex) {
             JOptionPane.showMessageDialog(wwf, "A kért tábla betöltése nem sikerült!");
         }
     }
-     
+    
     private void writeToCsv(String filename) {
         filename = filename.replaceAll(":", "");
-         String fs =System.getProperty("file.separator");
-        String fullFilepath = System.getProperty("user.home") + fs +"Desktop"+fs+filename;
-        
+        String fs = System.getProperty("file.separator");
+        String fullFilepath = System.getProperty("user.home") + fs + "Desktop" + fs + filename;
+
         BufferedWriter bw = null;
         FileWriter fw = null;
 
         try {
             fw = new FileWriter(fullFilepath);
             bw = new BufferedWriter(fw);
-            
-            String lines = wwf.rawInput.split(":, ")[2];
+
+            String lines = wwf.rawInput.split(":, ")[3];
             String line = (lines.replaceAll(", >>flag<<, ", "\n")).replaceAll(", >>flag<<]", "");
-                       
+
             bw.write(line);
             Thread.sleep(500);
             wwf.lf.dispose();
-            JOptionPane.showMessageDialog(wwf, "A kiválasztott tábla lementve: "+fullFilepath+". ");
+            JOptionPane.showMessageDialog(wwf, "A kiválasztott tábla lementve: " + fullFilepath + ". ");
         } catch (IOException e) {
         } catch (InterruptedException ex) {
             Logger.getLogger(WWFController.class.getName()).log(Level.SEVERE, null, ex);
@@ -232,23 +236,23 @@ public class WWFController implements Runnable{
         String[] string = withoutBrackets.split(", ");
         wwf.inDatas.addAll(Arrays.asList(string));
     }
-    
-    private void addTableToList(ArrayList<String> in){
+
+    private void addTableToList(ArrayList<String> in) {
         DefaultListModel dlm = (DefaultListModel) wwf.loadedTablesList.getModel();
         String newTable = in.get(1).replaceAll(":", "");
         wwf.selectedTable = newTable;
-        boolean canInsert=true;
+        boolean canInsert = true;
         String[] oldTables = dlm.toString().replaceAll("[\\[\\]]", "").split(", ");
-        
-        for(String ot: oldTables){
-            if(ot.equals(newTable)){
+
+        for (String ot : oldTables) {
+            if (ot.equals(newTable)) {
                 canInsert = false;
             }
         }
-        
-        if(canInsert){
+
+        if (canInsert) {
             dlm.addElement(in.get(1).replaceAll(":", ""));
         }
-        
+
     }
 }
