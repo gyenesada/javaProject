@@ -35,7 +35,7 @@ public class ClientThread implements Runnable {
 
     private ArrayList<String> inDatas = new ArrayList<>();
     private ArrayList<String> outDatas = new ArrayList<>();
-    private DBHandler db;
+    private final DBHandler db;
     
     public ClientThread(Socket s, Connection conn) {
         this.s = s;
@@ -92,13 +92,11 @@ public class ClientThread implements Runnable {
         switch (identifier) {
             case "log:": //log in
                 answer = Boolean.toString(db.validateClient(in));
-
                 out.add(identifier);
                 out.add(answer);
                 break;
             case "reg:": //registration
                 answer = Boolean.toString(db.regClient(in));
-
                 out.add(identifier);
                 out.add(answer);
                 break;
@@ -133,42 +131,42 @@ public class ClientThread implements Runnable {
                 break;
             case "ldt:": //chosen table loading
                 currentTaskID = Integer.parseInt(in.get(1));
-                out = readFromCsv("ldt:", in.get(2), true, false);
+                out = readFromCsv("ldt:", in.get(2), true);
                 break;
             case "fact:": //factorize
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "factorize.py", in.get(3));
-                out = readFromCsv("done:", answer, true, false);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "norm:": //normalize
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "normalize.py", in.get(3));
-                out = readFromCsv("done:", answer, true, false);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "ftsl:": //feature selection
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "variance.py", in.get(3), in.get(4));
-                out = readFromCsv("done:", answer, true, false);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "delc:": //delete columns
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "dropout.py", in.get(3), parametersToString(in));
-                out = readFromCsv("done:", answer, true, false);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "nanv:": //handle nan values
                 currentTaskID = Integer.parseInt(in.get(2));
                 newtable = Boolean.valueOf(in.get(1));
 
                 answer = callingPython(newtable, "nanvalues.py", in.get(3), in.get(4));
-                out = readFromCsv("done:", answer, true, false);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "dels:": //delete sessions
                 db.setTaskInactive(in.get(1));
@@ -180,15 +178,14 @@ public class ClientThread implements Runnable {
                 break;
             case "tdl:": //table download
                 currentTaskID = Integer.parseInt(in.get(1));
-                out = readFromCsv("tdl:", in.get(2), false, false);
+                out = readFromCsv("tdl:", in.get(2), false);
                 break;
             case "ada:":
-                System.out.println("CurrentTaskID: " + currentTaskID);
                 answer = callingClassifier(in, "ada.py");
                 if(answer.equals("notokay")){
                     out.add("nok:");
                 }else{
-                    out = readFromCsv("done:", answer, true, true);
+                    out = readFromCsv("done:", answer, true);
                 }
                 break;
             case "rfc:":
@@ -196,7 +193,7 @@ public class ClientThread implements Runnable {
                 if(answer.equals("notokay")){
                     out.add("nok:");
                 }else{
-                    out = readFromCsv("done:", answer, true, true);
+                    out = readFromCsv("done:", answer, true);
                 }
                 break;
             case "dtc:":
@@ -204,7 +201,7 @@ public class ClientThread implements Runnable {
                 if(answer.equals("notokay")){
                     out.add("nok:");
                 }else{
-                    out = readFromCsv("done:", answer, true, true);
+                    out = readFromCsv("done:", answer, true);
                 }
                 break;
             case "gtb:":
@@ -212,13 +209,13 @@ public class ClientThread implements Runnable {
                 if(answer.equals("notokay")){
                     out.add("nok:");
                 }else{
-                    out = readFromCsv("done:", answer, true, true);
+                    out = readFromCsv("done:", answer, true);
                 }
                 break;
             case "san:":
                 newtable = Boolean.valueOf(in.get(1));
                 answer = callingPython(newtable, "sentiment.py", in.get(3), in.get(4));
-                out = readFromCsv("done:", answer, true, false);
+                out = readFromCsv("done:", answer, true);
                 break;
             case "mdu:":
                 answer = Boolean.toString(db.modifyUsername(in.get(1)));
@@ -252,13 +249,13 @@ public class ClientThread implements Runnable {
         return sb.toString();
     }
 
-    private ArrayList<String> readFromCsv(String identifier, String filename, boolean preview, boolean classifier) {
+    private ArrayList<String> readFromCsv(String identifier, String filename, boolean preview) {
         ArrayList<String> csv = new ArrayList<>();
         csv.add(identifier);
         csv.add(filename + ":");
         System.out.println("Loading chosen table: " + filename);
         String path = PATH + db.getTaskName() + "_" + currentTaskID+ "/" + filename;
-        csv.add(Float.toString(accuracyScore) + ":");
+        csv.add(Float.toString(db.getAccuracy(filename)) + ":");
         File file = new File(path);
         try {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -320,7 +317,6 @@ public class ClientThread implements Runnable {
             bw.write(line);
             System.out.println("Done with file writing");
         } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             try {
                 bw.close();
@@ -381,7 +377,8 @@ public class ClientThread implements Runnable {
                     
                         System.out.println("Classifier completed successfully.");
                         String newtablename = prefixedTableName(py, file);
-                       db.insertTableIntoDatabase(newtablename, original);
+                        db.insertTableIntoDatabase(newtablename, original);
+                        db.updateAccuracy(newtablename, currentTaskID);
                         returnvalue = newtablename;
                     } else {
                         System.out.println("Classifier finished with an error.");
@@ -612,7 +609,7 @@ public class ClientThread implements Runnable {
     private boolean insertTableIntoDatabase(String filename, String original) {
         boolean returnvalue = false;
         try {
-            String insertQuery = "insert into tables values (?,?,?,?,?,?);";
+            String insertQuery = "insert into tables values (?,?,?,?,?,?,?);";
             PreparedStatement prep = conn.prepareStatement(insertQuery);
             currentTableID = getTableID();
 
@@ -620,8 +617,9 @@ public class ClientThread implements Runnable {
             prep.setInt(2, threadID);
             prep.setString(3, filename);
             prep.setString(4, original);
-            prep.setBoolean(5, true);
-            prep.setInt(6, currentTaskID);
+            prep.setFloat(5, accuracyScore);
+            prep.setBoolean(6, true);
+            prep.setInt(7, currentTaskID);
 
             if (!isTableInTask(filename)) {
                 prep.addBatch();
@@ -652,6 +650,16 @@ public class ClientThread implements Runnable {
             }
         }
         return returnvalue;
+    }
+    
+    private void updateAccuracy(String tablename, int taskid){
+        try{
+            Statement stat = conn.createStatement();
+            String query = "update tables set accuracy = '"+accuracyScore+"' where  name = '"+tablename+"' and task_id = '" + taskid + "';";  
+            stat.executeUpdate(query);
+        }catch(SQLException ex){
+            System.out.println("Error: updateAccuracy");
+        }
     }
 
     private int getTableID() {
@@ -808,6 +816,21 @@ public class ClientThread implements Runnable {
         } catch (SQLException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return returnvalue;
+    }
+    
+    private float getAccuracy(String tablename){
+        float returnvalue=Float.valueOf("-1.0");
+            try {
+                Statement stat = conn.createStatement();
+                String query = "select accuracy from tables where name= '"+tablename+"' and task_id = '"+currentTaskID+"';";
+                ResultSet rs = stat.executeQuery(query);
+                while(rs.next()){
+                    returnvalue = rs.getFloat("ACCURACY");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
         return returnvalue;
     }
 }
