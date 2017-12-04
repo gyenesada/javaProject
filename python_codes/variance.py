@@ -8,8 +8,13 @@ tablename = sys.argv[2]
 newtable = sys.argv[1]
 th = float(sys.argv[3])
 df = pd.read_csv(tablename)
-cols = df.columns.values.tolist()
+all_cols = df.columns.values.tolist()
+print all_cols 
 autoremove=True
+
+strings = list(df.select_dtypes(include=['object']).columns)
+cols = list(set(all_cols) - set(strings))
+print cols
 
 def feature_selection(dframe):
     X = dframe.loc[:, cols].values
@@ -43,6 +48,9 @@ def get_tablename(tablename):
 newtablename = get_newfile_path(tablename) + get_newfile_name(tablename)
 	
 df_out = feature_selection(df)
+for i in strings:
+	df_out[i] = df[i]
+	
 if newtable == "true":
 	df_out.to_csv(newtablename, index=False)
 else:

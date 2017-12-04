@@ -37,7 +37,7 @@ import javax.swing.table.DefaultTableModel;
 
 public final class WorkWindowFrame extends javax.swing.JFrame {
 
-    protected boolean exit = false;
+    protected boolean exit;
 
     protected String rawInput, selectedTable, currentTask, path;
     protected String selectedOperation = "";
@@ -61,6 +61,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed">
     public WorkWindowFrame(String username) throws Exception {
         this.loggedUser = username;
+        this.exit = false;
         //initcomponentsbe kellene majd.
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -1484,7 +1485,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 case "nanv:":
                     String mode = getSelectedRButton(nanRadioGroup);
                     insertIntoBuffer(selectedOperation, Boolean.toString(newTableCB.isSelected()), Integer.toString(currentTaskID), selectedTable, mode);
-                    cansend = true;
+                    if(mode.equals("")){
+                        cansend = false;
+                    }else{
+                        cansend = true;
+                    }
                     break;
                 case "fact:":
                     System.out.println(newTableCB.isSelected());
@@ -1526,14 +1531,18 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Kérem adjon meg feltöltendő file-t!");
             } else {
                 outDatas = readFromCsv(path, true);
+                 if(!outDatas.isEmpty()){
+                    lf = new LoadingFrame(this, "tableUpload", null);
+                    lf.setVisible(true);
+                }else{
+                    workPathField.setText("");
+                 }
             }
         }else{
             workPathField.setText("");
             JOptionPane.showMessageDialog(this, "Adjon meg egy csv file-t!");
         }
         
-            lf = new LoadingFrame(this, "tableUpload", null);
-            lf.setVisible(true);
     }//GEN-LAST:event_workUploadButtonActionPerformed
 
     protected void showLoadPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showLoadPanelActionPerformed
@@ -1633,11 +1642,15 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     //do nothing
                 }
                 outDatas = readFromCsv(path, false);
+                if(!outDatas.isEmpty()){
+                    lf = new LoadingFrame(this, "tableUpload", null);
+                    lf.setVisible(true);
+                }else{
+                    filepathField.setText("");
+                }
             }
             filepathField.setText("");
 
-            lf = new LoadingFrame(this, "tableUpload", null);
-            lf.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(this, "Adjon meg egy .csv file-t!");
         }
@@ -1837,7 +1850,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                     csv.add(line);
                     csv.add(">>flag<<");
                 }
-                if (index < 500) {
+                if (index < 250) {
                     String[] items_temp = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
                     items.add(items_temp);
                 }
@@ -1846,7 +1859,11 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
             fillPrevTable(cols, items);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Nem létező file.");
-        } finally {
+        } catch(NullPointerException ex){
+            JOptionPane.showMessageDialog(this, "A fájl nem tölthető be! Kérem ellenőrizze, hogy a fájl tartalma sérült-e!");
+            csv.clear();
+        }
+            finally {
             try {
                 br.close();
             } catch (IOException ex) {
@@ -2039,7 +2056,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }
 
     protected String getSelectedRButton(ButtonGroup bg) {
-        return bg.getSelection().getActionCommand();
+        String returnvalue="";
+        try{
+        returnvalue= bg.getSelection().getActionCommand();
+        }catch(NullPointerException ex){
+            JOptionPane.showMessageDialog(this, "Kérem válasszon egyet a lehetőségek közül!");
+        }
+        return returnvalue;
     }
 
     protected void changePanels(JPanel visiblePanel) {

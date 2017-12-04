@@ -8,6 +8,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class HelpWindow extends javax.swing.JFrame {
+    /*
+    This class implements the help menuitem. It describes every classifier and preprocessing operation.
+    */
 
     public HelpWindow(String mode) {
         initComponents();
@@ -473,7 +476,7 @@ public class HelpWindow extends javax.swing.JFrame {
 
     private void featButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_featButtonActionPerformed
         changePanels(featPanel);
-        featText.setText("<html><font size=\"6\">Feature Selection</font><br> <br> A Feature Selection egy olyan algoritmus, ami a Variance Threshold módszert alkalmazza a nem hasznos oszlopok kiszűrésére. Ehhez szükséges a táblát faktorizálni, ha annak szerkezete nem megfelelő, vagyis tartalmaz a számszerű mezőktől eltérő mezőt. A felhasználó az algoritmus kiválasztása során megad egy <b> threshold</b> paramétert. Ez a paraméter egy <b>float</b> érték. Az algoritmus ezt használja fel, az oszlopok kiszűrése esetén. Ha az bizonyos oszlop értékeinek szórása kisebb, mint a megadott küszöbérték, az oszlop nem kerül bele a kimeneti táblába. <br> <br> Ez az algoritmus segíti az osztályozókat abban, hogy felesleges attribútumokat, amik nem viszik előre az osztályozás menetét,  ne kelljen kezelniük.  </html>");
+        featText.setText("<html><font size=\"6\">Feature Selection</font><br> <br> A Feature Selection egy olyan algoritmus, ami a Variance Threshold módszert alkalmazza a nem hasznos oszlopok kiszűrésére. Ehhez szükséges a táblát faktorizálni, ha annak szerkezete nem megfelelő, vagyis nem tartalmaz egészszám típusú mezőt. A felhasználó az algoritmus kiválasztása során megad egy <b> threshold</b> paramétert. Ez a paraméter egy <b>float</b> érték. Az algoritmus ezt használja fel, az oszlopok kiszűrése esetén. Ha az bizonyos oszlop értékeinek szórása kisebb, mint a megadott küszöbérték, az oszlop nem kerül bele a kimeneti táblába. <br> <br> Ez az algoritmus segíti az osztályozókat abban, hogy felesleges attribútumokat, amik nem viszik előre az osztályozás menetét,  ne kelljen kezelniük.  </html>");
     }//GEN-LAST:event_featButtonActionPerformed
 
     private void normButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_normButtonActionPerformed
