@@ -86,8 +86,10 @@ public class WWFController implements Runnable {
                 wwf.selectedTable = in.get(1);
                 fillLoadedTablesList(in);
                 wwf.changePanels(wwf.firstPanel);
+                Thread.sleep(100);
                 wwf.lf.dispose();
-
+                
+                wwf.workPathField.setText("");
                 wwf.downloadTableButton.setEnabled(true);
                 wwf.delTableButton.setEnabled(true);
                 break;
@@ -104,14 +106,14 @@ public class WWFController implements Runnable {
                 fillLoadedTablesList(in);
                 Thread.sleep(10);
                 wwf.changeMainPanels(wwf.workPanel, wwf.sideWorkPanel);
-
+                
                 wwf.delTableButton.setEnabled(false);
                 wwf.downloadTableButton.setEnabled(false);
                 wwf.getSelectedTable();
                 break;
             case "ldt:":
-                loadedTablePreprocess();
                 wwf.changePanels(wwf.firstPanel);
+                loadedTablePreprocess();
                 wwf.classifierCBox.setSelectedIndex(0);
                 wwf.operationCBox.setSelectedIndex(0);
                 break;
@@ -182,8 +184,11 @@ public class WWFController implements Runnable {
             String[] temp = wwf.rawInput.split(":, ");
             input = temp[3];
             String accuracy = temp[2];
+            System.out.println("temp[2] " + temp[2]);
             if(!accuracy.equals("-1.0")){
                 wwf.accuracyLabel.setText("Accuracy: " + temp[2] );
+            }else{
+                wwf.accuracyLabel.setText("Accuracy: -");
             }
             String[] splitted = input.split(", >>flag<<, ");
             String[] cols = splitted[0].split(",");

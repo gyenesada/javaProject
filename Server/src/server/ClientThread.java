@@ -51,7 +51,6 @@ public class ClientThread implements Runnable {
             pw = new PrintWriter(s.getOutputStream(), true);
 
             communicationWithClients(pw, sc);
-            System.out.println(threadName + " logged out. Thread has stopped.");
         } catch (IOException e) {
             System.out.println("Error: ClientThread run");
         }
@@ -60,7 +59,8 @@ public class ClientThread implements Runnable {
     private void communicationWithClients(PrintWriter pw, Scanner sc) {
         int index = 0;
         while (true) {
-            System.out.println(index + ". kérés: ");
+            System.out.println("Thread: " + threadName);
+            System.out.println(index + ". request: ");
             System.out.println("");
             outDatas.clear();
             inputPreprocess(sc.nextLine());
@@ -69,7 +69,7 @@ public class ClientThread implements Runnable {
             pw.println(outDatas);
 
             index++;
-            System.out.println("Kérés vége.");
+            System.out.println("Request completed.");
             accuracyScore = Float.valueOf("-1.0");
         }
     }
@@ -80,7 +80,6 @@ public class ClientThread implements Runnable {
 
         String[] string = withoutBrackets.split(", ");
         inDatas.addAll(Arrays.asList(string));
-        System.out.println("IN: " + inDatas);
     }
 
     private ArrayList<String> controller(ArrayList<String> in) { //This method is handling the input datas, and divides the tasks depending the identifier (first member of incoming data)
@@ -116,7 +115,7 @@ public class ClientThread implements Runnable {
                 filename = in.get(2).replaceAll(":", "");
                 currentTaskID = Integer.parseInt(in.get(1).replaceAll(":", ""));
                 if (db.insertTableIntoDatabase(filename, filename)) {
-                    out = db.getTasksTable();
+                    out = db.getTasksTable("wcsv:");
                     writeToCsv(filename);
                 } else {
                     out.add("err:");
@@ -330,16 +329,13 @@ public class ClientThread implements Runnable {
     
     private boolean checkIsOkay(String command) throws IOException, InterruptedException{
         boolean returnvalue=true;
-        System.out.println("Isokay.py: " + command);
         
         Process p = Runtime.getRuntime().exec(command);
          BufferedReader pythonOutput = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String isokay;
             while ((isokay = pythonOutput.readLine()) != null) {
-                System.out.println(isokay);
                 returnvalue = Boolean.valueOf(isokay);
             }
-            System.out.println("Isokay? " + returnvalue);
         return returnvalue;
     }
 
@@ -354,7 +350,7 @@ public class ClientThread implements Runnable {
         String prefix = "python " + PY_PATH + py + " " + PATH +db.getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + original + " ";
         sb.append(prefix);
         
-        String isokay = "python " + PY_PATH + "isokay.py " + PATH + db.getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + original + " ";
+        String isokay = "python " + PY_PATH + "isokay.py" + PATH + db.getTaskName() + "_" + currentTaskID + fs + file + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + original + " ";
         pre_sb.append(isokay);
         for (int i = 2; i < input.size(); i++) {
             sb = sb.append(input.get(i));
@@ -364,7 +360,7 @@ public class ClientThread implements Runnable {
         }
         try {
                 if(checkIsOkay(pre_sb.toString())){
-                    System.out.println("Classifier can start..");
+                    System.out.println("The parameters are okay. Classifier can start..");
                     Process p = Runtime.getRuntime().exec(sb.toString());
                     
                     int exitVal = p.waitFor();
@@ -372,7 +368,7 @@ public class ClientThread implements Runnable {
                         
                     BufferedReader pythonOutput = new BufferedReader(new InputStreamReader(p.getInputStream()));
                     String pot = pythonOutput.readLine();
-                    System.out.println("accuracy: " + pot);
+                    System.out.println("Accuracy score: " + pot);
                     accuracyScore = Float.parseFloat(pot);
                     
                         System.out.println("Classifier completed successfully.");
@@ -385,7 +381,7 @@ public class ClientThread implements Runnable {
                     }
                 }
             else{
-                    System.out.println("Classifier can't start..");
+                    System.out.println("Error occured. Classifier can't start..");
                     returnvalue = "notokay";
             }
         } catch (IOException | InterruptedException ex) {
@@ -394,7 +390,7 @@ public class ClientThread implements Runnable {
         return returnvalue;
 
     }
-
+ //is pyequalssentiment -> checkisokay. ha false, mehet. ha pyequalsvariance -> checkisokay. ha true, mehet. || külön fv, callingPythonwithCheck
     private String callingPython(Boolean newtable, String py, String file, String... other) {
         System.out.println("Python file: " + file);
         String returnvalue = file;
@@ -433,10 +429,6 @@ public class ClientThread implements Runnable {
          
     public class DBHandler{
         
-        public DBHandler(){
-            
-        }
-    
         private boolean validateClient(ArrayList<String> acceptedDatas) {
         String name = acceptedDatas.get(1);
         String pass = acceptedDatas.get(2);

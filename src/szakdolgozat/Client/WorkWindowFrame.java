@@ -1694,11 +1694,13 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_downloadTableButtonActionPerformed
 
     protected void preMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preMenuItemActionPerformed
-
+        HelpWindow help = new HelpWindow("pre");
+        help.setVisible(true);
     }//GEN-LAST:event_preMenuItemActionPerformed
 
     protected void classifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classifMenuItemActionPerformed
-        // TODO add your handling code here:
+       HelpWindow help = new HelpWindow("clf");
+       help.setVisible(true);
     }//GEN-LAST:event_classifMenuItemActionPerformed
 
     protected void informMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_informMenuItemActionPerformed
@@ -2049,7 +2051,6 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
                 p.setVisible(false);
             }
         }
-        accuracyLabel.setText("Accuracy: -");
     }
 
     protected void changeMainPanels(JPanel visiblePanel, JPanel visibleSidePanel) {
