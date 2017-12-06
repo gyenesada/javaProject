@@ -48,6 +48,11 @@ n_estimators = int(parameters[1])
 random_state = int(parameters[2])
 n_jobs = int(parameters[3])
 
+if parameters[4]=="false" or parameters[4] =="False":
+	presort = False
+else:
+	presort = True
+
 df = pd.read_csv(tablename)
 dfo = pd.read_csv(original)
 

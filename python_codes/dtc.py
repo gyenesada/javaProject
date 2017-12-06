@@ -30,7 +30,7 @@ while (k<=out):
 	outcols.append(sys.argv[6+params+feat+k])
 	k=k+1
 
-if parameters[0]=="false":
+if parameters[0]=="false" or parameters[0] == "False":
 	presort = False
 else:
 	presort = True

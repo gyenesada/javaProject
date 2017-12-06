@@ -83,10 +83,14 @@ public class WWFController implements Runnable {
                 }
                 break;
             case "wcsv:":
-                wwf.selectedTable = in.get(1);
-                fillLoadedTablesList(in);
-                wwf.changePanels(wwf.firstPanel);
-                Thread.sleep(100);
+                if(in.get(1).equals("err")){
+                    JOptionPane.showMessageDialog(wwf, "Tábla feltöltés sikertelen. Győzödjön meg róla, hogy a tábla nem szerepel-e már a feltöltött táblái között.");
+                }else{
+                    wwf.selectedTable = in.get(1);
+                    fillLoadedTablesList(in);
+                    wwf.changePanels(wwf.firstPanel);
+                    Thread.sleep(100);
+                }
                 wwf.lf.dispose();
                 
                 wwf.workPathField.setText("");
@@ -120,6 +124,7 @@ public class WWFController implements Runnable {
             case "done:":
                 loadedTablePreprocess();
                 addTableToList(in);
+                Thread.sleep(100);
                 wwf.lf.dispose();
                 break;
             case "delt:":

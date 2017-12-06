@@ -118,7 +118,8 @@ public class ClientThread implements Runnable {
                     out = db.getTasksTable("wcsv:");
                     writeToCsv(filename);
                 } else {
-                    out.add("err:");
+                    out.add("wcsv:");
+                    out.add("err");
                 }
                 break;
             case "wrk:": //old task loading 
@@ -179,7 +180,7 @@ public class ClientThread implements Runnable {
                 currentTaskID = Integer.parseInt(in.get(1));
                 out = readFromCsv("tdl:", in.get(2), false);
                 break;
-            case "ada:":
+            case "ada:": //adaboost classifier
                 answer = callingClassifier(in, "ada.py");
                 if(answer.equals("notokay")){
                     out.add("nok:");
@@ -187,7 +188,7 @@ public class ClientThread implements Runnable {
                     out = readFromCsv("done:", answer, true);
                 }
                 break;
-            case "rfc:":
+            case "rfc:": //randomforest classifier
                 answer = callingClassifier(in, "rfc.py");
                 if(answer.equals("notokay")){
                     out.add("nok:");
@@ -195,7 +196,7 @@ public class ClientThread implements Runnable {
                     out = readFromCsv("done:", answer, true);
                 }
                 break;
-            case "dtc:":
+            case "dtc:": //decisiontree classifier
                 answer = callingClassifier(in, "dtc.py");
                 if(answer.equals("notokay")){
                     out.add("nok:");
@@ -203,7 +204,7 @@ public class ClientThread implements Runnable {
                     out = readFromCsv("done:", answer, true);
                 }
                 break;
-            case "gtb:":
+            case "gtb:": //gradientboost classifier
                 answer = callingClassifier(in, "gtb.py");
                 if(answer.equals("notokay")){
                     out.add("nok:");
@@ -211,19 +212,23 @@ public class ClientThread implements Runnable {
                     out = readFromCsv("done:", answer, true);
                 }
                 break;
-            case "san:":
+            case "san:": //sentiment analysis
                 newtable = Boolean.valueOf(in.get(1));
                 answer = callingPython(newtable, "sentiment.py", in.get(3), in.get(4));
-                out = readFromCsv("done:", answer, true);
+                if(answer.equals(in.get(3))){
+                    out.add("nok:");
+                }else{
+                    out = readFromCsv("done:", answer, true);
+                }
                 break;
-            case "mdu:":
+            case "mdu:": //modify username
                 answer = Boolean.toString(db.modifyUsername(in.get(1)));
                 out.add(identifier);
                 out.add(answer);
                 out.add(in.get(1));
                 System.out.println("out: " + out);
                 break;
-            case "mdp:":
+            case "mdp:": //modify password
                 db.modifyPass(in.get(1));
                 out.add(identifier);
                 break;
@@ -390,30 +395,28 @@ public class ClientThread implements Runnable {
         return returnvalue;
 
     }
- //is pyequalssentiment -> checkisokay. ha false, mehet. ha pyequalsvariance -> checkisokay. ha true, mehet. || külön fv, callingPythonwithCheck
+    
     private String callingPython(Boolean newtable, String py, String file, String... other) {
-        System.out.println("Python file: " + file);
         String returnvalue = file;
         String string = Arrays.toString(other).replaceAll("[\\[\\]]", "").replaceAll("\\t", " ");
-
         String fs = System.getProperty("file.separator");
         String cmd = "python " + PY_PATH + py + " " + newtable + " " + PATH + db.getTaskName() + "_" + currentTaskID + fs + file + " " + string + "";
         System.out.println("cmdl: " + cmd);
         try {
-            Process p = Runtime.getRuntime().exec(cmd);
-            int exitVal = p.waitFor();
-            if (exitVal == 0) {
-                System.out.println("Python script completed successfully.");
-            } else {
-                System.out.println("Python script finished with an error.");
-            }
+                Process p = Runtime.getRuntime().exec(cmd);
+                int exitVal = p.waitFor();
+                if (exitVal == 0) {
+                    System.out.println("Python script completed successfully.");
+                } else {
+                    System.out.println("Python script finished with an error.");
+                }
 
-            if (newtable && exitVal == 0) {
-                String newtablename = prefixedTableName(py, file);
-                String original = db.getOriginalTable(file);
-                db.insertTableIntoDatabase(newtablename, original);
-                returnvalue = newtablename;
-            }
+                if (newtable && exitVal == 0) {
+                    String newtablename = prefixedTableName(py, file);
+                    String original = db.getOriginalTable(file);
+                    db.insertTableIntoDatabase(newtablename, original);
+                    returnvalue = newtablename;
+                }
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -720,7 +723,6 @@ public class ClientThread implements Runnable {
         if (other.length == 0) {
             returnvalue.add("old:");
         } else {
-            //nem kell .add(old:)?
             returnvalue.add(Arrays.toString(other));
         }
 

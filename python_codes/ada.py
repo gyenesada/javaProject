@@ -1,6 +1,9 @@
 import sys
 import pandas as pd
 import numpy as np
+import time as t 
+cpu_start = t.clock() 
+real_start = t.time()
 
 from sklearn import metrics as ms
 from sklearn.ensemble import AdaBoostClassifier
@@ -98,3 +101,7 @@ for i in range(len(predictions)):
 df_out[target] = float_pred
 
 df_out.to_csv(newtablename, index=False)
+
+cpu_time = t.clock()-cpu_start
+real_time = t.time()-real_start
+print('CPU: %s, Valos:%s' %(cpu_time, real_time))

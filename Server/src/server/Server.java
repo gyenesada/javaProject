@@ -1,5 +1,6 @@
 package Server;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
@@ -20,7 +21,7 @@ public class Server implements Runnable {
         try {
             final ExecutorService service = Executors.newCachedThreadPool();
             ServerSocket ss = new ServerSocket(port);
-            System.out.println("The server is up..");
+            System.out.println("The server is up on port " + port);
             System.out.println("To shut down, use [CRTL] + [C].");
             while (true) {
                 Socket socket = ss.accept();
@@ -40,6 +41,14 @@ public class Server implements Runnable {
     }
 
     public static void main(String[] args) {
+        String cmd = "java -classpath ./gyenesadrienn/hsqldb/lib/hsqldb.jar org.hsqldb.server.Server --database.0 file:hsqldb/db --dbname.0 db";
+        try {
+            System.out.println("Connect to database server...");
+            Runtime.getRuntime().exec(cmd);
+        } catch (IOException ex) {
+            System.out.println("Database server can't start. ");
+        }
+        System.out.println("Connected on port 9001");
         new Server(2222).run();
     }
 }
