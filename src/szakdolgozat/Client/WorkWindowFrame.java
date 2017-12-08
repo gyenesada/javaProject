@@ -251,7 +251,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         preMenuItem = new javax.swing.JMenuItem();
         classifMenuItem = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        informMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setFocusTraversalPolicyProvider(true);
@@ -1388,8 +1388,15 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         helpMenu.add(classifMenuItem);
         helpMenu.add(jSeparator9);
 
-        jMenuItem1.setText("Névjegy");
-        helpMenu.add(jMenuItem1);
+        informMenuItem.setText("Névjegy");
+        helpMenu.add(informMenuItem);
+		
+        informMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                informMenuItemActionPerformed(evt);
+            }
+        });
+
 
         jMenuBar1.add(helpMenu);
 
@@ -1708,68 +1715,9 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_classifMenuItemActionPerformed
 
     protected void informMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_informMenuItemActionPerformed
-        JOptionPane.showMessageDialog(null, "Készítette Gyenes Adrienn (EP9KP0) \n Eötvös Loránd Tudományegyetem 2017");
+        JOptionPane.showMessageDialog(null, "Készítette Gyenes Adrienn (EP9KP0) \nEötvös Loránd Tudományegyetem 2017");
     }//GEN-LAST:event_informMenuItemActionPerformed
 
-    protected void dtc_mdFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtc_mdFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dtc_mdFieldActionPerformed
-
-    protected void dtc_rsFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtc_rsFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dtc_rsFieldActionPerformed
-
-    protected void dtc_targetCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtc_targetCBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dtc_targetCBoxActionPerformed
-
-    protected void dtc_outCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtc_outCBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dtc_outCBoxActionPerformed
-
-    protected void ada_neFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ada_neFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ada_neFieldActionPerformed
-
-    protected void ada_outCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ada_outCBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ada_outCBoxActionPerformed
-
-    protected void ada_targetCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ada_targetCBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ada_targetCBoxActionPerformed
-
-    protected void ada_rsFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ada_rsFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ada_rsFieldActionPerformed
-
-    protected void ada_lrFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ada_lrFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ada_lrFieldActionPerformed
-
-    protected void rfc_mdFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rfc_mdFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rfc_mdFieldActionPerformed
-
-    protected void rfc_rsFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rfc_rsFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rfc_rsFieldActionPerformed
-
-    protected void rfc_targetCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rfc_targetCBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rfc_targetCBoxActionPerformed
-
-    protected void rfc_outCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rfc_outCBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rfc_outCBoxActionPerformed
-
-    protected void rfc_njFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rfc_njFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rfc_njFieldActionPerformed
-
-    protected void rfc_bsFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rfc_bsFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rfc_bsFieldActionPerformed
 
     protected void addExitOption() {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -2148,8 +2096,10 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
         for (int i = 0; i < outcols.getModel().getSize(); i++) {
             out[i] = outcols.getModel().getElementAt(i);
         }
-        if (out.length == 0 || feat.length == 0) {
+        System.out.println("out.length" + out.length);
+        if (out[0].equals(" ") || feat.length == 0) {
             JOptionPane.showMessageDialog(null, "A features set vagy a kimeneti tábla oszlopai üresek. Kérjük ellenőrizze.");
+            
             return false;
         } else {
             bufferOutput.clear();
@@ -2447,7 +2397,7 @@ public final class WorkWindowFrame extends javax.swing.JFrame {
     protected javax.swing.JList<String> gtb_toList;
     protected javax.swing.JMenu helpMenu;
     protected javax.swing.JMenuBar jMenuBar1;
-    protected javax.swing.JMenuItem jMenuItem1;
+    protected javax.swing.JMenuItem informMenuItem;
     protected javax.swing.JScrollPane jScrollPane1;
     protected javax.swing.JScrollPane jScrollPane13;
     protected javax.swing.JScrollPane jScrollPane14;
